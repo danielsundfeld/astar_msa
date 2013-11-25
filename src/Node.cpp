@@ -1,6 +1,6 @@
 #include "Node.h"
 
-Node::Node(const int g, const int f, const int h, const Coords& pos)
+Node::Node(const int g, const int f, const int h, const Coord& pos)
 : pos(pos)
 {
     m_g = g;

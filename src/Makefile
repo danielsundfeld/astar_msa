@@ -16,7 +16,7 @@ endif
 
 CPP_SRCS = \
   main.cpp \
-  Coords.cpp \
+  Coord.cpp \
   Node.cpp \
 
 VPATH += \

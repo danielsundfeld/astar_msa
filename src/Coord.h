@@ -1,10 +1,10 @@
 #ifndef _COORDS_H
 #define _COORDS_H
 
-class Coords {
+class Coord {
     public:
         int x, y, z;
-        Coords(int x, int y, int z);
+        Coord(int x, int y, int z);
 };
 
 #endif
