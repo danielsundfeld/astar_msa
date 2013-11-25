@@ -2,8 +2,8 @@
 
 Coord::Coord(int x, int y, int z)
 {
-    x = x;
-    y = y;
-    z = z;
+    m_x = x;
+    m_y = y;
+    m_z = z;
 }
 
