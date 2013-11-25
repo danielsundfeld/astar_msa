@@ -16,6 +16,8 @@ endif
 
 CPP_SRCS = \
   main.cpp \
+  Coords.cpp \
+  Node.cpp \
 
 VPATH += \
   $(VDIR)/vpath \
