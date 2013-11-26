@@ -5,13 +5,13 @@ TARGET       = msa_a_star
 VDIR         = .
 INCDIR       = .
 
-CFLAGS   += -pipe -Wall
+CPPFLAGS   += -pipe -Wall
 
 ifdef RELEASE
-  CFLAGS   += -O2
+  CPPFLAGS   += -O2
   LDFLAGS  += -s
 else
-  CFLAGS   += -O0 -g
+  CPPFLAGS   += -O0 -g
 endif
 
 CPP_SRCS = \
@@ -23,9 +23,9 @@ VPATH += \
   $(VDIR)/vpath \
 
 INCPATH += \
-  -I$(INCDIR)/include \
+  -I$(INCDIR) \
 
-CFLAGS += \
+CPPFLAGS += \
   $(INCPATH) \
 
 CPP_OBJS  = $(CPP_SRCS:.cpp=.o)
