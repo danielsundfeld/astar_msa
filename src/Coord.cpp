@@ -1,5 +1,12 @@
 #include "Coord.h"
 
+Coord::Coord()
+{
+    m_x = 0;
+    m_y = 0;
+    m_z = 0;
+}
+
 Coord::Coord(int x, int y, int z)
 {
     m_x = x;
@@ -11,6 +18,9 @@ Coord& Coord::operator=(const Coord &rhs)
 {
     if (this == &rhs) // identify self-assignment
         return *this; // do nothing
+    this->m_x = rhs.m_x;
+    this->m_y = rhs.m_y;
+    this->m_z = rhs.m_z;
 
     return *this;
 }

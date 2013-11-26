@@ -6,6 +6,7 @@ class Coord {
         int m_x, m_y, m_z;
 
     public:
+        Coord();
         Coord(int x, int y, int z);
         Coord &operator=(const Coord &rhs);
         int operator==(const Coord &rhs) const;
