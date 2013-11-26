@@ -26,10 +26,11 @@ Node::Node(const int g, const Coord& pos)
 vector<Node> Node::getNeigh()
 {
     vector<Node> a;
-    int x = pos.get_x();
-    int y = pos.get_y();
-    int z = pos.get_z();
+    unsigned int x = pos.get_x();
+    unsigned int y = pos.get_y();
+    unsigned int z = pos.get_z();
 
+    bool addx, addy, addz;
     int cxy, cyz, cxz;
 
     Sequences *seq = Sequences::getInstance();
@@ -38,14 +39,23 @@ vector<Node> Node::getNeigh()
     cxz = seq->cost(seq->get_seq(0)[x], seq->get_seq(2)[z]);
     cyz = seq->cost(seq->get_seq(1)[y], seq->get_seq(2)[z]);
 
-    printf("Comparando (%d %d %d) / (%d/%d/%d)\n", x, y, z, cxy, cxz, cyz);
+    addx = (x < seq->get_seq(0).length());
+    addy = (y < seq->get_seq(1).length());
+    addz = (z < seq->get_seq(2).length());
 
-    a.push_back(Node(m_g + 2 * Sequences::GAP,   Coord(x + 1, y,     z    )));
-    a.push_back(Node(m_g + 2 * Sequences::GAP,   Coord(x,     y + 1, z    )));
-    a.push_back(Node(m_g + 2 * Sequences::GAP,   Coord(x,     y,     z + 1)));
-    a.push_back(Node(m_g + cxy + Sequences::GAP, Coord(x + 1, y + 1, z    )));
-    a.push_back(Node(m_g + cyz + Sequences::GAP, Coord(x,     y + 1, z + 1)));
-    a.push_back(Node(m_g + cxz + Sequences::GAP, Coord(x + 1, y,     z + 1)));
-    a.push_back(Node(m_g + cxy + cxz + cyz,      Coord(x + 1, y + 1, z + 1)));
+    if (addx)
+        a.push_back(Node(m_g + 2 * Sequences::GAP,   Coord(x + 1, y,     z    )));
+    if (addy)
+        a.push_back(Node(m_g + 2 * Sequences::GAP,   Coord(x,     y + 1, z    )));
+    if (addz)
+        a.push_back(Node(m_g + 2 * Sequences::GAP,   Coord(x,     y,     z + 1)));
+    if (addx && addy)
+        a.push_back(Node(m_g + cxy + Sequences::GAP, Coord(x + 1, y + 1, z    )));
+    if (addy && addz)
+        a.push_back(Node(m_g + cyz + Sequences::GAP, Coord(x,     y + 1, z + 1)));
+    if (addx && addz)
+        a.push_back(Node(m_g + cxz + Sequences::GAP, Coord(x + 1, y,     z + 1)));
+    if (addx && addy && addz)
+        a.push_back(Node(m_g + cxy + cxz + cyz,      Coord(x + 1, y + 1, z + 1)));
     return a;
 }
