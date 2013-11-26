@@ -1,4 +1,6 @@
+#include <iostream>
 #include <string>
+#include "Coord.h"
 #include "Sequences.h"
 
 using namespace std;
@@ -25,6 +27,15 @@ int Sequences::cost(char r, char l)
 int Sequences::set_seq(string x)
 {
     seqs.push_back(x);
-    return ++n_seq;
+    ++n_seq;
+
+    if (n_seq == 3)
+       final_coord = Coord(get_seq(0).length(), get_seq(1).length(), get_seq(2).length()); 
+    return n_seq;
+}
+
+bool Sequences::is_not_final(Coord c)
+{
+    return !(c == final_coord);
 }
 

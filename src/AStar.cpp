@@ -11,9 +11,9 @@
 
 using namespace std;
 
-string a = "AAAAAAAAAAAAAAAAAAA";
-string b = "AAAAAAAAABAAAAAAAAA";
-string c = "AAAAAAAAACAAAAAAAAA";
+string a = "AAAAAAA";
+string b = "AAABAAA";
+string c = "AAACAAA";
 
 void print_coord(const char msg[], Node l)
 {
@@ -25,16 +25,15 @@ int a_star()
     map<Coord, Node> OpenList;
     map<Coord, Node> ClosedList;
     priority_queue<Node, vector<Node>, PriorityNode> pq;
-
     Sequences *seq = Sequences::getInstance();
     seq->set_seq(a);
     seq->set_seq(b);
     seq->set_seq(c);
 
     pq.push(Node(0, Coord(0, 0, 0))); //Zero cost, zero coords.
-    while (!pq.empty())
+    Node current = pq.top();
+    while (!pq.empty() && seq->is_not_final(current.pos))
     {
-        Node current = pq.top();
         print_coord("Visitando no", current);
         pq.pop();
         ClosedList[current.pos] = current;
@@ -42,10 +41,11 @@ int a_star()
         vector<Node> neigh = current.getNeigh();
         for (vector<Node>::iterator it = neigh.begin() ; it != neigh.end(); ++it)
         {
-            print_coord("Adicionando vizinho", *it);
-
+            pq.push(*it);
         }
+        current = pq.top();
     }
+    print_coord("Score final:", current);
     return 0;
 }
 
@@ -66,8 +66,5 @@ while lowest rank in OPEN is not the GOAL:
       add neighbor to OPEN
       set priority queue rank to g(neighbor) + h(neighbor)
       set neighbor's parent to current
-
-reconstruct reverse path from goal to start
-by following parent pointers
 
 */

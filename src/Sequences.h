@@ -2,6 +2,7 @@
 #define _SEQUENCES_H
 #include <string>
 #include <vector>
+#include "Coord.h"
 
 using namespace std;
 
@@ -12,6 +13,7 @@ class Sequences
         static Sequences *instance;
         Sequences();
         vector<string> seqs;
+        Coord final_coord;
 
     public:
         enum { MATCH = 0, GAP = 2 };
@@ -25,5 +27,6 @@ class Sequences
         unsigned int get_seq_num() { return n_seq; };
         int cost(char r, char l);
         int cost_mismatch(char r, char l);
+        bool is_not_final(Coord c);
 };
 #endif
