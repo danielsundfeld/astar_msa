@@ -50,17 +50,3 @@ int Coord::operator<(const Coord &rhs) const
     return 0;
 }
 
-vector<Coord> Coord::getNeigh()
-{
-    vector<Coord> a;
-
-    a.push_back(Coord(m_x + 1, m_y,     m_z    ));
-    a.push_back(Coord(m_x,     m_y + 1, m_z    ));
-    a.push_back(Coord(m_x,     m_y,     m_z + 1));
-    a.push_back(Coord(m_x + 1, m_y + 1, m_z    ));
-    a.push_back(Coord(m_x,     m_y + 1, m_z + 1));
-    a.push_back(Coord(m_x + 1, m_y,     m_z + 1));
-    a.push_back(Coord(m_x + 1, m_y + 1, m_z + 1));
-    return a;
-}
-
