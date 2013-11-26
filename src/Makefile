@@ -19,6 +19,7 @@ CPP_SRCS = \
   Coord.cpp \
   Node.cpp \
   AStar.cpp \
+  Sequences.cpp \
 
 VPATH += \
   $(VDIR)/vpath \

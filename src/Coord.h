@@ -1,5 +1,8 @@
 #ifndef _COORDS_H
 #define _COORDS_H
+#include <vector>
+
+using namespace std;
 
 class Coord {
     private:
@@ -11,6 +14,8 @@ class Coord {
         Coord &operator=(const Coord &rhs);
         int operator==(const Coord &rhs) const;
         int operator<(const Coord &rhs) const;
+
+        vector<Coord> getNeigh();
 
         int get_x() { return m_x; };
         int get_y() { return m_y; };

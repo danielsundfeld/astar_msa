@@ -1,6 +1,9 @@
 #ifndef _NODE_H
 #define _NODE_H
+#include <vector>
 #include "Coord.h"
+
+using namespace std;
 
 class Node {
     private:
@@ -12,6 +15,8 @@ class Node {
         Coord pos;
         Node();
         Node(const int g, const Coord& pos);
+        vector<Node> getNeigh();
+
         int get_g() { return m_g; };
         int get_f() { return m_f; };
         int get_h() { return m_h; };
