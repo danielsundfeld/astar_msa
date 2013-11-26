@@ -11,7 +11,7 @@ class Node {
     public: 
         Coord pos;
         Node();
-        Node(const int g, const int f, const int h, const Coord& pos);
+        Node(const int g, const Coord& pos);
         int get_g() { return m_g; };
         int get_f() { return m_f; };
         int get_h() { return m_h; };

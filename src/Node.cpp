@@ -7,10 +7,10 @@ Node::Node()
     m_h = 0;
 }
 
-Node::Node(const int g, const int f, const int h, const Coord& pos)
+Node::Node(const int g, const Coord& pos)
 : pos(pos)
 {
     m_g = g;
-    m_f = f;
-    m_h = h;
+    m_f = 0; //TODO to calculate
+    m_h = 0; //TODO to calculate
 }
