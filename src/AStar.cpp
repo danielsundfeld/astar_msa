@@ -30,7 +30,11 @@ int a_star()
     seq->set_seq(b);
     seq->set_seq(c);
 
-    pq.push(Node(0, Coord(0, 0, 0))); //Zero cost, zero coords.
+    Coord coord_zero = Coord(Coord(0,0,0));
+    Node node_zero = Node(0, coord_zero);
+    OpenList[coord_zero] = node_zero;
+    pq.push(node_zero); //Zero cost, zero coords.
+
     Node current = pq.top();
     while (!pq.empty() && seq->is_not_final(current.pos))
     {
@@ -41,11 +45,27 @@ int a_star()
         vector<Node> neigh = current.getNeigh();
         for (vector<Node>::iterator it = neigh.begin() ; it != neigh.end(); ++it)
         {
+            std::map<Coord,Node>::iterator search;
+
+            if ((search = OpenList.find(it->pos)) != OpenList.end())
+            {
+                // if score on open list is better, ignore this neighboor
+                if (it->get_g() > search->second.get_g())
+                    continue;
+            }
+            if ((search = ClosedList.find(it->pos)) != ClosedList.end())
+            {
+                if (it->get_g() > search->second.get_g())
+                    continue;
+                ClosedList.erase(it->pos);
+            }
+
+            OpenList[it->pos] = *it;
             pq.push(*it);
         }
         current = pq.top();
     }
-    print_coord("Score final:", current);
+    print_coord("Final score:", current);
     return 0;
 }
 
