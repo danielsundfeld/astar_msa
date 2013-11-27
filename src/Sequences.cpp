@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+
 #include "Coord.h"
 #include "Sequences.h"
 

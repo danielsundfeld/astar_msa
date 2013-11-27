@@ -52,7 +52,7 @@ int a_star()
     Node current = pq.top();
     while (!pq.empty() && seq->is_not_final(current.pos))
     {
-        print_coord("Visitando no", current);
+        //print_coord("Visitando no", current);
         pq.pop();
         ClosedList[current.pos] = current;
 

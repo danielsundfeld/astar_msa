@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "AStar.h"
 #include "read_fasta.h"
 
