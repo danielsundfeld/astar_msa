@@ -19,8 +19,19 @@ Node::Node(const int g, const Coord& pos)
 : pos(pos)
 {
     m_g = g;
-    m_f = 0; //TODO to calculate
-    m_h = 0; //TODO to calculate
+    calculate_h();
+    m_f = m_g + m_h;
+}
+
+void Node::calculate_h()
+{
+    Coord final = Sequences::getInstance()->get_final_coord();
+    int delta_x = final.get_x() - pos.get_x();
+    int delta_y = final.get_y() - pos.get_y();
+    int delta_z = final.get_z() - pos.get_z();
+
+    int min_delta = min(delta_x, min(delta_y, delta_z)); // Minimum value represent the all mismatch functions...
+    m_h = (delta_x - min_delta + delta_y + delta_z) * Sequences::GAP + min_delta * Sequences::MAX_MISMATCH;
 }
 
 vector<Node> Node::getNeigh()
@@ -59,3 +70,4 @@ vector<Node> Node::getNeigh()
         a.push_back(Node(m_g + cxy + cxz + cyz,      Coord(x + 1, y + 1, z + 1)));
     return a;
 }
+

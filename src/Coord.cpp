@@ -50,3 +50,4 @@ int Coord::operator<(const Coord &rhs) const
     return 0;
 }
 
+//TODO operator -

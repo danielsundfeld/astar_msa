@@ -17,7 +17,7 @@ string c = "AAACAAA";
 
 void print_coord(const char msg[], Node l)
 {
-    printf("%s (%d) (%d %d %d)\n", msg, l.get_g(), l.pos.get_x(), l.pos.get_y(), l.pos.get_z());
+    printf("%s (%d) (%d %d %d)/(%d)\n", msg, l.get_g(), l.pos.get_x(), l.pos.get_y(), l.pos.get_z(), l.get_h());
 }
 
 int a_star()
