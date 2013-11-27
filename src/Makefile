@@ -20,6 +20,7 @@ CPP_SRCS = \
   Node.cpp \
   AStar.cpp \
   Sequences.cpp \
+  read_fasta.cpp \
 
 VPATH += \
   $(VDIR)/vpath \
