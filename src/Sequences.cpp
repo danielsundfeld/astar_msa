@@ -40,3 +40,9 @@ bool Sequences::is_not_final(Coord c)
     return !(c == final_coord);
 }
 
+void Sequences::destroy()
+{
+    delete instance;
+    instance = NULL;
+}
+

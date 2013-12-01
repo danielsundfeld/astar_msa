@@ -30,5 +30,6 @@ class Sequences
         int cost(char r, char l);
         int cost_mismatch(char r, char l);
         bool is_not_final(Coord c);
+        void destroy();
 };
 #endif
