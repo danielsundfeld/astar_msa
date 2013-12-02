@@ -17,11 +17,7 @@ class Sequences
 
     public:
         enum { MATCH = 0, MAX_MISMATCH = 1, GAP = 2 };
-        static Sequences *getInstance()
-        {
-            if (!instance) instance = new Sequences();
-            return instance;
-        }
+        static Sequences *getInstance();
         Coord get_final_coord() { return final_coord; };
         string get_seq(int x) { return seqs.at(x); };
         unsigned int get_seq_num() { return n_seq; };

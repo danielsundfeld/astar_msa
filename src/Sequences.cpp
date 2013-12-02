@@ -13,6 +13,13 @@ Sequences::Sequences()
 
 Sequences* Sequences::instance = NULL;
 
+Sequences* Sequences::getInstance()
+{
+    if (!instance)
+        instance = new Sequences();
+    return instance;
+}
+
 int Sequences::cost_mismatch(char r, char l)
 {
     return 1;
