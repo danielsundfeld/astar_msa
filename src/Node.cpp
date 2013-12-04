@@ -30,8 +30,8 @@ void Node::calculate_h()
     int delta_y = final.get_y() - pos.get_y();
     int delta_z = final.get_z() - pos.get_z();
 
-    int min_delta = min(delta_x, min(delta_y, delta_z)); // Minimum value represent the all mismatch functions...
-    m_h = (delta_x - min_delta + delta_y + delta_z) * Sequences::GAP + min_delta * Sequences::MAX_MISMATCH;
+    int min_delta = min(delta_x, min(delta_y, delta_z));
+    m_h = (delta_x + delta_y + delta_z - 3 * min_delta) * Sequences::GAP;
 }
 
 vector<Node> Node::getNeigh()
