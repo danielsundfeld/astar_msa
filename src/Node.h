@@ -6,6 +6,7 @@
 using namespace std;
 
 class Node {
+    friend class PriorityNode;
     private:
         int m_g; // exact cost of the path from the start
         int m_h; // heuristc estimated cost to the goal
@@ -25,10 +26,6 @@ class Node {
 
 class PriorityNode {
     public:
-        bool operator()(Node& n1, Node& n2)
-        {
-            if (n1.get_f() > n2.get_f()) return true;
-            return false;
-        }
+        bool operator()(Node& n1, Node& n2);
 };
 #endif

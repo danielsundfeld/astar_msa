@@ -71,3 +71,10 @@ vector<Node> Node::getNeigh()
     return a;
 }
 
+bool PriorityNode::operator()(Node& n1, Node& n2)
+{
+    if (n1.m_f > n2.m_f)
+        return true;
+    return false;
+}
+
