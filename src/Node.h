@@ -11,17 +11,19 @@ class Node {
         int m_g; // exact cost of the path from the start
         int m_h; // heuristc estimated cost to the goal
         int m_f; // priority
+        Coord parent;
         void calculate_h();
 
     public: 
         Coord pos;
         Node();
-        Node(const int g, const Coord& pos);
+        Node(const int g, const Coord& pos, const Coord& parent = Coord(0,0,0));
+        friend ostream &operator<<(ostream &lhs, const Node &rhs);
         vector<Node> getNeigh();
-
         int get_g() { return m_g; };
         int get_f() { return m_f; };
         int get_h() { return m_h; };
+        inline Coord get_parent() { return parent; };
 };
 
 class PriorityNode {

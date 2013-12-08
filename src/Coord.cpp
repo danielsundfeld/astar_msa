@@ -1,3 +1,4 @@
+#include <iostream>
 #include <vector>
 
 #include "Coord.h"
@@ -49,6 +50,12 @@ int Coord::operator<(const Coord &rhs) const
     if (m_x < rhs.m_x)
         return 1;
     return 0;
+}
+
+ostream& operator<<(ostream &lhs, const Coord &rhs)
+{
+    lhs << "(" << rhs.m_x << " " << rhs.m_y << " " << rhs.m_z << ")";
+    return lhs;
 }
 
 //TODO operator -

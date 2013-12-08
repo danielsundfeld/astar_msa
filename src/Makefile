@@ -22,6 +22,7 @@ CPP_SRCS = \
   Sequences.cpp \
   SequencesKeep.cpp \
   read_fasta.cpp \
+  backtrace.cpp \
 
 VPATH += \
   $(VDIR)/vpath \

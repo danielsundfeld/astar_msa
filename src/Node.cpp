@@ -1,7 +1,6 @@
 #include <algorithm>
 #include <iostream>
 #include <vector>
-#include <stdio.h>
 
 #include "Node.h"
 #include "Sequences.h"
@@ -15,12 +14,20 @@ Node::Node()
     m_h = 0;
 }
 
-Node::Node(const int g, const Coord& pos)
-: pos(pos)
+Node::Node(const int g, const Coord& pos, const Coord& parent)
+: parent(parent),
+  pos(pos)
 {
     m_g = g;
     calculate_h();
     m_f = m_g + m_h;
+}
+
+ostream& operator<<(ostream &lhs, const Node &rhs)
+{
+    lhs << "g - " << rhs.m_g << " (h - " << rhs.m_h << " f - " << rhs.m_f
+        << ") " << rhs.pos;
+    return lhs;
 }
 
 void Node::calculate_h()
@@ -55,19 +62,19 @@ vector<Node> Node::getNeigh()
     addz = (z < seq->get_seq(2).length());
 
     if (addx)
-        a.push_back(Node(m_g + 2 * Sequences::GAP,   Coord(x + 1, y,     z    )));
+        a.push_back(Node(m_g + 2 * Sequences::GAP,   Coord(x + 1, y,     z    ), pos));
     if (addy)
-        a.push_back(Node(m_g + 2 * Sequences::GAP,   Coord(x,     y + 1, z    )));
+        a.push_back(Node(m_g + 2 * Sequences::GAP,   Coord(x,     y + 1, z    ), pos));
     if (addz)
-        a.push_back(Node(m_g + 2 * Sequences::GAP,   Coord(x,     y,     z + 1)));
+        a.push_back(Node(m_g + 2 * Sequences::GAP,   Coord(x,     y,     z + 1), pos));
     if (addx && addy)
-        a.push_back(Node(m_g + cxy + Sequences::GAP, Coord(x + 1, y + 1, z    )));
+        a.push_back(Node(m_g + cxy + Sequences::GAP, Coord(x + 1, y + 1, z    ), pos));
     if (addy && addz)
-        a.push_back(Node(m_g + cyz + Sequences::GAP, Coord(x,     y + 1, z + 1)));
+        a.push_back(Node(m_g + cyz + Sequences::GAP, Coord(x,     y + 1, z + 1), pos));
     if (addx && addz)
-        a.push_back(Node(m_g + cxz + Sequences::GAP, Coord(x + 1, y,     z + 1)));
+        a.push_back(Node(m_g + cxz + Sequences::GAP, Coord(x + 1, y,     z + 1), pos));
     if (addx && addy && addz)
-        a.push_back(Node(m_g + cxy + cxz + cyz,      Coord(x + 1, y + 1, z + 1)));
+        a.push_back(Node(m_g + cxy + cxz + cyz,      Coord(x + 1, y + 1, z + 1), pos));
     return a;
 }
 

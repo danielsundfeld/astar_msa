@@ -3,18 +3,13 @@
 #include <queue>
 #include <string>
 #include <vector>
-#include <stdio.h>
 
+#include "backtrace.h"
 #include "Coord.h"
 #include "Node.h"
 #include "Sequences.h"
 
 using namespace std;
-
-void print_coord(const char msg[], Node l)
-{
-    printf("%s (%d %d %d)/(g-%d,h-%d,f-%d)\n", msg, l.pos.get_x(), l.pos.get_y(), l.pos.get_z(), l.get_g(), l.get_h(), l.get_f());
-}
 
 /*
  * A classic A-Star implentation resume:
@@ -52,7 +47,7 @@ int a_star()
     Node current = pq.top();
     while (!pq.empty() && seq->is_not_final(current.pos))
     {
-        //print_coord("Visitando no", current);
+        //cout << "Opening node:\t" << current << endl;
         pq.pop();
         ClosedList[current.pos] = current;
 
@@ -79,7 +74,9 @@ int a_star()
         }
         current = pq.top();
     }
-    print_coord("Final score:", current);
+    ClosedList[current.pos] = current;
+    cout << "Final score:\t" << current << endl;
+    backtrace(ClosedList);
     return 0;
 }
 
