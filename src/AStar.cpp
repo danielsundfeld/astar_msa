@@ -39,8 +39,8 @@ int a_star()
     priority_queue<Node, vector<Node>, PriorityNode> pq;
     Sequences *seq = Sequences::getInstance();
 
-    Coord coord_zero = Coord(Coord(0,0,0));
-    Node node_zero = Node(0, coord_zero);
+    const Coord coord_zero; //default is zero
+    const Node node_zero(0, coord_zero);
     OpenList[coord_zero] = node_zero;
     pq.push(node_zero); //Zero cost, zero coords.
 
