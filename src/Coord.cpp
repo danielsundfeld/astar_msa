@@ -12,7 +12,7 @@ Coord::Coord()
     m_z = 0;
 }
 
-Coord::Coord(int x, int y, int z)
+Coord::Coord(const int x, const int y, const int z)
 {
     m_x = x;
     m_y = y;
@@ -30,26 +30,26 @@ Coord& Coord::operator=(const Coord &rhs)
     return *this;
 }
 
-int Coord::operator==(const Coord &rhs) const
+bool Coord::operator==(const Coord &rhs) const
 {
     if (m_x != rhs.m_x)
-        return 0;
+        return false;
     if (m_y != rhs.m_y)
-        return 0;
+        return false;
     if (m_z != rhs.m_z)
-        return 0;
-    return 1;
+        return false;
+    return true;
 }
 
-int Coord::operator<(const Coord &rhs) const
+bool Coord::operator<(const Coord &rhs) const
 {
     if (m_x == rhs.m_x && m_y == rhs.m_y && m_z < rhs.m_z)
-        return 1;
+        return true;
     if (m_x == rhs.m_x && m_y < rhs.m_y)
-        return 1;
+        return true;
     if (m_x < rhs.m_x)
-        return 1;
-    return 0;
+        return true;
+    return false;
 }
 
 ostream& operator<<(ostream &lhs, const Coord &rhs)

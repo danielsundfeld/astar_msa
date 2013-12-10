@@ -11,14 +11,14 @@ class Coord {
 
     public:
         Coord();
-        Coord(int x, int y, int z);
+        Coord(const int x, const int y, const int z);
         Coord &operator=(const Coord &rhs);
-        int operator==(const Coord &rhs) const;
-        int operator<(const Coord &rhs) const;
+        bool operator==(const Coord &rhs) const;
+        bool operator<(const Coord &rhs) const;
         friend ostream &operator<<(ostream &lhs, const Coord &rhs);
-        int get_x() { return m_x; };
-        int get_y() { return m_y; };
-        int get_z() { return m_z; };
+        int get_x() const { return m_x; };
+        int get_y() const { return m_y; };
+        int get_z() const { return m_z; };
 };
 
 #endif
