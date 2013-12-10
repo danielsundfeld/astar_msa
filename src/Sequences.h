@@ -18,14 +18,14 @@ class Sequences
     public:
         enum { MATCH = 0, MAX_MISMATCH = 1, GAP = 2 };
         static Sequences *getInstance();
-        Coord get_final_coord() { return final_coord; };
-        string get_seq(int x) { return seqs.at(x); };
-        unsigned int get_seq_num() { return n_seq; };
         int set_seq(string x);
+        const Coord& get_final_coord() const { return final_coord; };
+        const string& get_seq(int x) const { return seqs.at(x); };
+        const unsigned int& get_seq_num() const { return n_seq; };
 
-        int cost(char r, char l);
-        int cost_mismatch(char r, char l);
-        bool is_not_final(Coord c);
+        int cost(const char r, const char l) const;
+        int cost_mismatch(const char r, const char l) const;
+        bool is_not_final(const Coord &c) const;
         void destroy();
 };
 #endif

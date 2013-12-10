@@ -20,12 +20,12 @@ Sequences* Sequences::getInstance()
     return instance;
 }
 
-int Sequences::cost_mismatch(char r, char l)
+int Sequences::cost_mismatch(const char r, const char l) const
 {
     return 1;
 }
 
-int Sequences::cost(char r, char l)
+int Sequences::cost(const char r, const char l) const
 {
     if (r == l)
         return MATCH;
@@ -42,7 +42,7 @@ int Sequences::set_seq(string x)
     return n_seq;
 }
 
-bool Sequences::is_not_final(Coord c)
+bool Sequences::is_not_final(const Coord &c) const
 {
     return !(c == final_coord);
 }
