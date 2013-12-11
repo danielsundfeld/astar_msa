@@ -51,7 +51,9 @@ int a_star()
         pq.pop();
         ClosedList[current.pos] = current;
 
-        vector<Node> neigh = current.getNeigh();
+        vector<Node> neigh;
+        current.getNeigh(neigh);
+
         for (vector<Node>::iterator it = neigh.begin() ; it != neigh.end(); ++it)
         {
             std::map<Coord,Node>::iterator search;

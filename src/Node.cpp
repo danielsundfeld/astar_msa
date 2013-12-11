@@ -41,9 +41,8 @@ void Node::calculate_h()
     m_h = (delta_x + delta_y + delta_z - 3 * min_delta) * Sequences::GAP;
 }
 
-vector<Node> Node::getNeigh()
+int Node::getNeigh(vector<Node> &a)
 {
-    vector<Node> a;
     unsigned int x = pos.get_x();
     unsigned int y = pos.get_y();
     unsigned int z = pos.get_z();
@@ -75,7 +74,7 @@ vector<Node> Node::getNeigh()
         a.push_back(Node(m_g + cxz + Sequences::GAP, Coord(x + 1, y,     z + 1), pos));
     if (addx && addy && addz)
         a.push_back(Node(m_g + cxy + cxz + cyz,      Coord(x + 1, y + 1, z + 1), pos));
-    return a;
+    return 0;
 }
 
 bool PriorityNode::operator()(Node& n1, Node& n2)

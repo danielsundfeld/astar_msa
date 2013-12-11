@@ -19,7 +19,7 @@ class Node {
         Node();
         Node(const int g, const Coord& pos, const Coord& parent = Coord());
         friend ostream &operator<<(ostream &lhs, const Node &rhs);
-        vector<Node> getNeigh();
+        int getNeigh(vector<Node> &a);
         int get_g() const { return m_g; };
         int get_f() const { return m_f; };
         int get_h() const { return m_h; };
