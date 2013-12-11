@@ -30,15 +30,20 @@ Coord& Coord::operator=(const Coord &rhs)
     return *this;
 }
 
-bool Coord::operator==(const Coord &rhs) const
+bool Coord::operator!=(const Coord &rhs) const
 {
     if (m_x != rhs.m_x)
-        return false;
+        return true;
     if (m_y != rhs.m_y)
-        return false;
+        return true;
     if (m_z != rhs.m_z)
-        return false;
-    return true;
+        return true;
+    return false;
+}
+
+bool Coord::operator==(const Coord &rhs) const
+{
+    return !(*this != rhs);
 }
 
 bool Coord::operator<(const Coord &rhs) const

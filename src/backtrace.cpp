@@ -51,7 +51,7 @@ void backtrace_create_stack(stack<char> *backtrace_stack, std::map<Coord, Node> 
         backtrace_stack[2].push(c);
 
         current = ClosedList[current.get_parent()];
-    } while (!(current.pos == current.get_parent()));
+    } while (current.pos != current.get_parent());
 }
 
 void backtrace_print_stack(stack<char> *backtrace_stack)

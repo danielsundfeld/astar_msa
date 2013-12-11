@@ -44,7 +44,7 @@ int Sequences::set_seq(string x)
 
 bool Sequences::is_not_final(const Coord &c) const
 {
-    return !(c == final_coord);
+    return (c != final_coord);
 }
 
 void Sequences::destroy()

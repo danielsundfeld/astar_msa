@@ -13,6 +13,7 @@ class Coord {
         Coord();
         Coord(const int x, const int y, const int z);
         Coord &operator=(const Coord &rhs);
+        bool operator!=(const Coord &rhs) const;
         bool operator==(const Coord &rhs) const;
         bool operator<(const Coord &rhs) const;
         friend ostream &operator<<(ostream &lhs, const Coord &rhs);
