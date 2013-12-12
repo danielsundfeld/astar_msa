@@ -1,11 +1,10 @@
-# Makefile para geracao do 'msa'
+# msa_a_star bin Makefile
 
 TARGET       = msa_a_star
 
-VDIR         = .
 INCDIR       = .
 
-CPPFLAGS   += -pipe -Wall
+CPPFLAGS   += -Wall
 
 ifdef RELEASE
   CPPFLAGS   += -O2
@@ -23,9 +22,6 @@ CPP_SRCS = \
   SequencesKeep.cpp \
   read_fasta.cpp \
   backtrace.cpp \
-
-VPATH += \
-  $(VDIR)/vpath \
 
 INCPATH += \
   -I$(INCDIR) \
