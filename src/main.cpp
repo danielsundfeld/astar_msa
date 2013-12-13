@@ -13,10 +13,8 @@ int usage(char progname[])
 
 int main(int argc, char *argv[])
 {
-    if (argc == 1)
+    if ((argc == 1) || (read_fasta_file(argv[1]) != 0))
         return usage(argv[0]);
-    if (read_fasta_file(argv[1]) != 0)
-        return -1;
     return a_star();
 }
 

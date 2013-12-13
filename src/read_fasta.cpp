@@ -1,20 +1,18 @@
 #include <fstream>
 #include <iostream>
-#include <stdlib.h>
-#include <string.h>
 
 #include "Sequences.h"
 
 using namespace std;
 
-int read_fasta_file(const char nome[])
+int read_fasta_file(const char name[])
 {
-    ifstream file(nome);
+    ifstream file(name);
     Sequences *sequences = Sequences::getInstance();
 
     if (!file.is_open())
     {
-        cout << "Can't open file " << nome << "\n";
+        cout << "Can't open file " << name << endl;
         return -1;
     }
     else
