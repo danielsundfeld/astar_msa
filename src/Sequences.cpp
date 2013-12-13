@@ -20,6 +20,12 @@ Sequences* Sequences::getInstance()
     return instance;
 }
 
+void Sequences::destroyInstance()
+{
+    delete instance;
+    instance = NULL;
+}
+
 int Sequences::cost_mismatch(const char r, const char l) const
 {
     return 1;
@@ -45,11 +51,5 @@ int Sequences::set_seq(string x)
 bool Sequences::is_not_final(const Coord &c) const
 {
     return (c != final_coord);
-}
-
-void Sequences::destroy()
-{
-    delete instance;
-    instance = NULL;
 }
 

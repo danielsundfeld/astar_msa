@@ -19,7 +19,7 @@ CPP_SRCS = \
   Node.cpp \
   AStar.cpp \
   Sequences.cpp \
-  SequencesKeep.cpp \
+  SingletonKeep.cpp \
   read_fasta.cpp \
   backtrace.cpp \
 
