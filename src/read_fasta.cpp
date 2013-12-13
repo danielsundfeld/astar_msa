@@ -15,16 +15,6 @@ int read_fasta_file(const char name[])
         cout << "Can't open file " << name << endl;
         return -1;
     }
-    else
-    {
-        string buf;
-        getline(file, buf);
-        if ((buf.length() <= 0) || (buf.at(0) != '>'))
-        {
-            cout << "Invalid fasta file.\n";
-            return -1;
-        }
-    }
 
     while (!file.eof())
     {
@@ -33,11 +23,12 @@ int read_fasta_file(const char name[])
         {
             string buf;
             getline(file, buf);
-            if ((buf.length() <= 0) || buf.at(0) == '>')
+            if ((buf.length() <= 0) || (buf.at(0) == '>'))
                 break;
             seq.append(buf);
         }
-        sequences->set_seq(seq);
+        if (!seq.empty())
+            sequences->set_seq(seq);
     }
     return 0;
 }
