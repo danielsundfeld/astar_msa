@@ -1,12 +1,13 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <iostream>
+
+using namespace std;
 
 #include "AStar.h"
 #include "read_fasta.h"
 
 int usage(char progname[])
 {
-    printf("Usage:\n<%s> <fasta_file>.\n", progname);
+    cout << "Usage:\n" << progname << " <fasta_file>\n";
     return -1;
 }
 
