@@ -16,7 +16,6 @@ class Sequences
         Coord final_coord;
 
     public:
-        enum { MATCH = 0, MAX_MISMATCH = 1, GAP = 2 };
         static Sequences *getInstance();
         static void destroyInstance();
         int set_seq(string x);
@@ -24,8 +23,6 @@ class Sequences
         const string& get_seq(int x) const { return seqs.at(x); };
         const unsigned int& get_seq_num() const { return n_seq; };
 
-        int cost(const char r, const char l) const;
-        int cost_mismatch(const char r, const char l) const;
         bool is_not_final(const Coord &c) const;
 };
 #endif

@@ -26,18 +26,6 @@ void Sequences::destroyInstance()
     instance = NULL;
 }
 
-int Sequences::cost_mismatch(const char r, const char l) const
-{
-    return 1;
-}
-
-int Sequences::cost(const char r, const char l) const
-{
-    if (r == l)
-        return MATCH;
-    return cost_mismatch(r, l);
-}
-
 int Sequences::set_seq(string x)
 {
     seqs.push_back(x);

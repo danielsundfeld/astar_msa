@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 
+#include "Cost.h"
 #include "Node.h"
 #include "Sequences.h"
 
@@ -38,7 +39,7 @@ void Node::calculate_h()
     int delta_z = final.get_z() - pos.get_z();
 
     int min_delta = min(delta_x, min(delta_y, delta_z));
-    m_h = (delta_x + delta_y + delta_z - 3 * min_delta) * Sequences::GAP;
+    m_h = (delta_x + delta_y + delta_z - 3 * min_delta) * Cost::GAP;
 }
 
 int Node::getNeigh(vector<Node> &a)
@@ -52,28 +53,28 @@ int Node::getNeigh(vector<Node> &a)
 
     Sequences *seq = Sequences::getInstance();
 
-    cxy = seq->cost(seq->get_seq(0)[x], seq->get_seq(1)[y]);
-    cxz = seq->cost(seq->get_seq(0)[x], seq->get_seq(2)[z]);
-    cyz = seq->cost(seq->get_seq(1)[y], seq->get_seq(2)[z]);
+    cxy = Cost::cost(seq->get_seq(0)[x], seq->get_seq(1)[y]);
+    cxz = Cost::cost(seq->get_seq(0)[x], seq->get_seq(2)[z]);
+    cyz = Cost::cost(seq->get_seq(1)[y], seq->get_seq(2)[z]);
 
     addx = (x < seq->get_seq(0).length());
     addy = (y < seq->get_seq(1).length());
     addz = (z < seq->get_seq(2).length());
 
     if (addx)
-        a.push_back(Node(m_g + 2 * Sequences::GAP,   Coord(x + 1, y,     z    ), pos));
+        a.push_back(Node(m_g + 2 * Cost::GAP,   Coord(x + 1, y,     z    ), pos));
     if (addy)
-        a.push_back(Node(m_g + 2 * Sequences::GAP,   Coord(x,     y + 1, z    ), pos));
+        a.push_back(Node(m_g + 2 * Cost::GAP,   Coord(x,     y + 1, z    ), pos));
     if (addz)
-        a.push_back(Node(m_g + 2 * Sequences::GAP,   Coord(x,     y,     z + 1), pos));
+        a.push_back(Node(m_g + 2 * Cost::GAP,   Coord(x,     y,     z + 1), pos));
     if (addx && addy)
-        a.push_back(Node(m_g + cxy + Sequences::GAP, Coord(x + 1, y + 1, z    ), pos));
+        a.push_back(Node(m_g + cxy + Cost::GAP, Coord(x + 1, y + 1, z    ), pos));
     if (addy && addz)
-        a.push_back(Node(m_g + cyz + Sequences::GAP, Coord(x,     y + 1, z + 1), pos));
+        a.push_back(Node(m_g + cyz + Cost::GAP, Coord(x,     y + 1, z + 1), pos));
     if (addx && addz)
-        a.push_back(Node(m_g + cxz + Sequences::GAP, Coord(x + 1, y,     z + 1), pos));
+        a.push_back(Node(m_g + cxz + Cost::GAP, Coord(x + 1, y,     z + 1), pos));
     if (addx && addy && addz)
-        a.push_back(Node(m_g + cxy + cxz + cyz,      Coord(x + 1, y + 1, z + 1), pos));
+        a.push_back(Node(m_g + cxy + cxz + cyz, Coord(x + 1, y + 1, z + 1), pos));
     return 0;
 }
 

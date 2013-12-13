@@ -22,6 +22,7 @@ CPP_SRCS = \
   SingletonKeep.cpp \
   read_fasta.cpp \
   backtrace.cpp \
+  Cost.cpp \
 
 INCPATH += \
   -I$(INCDIR) \
