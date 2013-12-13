@@ -7,28 +7,28 @@ INCDIR       = .
 CPPFLAGS   += -Wall
 
 ifdef RELEASE
-  CPPFLAGS   += -O2
-  LDFLAGS  += -s
+    CPPFLAGS   += -O2
+    LDFLAGS  += -s
 else
-  CPPFLAGS   += -O0 -g
+    CPPFLAGS   += -O0 -g
 endif
 
 CPP_SRCS = \
-  main.cpp \
-  Coord.cpp \
-  Node.cpp \
-  AStar.cpp \
-  Sequences.cpp \
-  SingletonKeep.cpp \
-  read_fasta.cpp \
-  backtrace.cpp \
-  Cost.cpp \
+    AStar.cpp \
+    backtrace.cpp \
+    Coord.cpp \
+    Cost.cpp \
+    main.cpp \
+    Node.cpp \
+    read_fasta.cpp \
+    Sequences.cpp \
+    SingletonKeep.cpp \
 
 INCPATH += \
-  -I$(INCDIR) \
+    -I$(INCDIR) \
 
 CPPFLAGS += \
-  $(INCPATH) \
+    $(INCPATH) \
 
 CPP_OBJS  = $(CPP_SRCS:.cpp=.o)
 
