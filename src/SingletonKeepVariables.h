@@ -1,5 +1,6 @@
 #ifndef _SINGLETONKEEPVARIABLES_H
 #define _SINGLETONKEEPVARIABLES_H
+#include "HeuristicAllP2.h"
 #include "Sequences.h"
 
 /*! 
@@ -10,4 +11,5 @@
  */
 
 static SingletonKeep<Sequences> sequenceskeeper;
+static SingletonKeep<HeuristicAllP2> heuristicallp2keeper;
 #endif

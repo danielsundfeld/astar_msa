@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "Cost.h"
-#include "HeuristicAllP2.h"
+#include "Heuristic.h"
 #include "Node.h"
 #include "Sequences.h"
 
@@ -21,7 +21,7 @@ Node::Node(const int g, const Coord& pos, const Coord& parent)
   pos(pos)
 {
     m_g = g;
-    m_h = HeuristicAllP2::calculate_h(pos);
+    m_h = Heuristic::getHeuristic()->calculate_h(pos);
     m_f = m_g + m_h;
 }
 

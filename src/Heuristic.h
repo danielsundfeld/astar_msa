@@ -3,7 +3,14 @@
 #include "Coord.h"
 
 class Heuristic {
+    private:
+        static Heuristic *instance;
+
     public:
-        virtual int calculate_heuristic(const Coord &c) const = 0;
+        virtual ~Heuristic();
+        static Heuristic* getHeuristic();
+        static void setHeuristic(Heuristic *p);
+
+        virtual int calculate_h(const Coord &c) const = 0;
 };
 #endif
