@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "Cost.h"
+#include "HeuristicAllP2.h"
 #include "Node.h"
 #include "Sequences.h"
 
@@ -20,7 +21,7 @@ Node::Node(const int g, const Coord& pos, const Coord& parent)
   pos(pos)
 {
     m_g = g;
-    calculate_h();
+    m_h = HeuristicAllP2::calculate_h(pos);
     m_f = m_g + m_h;
 }
 
@@ -29,17 +30,6 @@ ostream& operator<<(ostream &lhs, const Node &rhs)
     lhs << "g - " << rhs.m_g << " (h - " << rhs.m_h << " f - " << rhs.m_f
         << ") " << rhs.pos;
     return lhs;
-}
-
-void Node::calculate_h()
-{
-    Coord final = Sequences::getInstance()->get_final_coord();
-    int delta_x = final.get_x() - pos.get_x();
-    int delta_y = final.get_y() - pos.get_y();
-    int delta_z = final.get_z() - pos.get_z();
-
-    int min_delta = min(delta_x, min(delta_y, delta_z));
-    m_h = (delta_x + delta_y + delta_z - 3 * min_delta) * Cost::GAP;
 }
 
 int Node::getNeigh(vector<Node> &a)

@@ -12,7 +12,6 @@ class Node {
         int m_h; // heuristc estimated cost to the goal
         int m_f; // priority
         Coord parent;
-        void calculate_h();
 
     public: 
         Coord pos;

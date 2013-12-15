@@ -18,6 +18,7 @@ CPP_SRCS = \
     backtrace.cpp \
     Coord.cpp \
     Cost.cpp \
+    HeuristicAllP2.cpp \
     main.cpp \
     Node.cpp \
     read_fasta.cpp \
