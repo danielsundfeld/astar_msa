@@ -34,6 +34,7 @@ using namespace std;
  */
 int a_star()
 {
+    Node current;
     map<Coord, Node> OpenList;
     map<Coord, Node> ClosedList;
     priority_queue<Node, vector<Node>, PriorityNode> pq;
@@ -44,11 +45,35 @@ int a_star()
     OpenList[coord_zero] = node_zero;
     pq.push(node_zero); //Zero cost, zero coords.
 
-    Node current = pq.top();
-    while (!pq.empty() && seq->is_not_final(current.pos))
+    while (!pq.empty())
     {
-        //cout << "Opening node:\t" << current << endl;
+        current = pq.top();
+        map<Coord,Node>::iterator search;
         pq.pop();
+
+       // Check if better node is already found
+        if ((search = OpenList.find(current.pos)) != OpenList.end())
+        {
+            if (current.get_g() > search->second.get_g())
+            {
+                current = pq.top();
+                continue;
+            }
+        }
+        // Or already opened
+        if ((search = ClosedList.find(current.pos)) != ClosedList.end())
+        {
+            if (current.get_g() >= search->second.get_g())
+            {
+                current = pq.top();
+                continue;
+            }
+        }
+
+        if (!seq->is_not_final(current.pos))
+            break;
+
+        //cout << "Opening node:\t" << current << endl;
         ClosedList[current.pos] = current;
 
         vector<Node> neigh;
@@ -56,12 +81,10 @@ int a_star()
 
         for (vector<Node>::iterator it = neigh.begin() ; it != neigh.end(); ++it)
         {
-            std::map<Coord,Node>::iterator search;
-
             if ((search = OpenList.find(it->pos)) != OpenList.end())
             {
                 // if score on open list is better, ignore this neighboor
-                if (it->get_g() >= search->second.get_g())
+                if (it->get_g() > search->second.get_g())
                     continue;
             }
             if ((search = ClosedList.find(it->pos)) != ClosedList.end())
@@ -72,9 +95,9 @@ int a_star()
             }
 
             OpenList[it->pos] = *it;
+            //cout << "Adding:\t" << *it << "from\t" << current << endl;
             pq.push(*it);
         }
-        current = pq.top();
     }
     ClosedList[current.pos] = current;
     cout << "Final score:\t" << current << endl;
