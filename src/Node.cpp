@@ -27,8 +27,8 @@ Node::Node(const int g, const Coord& pos, const Coord& parent)
 
 ostream& operator<<(ostream &lhs, const Node &rhs)
 {
-    lhs << "g - " << rhs.m_g << " (h - " << rhs.m_h << " f - " << rhs.m_f
-        << ") " << rhs.pos;
+    lhs << rhs.pos << "\tg - " << rhs.m_g << " (h - " << rhs.m_h
+        << " f - " << rhs.m_f << ")";
     return lhs;
 }
 
