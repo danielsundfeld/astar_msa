@@ -19,10 +19,11 @@ CPP_SRCS = \
     Coord.cpp \
     Cost.cpp \
     Heuristic.cpp \
-    HeuristicAllP2.cpp \
+    HeuristicHPair.cpp \
     main.cpp \
     Node.cpp \
     read_fasta.cpp \
+    PairAlign.cpp \
     Sequences.cpp \
     SingletonKeep.cpp \
 
