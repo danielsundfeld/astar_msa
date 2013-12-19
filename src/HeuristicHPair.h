@@ -15,7 +15,6 @@ class HeuristicHPair : public Heuristic
         static HeuristicHPair *instance;
         HeuristicHPair();
         ~HeuristicHPair();
-        Sequences *m_seq;
         vector<PairAlign*> mAligns;
 
     public:

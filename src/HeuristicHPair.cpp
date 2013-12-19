@@ -9,7 +9,6 @@ HeuristicHPair* HeuristicHPair::instance = NULL;
 
 HeuristicHPair::HeuristicHPair()
 {
-    m_seq = Sequences::getInstance();
     mAligns.clear();
 }
 
@@ -34,7 +33,8 @@ void HeuristicHPair::destroyInstance()
 
 void HeuristicHPair::init()
 {
-    int seq_num = m_seq->get_seq_num();
+    Sequences *seq = Sequences::getInstance();
+    int seq_num = seq->get_seq_num();
     setHeuristic(instance);
 
     cout << "Starting pairwise alignments... " << flush;
@@ -43,7 +43,7 @@ void HeuristicHPair::init()
         for (int j = i + 1; j < seq_num; j++)
         {
             Pair p(i, j);
-            PairAlign *a = new PairAlign(p, m_seq->get_seq(i), m_seq->get_seq(j));
+            PairAlign *a = new PairAlign(p, seq->get_seq(i), seq->get_seq(j));
             mAligns.push_back(a);
         }
     }
