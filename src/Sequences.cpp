@@ -11,6 +11,7 @@ Sequences::Sequences()
     n_seq = 0;
 }
 
+unsigned int Sequences::n_seq = 0;
 Sequences* Sequences::instance = NULL;
 
 Sequences* Sequences::getInstance()

@@ -34,7 +34,7 @@ void HeuristicHPair::destroyInstance()
 void HeuristicHPair::init()
 {
     Sequences *seq = Sequences::getInstance();
-    int seq_num = seq->get_seq_num();
+    int seq_num = Sequences::get_seq_num();
     setHeuristic(instance);
 
     cout << "Starting pairwise alignments... " << flush;

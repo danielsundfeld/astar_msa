@@ -56,7 +56,7 @@ void backtrace_create_stack(stack<char> *backtrace_stack, std::map<Coord, Node> 
 
 void backtrace_print_stack(stack<char> *backtrace_stack)
 {
-    int dimensions = Sequences::getInstance()->get_seq_num();
+    int dimensions = Sequences::get_seq_num();
     int size = get_terminal_size();
 
     while (!backtrace_stack[0].empty())
