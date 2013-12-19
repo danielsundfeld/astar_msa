@@ -70,7 +70,7 @@ int a_star()
             }
         }
 
-        if (!seq->is_not_final(current.pos))
+        if (seq->is_final(current.pos))
             break;
 
         //cout << "Opening node:\t" << current << endl;

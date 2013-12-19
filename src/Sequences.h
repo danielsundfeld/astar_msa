@@ -24,7 +24,6 @@ class Sequences
         const Coord& get_final_coord() const { return final_coord; };
         const string& get_seq(int x) const { return seqs.at(x); };
         const unsigned int& get_seq_num() const { return n_seq; };
-
-        bool is_not_final(const Coord &c) const;
+        bool is_final(const Coord &c) const;
 };
 #endif

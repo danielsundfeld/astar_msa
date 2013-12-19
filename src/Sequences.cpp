@@ -36,8 +36,7 @@ int Sequences::set_seq(string x)
     return n_seq;
 }
 
-bool Sequences::is_not_final(const Coord &c) const
+bool Sequences::is_final(const Coord &c) const
 {
-    return (c != final_coord);
+    return (c == final_coord);
 }
-
