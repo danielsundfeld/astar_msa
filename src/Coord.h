@@ -7,7 +7,7 @@ using namespace std;
 
 class Coord {
     private:
-        int m_x, m_y, m_z;
+        vector<int> m_coord;
 
     public:
         Coord();
@@ -17,9 +17,11 @@ class Coord {
         bool operator==(const Coord &rhs) const;
         bool operator<(const Coord &rhs) const;
         friend ostream &operator<<(ostream &lhs, const Coord &rhs);
-        int get_x() const { return m_x; };
-        int get_y() const { return m_y; };
-        int get_z() const { return m_z; };
+        int& operator[](const int n);
+        void append(const int &n);
+        int get_x() const { return m_coord[0]; };
+        int get_y() const { return m_coord[1]; };
+        int get_z() const { return m_coord[2]; };
 };
 
 #endif
