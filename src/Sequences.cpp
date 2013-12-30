@@ -27,11 +27,12 @@ void Sequences::destroyInstance()
     instance = NULL;
 }
 
-int Sequences::set_seq(string x)
+int Sequences::set_seq(const string &x)
 {
     seqs.push_back(x);
     ++n_seq;
 
+    //TODO n_seq
     if (n_seq == 3)
        final_coord = Coord(get_seq(0).length(), get_seq(1).length(), get_seq(2).length()); 
     return n_seq;
