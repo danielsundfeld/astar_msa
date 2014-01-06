@@ -1,3 +1,9 @@
+/*!
+ * \filename Heuristic.cpp
+ * \author Daniel Sundfeld
+ *
+ * INSERT_LICENSE
+ */
 #include "Heuristic.h"
 
 Heuristic* Heuristic::instance = NULL;

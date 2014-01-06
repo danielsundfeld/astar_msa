@@ -1,3 +1,11 @@
+/*!
+ * \class PairAlign
+ * \filename PairAlign.h
+ * \author Daniel Sundfeld
+ * \brief Calculate an pairwise alignment and saves all scores on a 2D matrix
+ *
+ * INSERT_LICENSE
+ */
 #ifndef _PAIRALIGN_H
 #define _PAIRALIGN_H
 #include <string>

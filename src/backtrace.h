@@ -1,3 +1,9 @@
+/*!
+ * \filename Backtrace.h
+ * \author Daniel Sundfeld
+ *
+ * INSERT_LICENSE
+ */
 #ifndef _BACKTRACE_H
 #define _BACKTRACE_H
 #include <map>

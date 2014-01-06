@@ -1,3 +1,11 @@
+/*!
+ * \class Coord
+ * \filename Coords.h
+ * \author Daniel Sundfeld
+ * \brief A multidimensional coordinate
+ *
+ * INSERT_LICENSE
+ */
 #ifndef _COORDS_H
 #define _COORDS_H
 #include <iostream>

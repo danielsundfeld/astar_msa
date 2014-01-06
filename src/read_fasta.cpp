@@ -1,3 +1,9 @@
+/*!
+ * \filename read_fasta.cpp
+ * \author Daniel Sundfeld
+ *
+ * INSERT_LICENSE
+ */
 #include <fstream>
 #include <iostream>
 
@@ -5,6 +11,10 @@
 
 using namespace std;
 
+/*!
+ * \brief Read the \a name fasta file, loading it to the Sequences
+ * singleton
+ */
 int read_fasta_file(const char name[])
 {
     ifstream file(name);

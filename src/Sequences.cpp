@@ -1,3 +1,9 @@
+/*!
+ * \filename Sequences.cpp
+ * \author Daniel Sundfeld
+ *
+ * INSERT_LICENSE
+ */
 #include <iostream>
 #include <string>
 

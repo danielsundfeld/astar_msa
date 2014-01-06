@@ -1,3 +1,9 @@
+/*!
+ * \filename SingletonKeep.cpp
+ * \author Daniel Sundfeld
+ *
+ * INSERT_LICENSE
+ */
 #include "SingletonKeep.h"
 #include "SingletonKeepVariables.h"
 

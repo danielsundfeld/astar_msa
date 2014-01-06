@@ -1,3 +1,11 @@
+/*!
+ * \filename a_star.cpp
+ * \author Daniel Sundfeld
+ * \brief Do a multiple sequence alignment reducing the search space
+ * with a-star algorithm alignment
+ *
+ * INSERT_LICENSE
+ */
 #include <iostream>
 #include <map>
 #include <queue>
@@ -11,7 +19,7 @@
 
 using namespace std;
 
-/*
+/*!
  * A classic A-Star implentation resume:
  *
  * OPEN = priority queue with START node

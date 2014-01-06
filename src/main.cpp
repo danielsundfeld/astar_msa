@@ -1,3 +1,10 @@
+/*!
+ * \filename main.cpp
+ * \author Daniel Sundfeld
+ * \brief The main fuction from the MSA-A-Star project
+ *
+ * INSERT_LICENSE
+ */
 #include <iostream>
 
 using namespace std;

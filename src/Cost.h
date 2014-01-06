@@ -1,3 +1,11 @@
+/*!
+ * \class Cost
+ * \filename Cost.h
+ * \author Daniel Sundfeld
+ * \brief Class that calculates match, mismatch and gap cost
+ *
+ * INSERT_LICENSE
+ */
 #ifndef _COST_H
 #define _COST_H
 class Cost {

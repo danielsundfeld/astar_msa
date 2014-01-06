@@ -1,3 +1,7 @@
+/*!
+ * \filename backtrace.cpp
+ * \author Daniel Sundfeld
+ */
 #include <iostream>
 #include <map>
 #include <stack>

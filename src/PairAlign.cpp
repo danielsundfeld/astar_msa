@@ -1,3 +1,9 @@
+/*!
+ * \filename PairAlign.cpp
+ * \author Daniel Sundfeld
+ *
+ * INSERT_LICENSE
+ */
 #include <algorithm>
 #include <iomanip>
 #include <iostream>

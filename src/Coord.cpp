@@ -1,3 +1,9 @@
+/*!
+ * \filename Coord.cpp
+ * \author Daniel Sundfeld
+ *
+ * INSERT_LICENSE
+ */
 #include <iostream>
 #include <vector>
 
