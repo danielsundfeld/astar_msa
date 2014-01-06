@@ -56,14 +56,10 @@ int HeuristicHPair::calculate_h(const Coord &c) const
     int h = 0;
     for (vector<PairAlign*>::const_iterator it = mAligns.begin() ; it != mAligns.end(); ++it)
     {
-        if ((*it)->getPair() == Pair(0, 1))
-            h += (*it)->getScore(c.get_x(), c.get_y());
-        else if ((*it)->getPair() == Pair(0, 2))
-            h += (*it)->getScore(c.get_x(), c.get_z());
-        else if ((*it)->getPair() == Pair(1, 2))
-            h += (*it)->getScore(c.get_y(), c.get_z());
-        else
-            continue;
+        int x = (*it)->getPair().first;
+        int y = (*it)->getPair().second;
+
+        h += (*it)->getScore(c[x], c[y]);
     }
     return h;
 }
