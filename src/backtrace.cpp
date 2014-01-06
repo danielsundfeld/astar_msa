@@ -13,7 +13,7 @@ using namespace std;
 int get_terminal_size()
 {
     int size = 80;
-#ifdef linux
+#ifdef __linux
     // This method works with resized terminal
     struct winsize w;
 
@@ -25,38 +25,29 @@ int get_terminal_size()
 
 void backtrace_create_stack(stack<char> *backtrace_stack, std::map<Coord, Node> &ClosedList)
 {
+    const int dimensions = Sequences::get_seq_num();
     Sequences *seq = Sequences::getInstance();
 
     Node current = ClosedList[seq->get_final_coord()];
     do 
     {
-        char c;
         //cout << "Backtrace:\t" << current << endl;
-        if (current.pos.get_x() != current.get_parent().get_x())
-            c = seq->get_seq(0)[current.pos.get_x() - 1];
-        else
-            c = '-';
-        backtrace_stack[0].push(c);
-
-        if (current.pos.get_y() != current.get_parent().get_y())
-            c = seq->get_seq(1)[current.pos.get_y() - 1];
-        else
-            c = '-';
-        backtrace_stack[1].push(c);
-
-        if (current.pos.get_z() != current.get_parent().get_z())
-            c = seq->get_seq(2)[current.pos.get_z() - 1];
-        else
-            c = '-';
-        backtrace_stack[2].push(c);
-
+        for (int i = 0; i < dimensions; i++)
+        {
+            char c;
+            if (current.pos[i] != current.get_parent()[i])
+                c = seq->get_seq(i)[current.pos[i] - 1];
+            else
+                c = '-';
+            backtrace_stack[i].push(c);
+        }
         current = ClosedList[current.get_parent()];
     } while (current.pos != current.get_parent());
 }
 
 void backtrace_print_stack(stack<char> *backtrace_stack)
 {
-    int dimensions = Sequences::get_seq_num();
+    const int dimensions = Sequences::get_seq_num();
     int size = get_terminal_size();
 
     while (!backtrace_stack[0].empty())
@@ -78,9 +69,10 @@ void backtrace_print_stack(stack<char> *backtrace_stack)
 
 void backtrace(std::map<Coord, Node> &ClosedList)
 {
-    stack<char> backtrace_stack[3];
+    stack<char> *backtrace_stack = new stack<char>[Sequences::get_seq_num()];
 
     backtrace_create_stack(backtrace_stack, ClosedList);
     backtrace_print_stack(backtrace_stack);
+    delete[] backtrace_stack;
 }
 
