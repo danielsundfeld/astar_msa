@@ -11,5 +11,5 @@
  */
 
 static SingletonKeep<Sequences> sequenceskeeper;
-static SingletonKeep<HeuristicHPair> heuristicallp2keeper;
+static SingletonKeep<HeuristicHPair> heuristichpairkeeper;
 #endif
