@@ -1,3 +1,12 @@
+/*!
+ * \class Node
+ * \filename Node.h
+ * \author Daniel Sundfeld
+ * \brief Class that hold all Nodes atributes, like the cost from the
+ * origin, heuristic estimative, parent
+ *
+ * INSERT_LICENSE
+ */
 #ifndef _NODE_H
 #define _NODE_H
 #include <vector>
@@ -12,6 +21,9 @@ class Node {
         int m_h; // heuristc estimated cost to the goal
         int m_f; // priority
         Coord parent;
+        bool borderCheck(const Coord &c) const;
+        inline int bitSeq(const int &i) const;
+        inline bool bitSeqCheck(const int &i, const int &s1, const int &s2) const;
 
     public: 
         Coord pos;
@@ -25,6 +37,9 @@ class Node {
         inline Coord get_parent() const { return parent; };
 };
 
+/*!
+ * \brief Class to compare Nodes on a priority_queue
+ */
 class PriorityNode {
     public:
         bool operator()(Node& n1, Node& n2);
