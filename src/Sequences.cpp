@@ -19,6 +19,7 @@ Sequences::Sequences()
 
 unsigned int Sequences::n_seq = 0;
 Sequences* Sequences::instance = NULL;
+Coord Sequences::final_coord;
 
 Sequences* Sequences::getInstance()
 {

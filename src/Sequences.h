@@ -23,13 +23,13 @@ class Sequences
         static Sequences *instance;
         Sequences();
         vector<string> seqs;
-        Coord final_coord;
+        static Coord final_coord;
 
     public:
         static Sequences *getInstance();
         static void destroyInstance();
         int set_seq(const string &x);
-        const Coord& get_final_coord() const { return final_coord; };
+        static const Coord& get_final_coord() { return final_coord; };
         const string& get_seq(int x) const { return seqs.at(x); };
         static unsigned int& get_seq_num() { return n_seq; };
         bool is_final(const Coord &c) const;
