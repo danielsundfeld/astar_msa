@@ -56,10 +56,8 @@ ostream& operator<<(ostream &lhs, const Node &rhs)
  */
 bool Node::borderCheck(const Coord &c) const
 {
-    Sequences *seq = Sequences::getInstance();
-
     for (unsigned int i = 0; i < Sequences::get_seq_num(); i++)
-        if ((unsigned int)c[i] > seq->get_seq(i).length())
+        if (c[i] > Sequences::get_final_coord()[i])
             return false;
     return true;
 }
