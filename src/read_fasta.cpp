@@ -12,8 +12,7 @@
 using namespace std;
 
 /*!
- * \brief Read the \a name fasta file, loading it to the Sequences
- * singleton
+ * Read the \a name fasta file, loading it to the Sequences singleton
  */
 int read_fasta_file(const char name[])
 {
@@ -42,4 +41,3 @@ int read_fasta_file(const char name[])
     }
     return 0;
 }
-

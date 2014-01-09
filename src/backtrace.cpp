@@ -27,6 +27,14 @@ int get_terminal_size()
     return size;
 }
 
+/*!
+ * Using the last node on \a ClosedList do a backtrace, verifing
+ * gaps, matches and mismatches, saving characteres o the
+ * \a backstrace_stack.
+ *
+ * At the end of the process, \a backstrace_stack contains the
+ * answer for every sequence.
+ */
 void backtrace_create_stack(stack<char> *backtrace_stack, std::map<Coord, Node> &ClosedList)
 {
     const int dimensions = Sequences::get_seq_num();
@@ -49,6 +57,10 @@ void backtrace_create_stack(stack<char> *backtrace_stack, std::map<Coord, Node> 
     } while (current.pos != current.get_parent());
 }
 
+/*!
+ * Print the answer in \a backstrace_stack. Use a good lenght to print
+ * considering the current terminal (linux-only).
+ */
 void backtrace_print_stack(stack<char> *backtrace_stack)
 {
     const int dimensions = Sequences::get_seq_num();
@@ -71,6 +83,10 @@ void backtrace_print_stack(stack<char> *backtrace_stack)
     }
 }
 
+/*!
+ * MSA-Node backtrace functions prints the answer. Using the
+ * \a ClosedList it backtrace every node until the origin is reached
+ */
 void backtrace(std::map<Coord, Node> &ClosedList)
 {
     stack<char> *backtrace_stack = new stack<char>[Sequences::get_seq_num()];
@@ -79,4 +95,3 @@ void backtrace(std::map<Coord, Node> &ClosedList)
     backtrace_print_stack(backtrace_stack);
     delete[] backtrace_stack;
 }
-

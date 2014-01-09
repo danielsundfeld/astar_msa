@@ -2,6 +2,7 @@
  * \filename Node.cpp
  * \author Daniel Sundfeld
  *
+ * TODO refactor. Divide it as msa-node and node
  * INSERT_LICENSE
  */
 #include <algorithm>
@@ -15,9 +16,7 @@
 
 using namespace std;
 
-/*!
- * Build a node with zero on all atributes
- */
+//! Build a node with zero on all atributes
 Node::Node()
 {
     m_g = 0;
@@ -41,9 +40,6 @@ Node::Node(const int g, const Coord& pos, const Coord& parent)
     m_f = m_g + m_h;
 }
 
-/*!
- * Print \a rhs atributes
- */
 ostream& operator<<(ostream &lhs, const Node &rhs)
 {
     lhs << rhs.pos << "\tg - " << rhs.m_g << " (h - " << rhs.m_h
@@ -51,9 +47,7 @@ ostream& operator<<(ostream &lhs, const Node &rhs)
     return lhs;
 }
 
-/*!
- * Check if coord \a c belongs to the sequences' search space
- */
+//! Check if coord \a c belongs to the sequences' search space
 bool Node::borderCheck(const Coord &c) const
 {
     for (unsigned int i = 0; i < Sequences::get_seq_num(); i++)
@@ -62,17 +56,13 @@ bool Node::borderCheck(const Coord &c) const
     return true;
 }
 
-/*!
- * Return sequence \a i as a bitfield
- */
+//! Return sequence \a i as a bitfield
 inline int Node::bitSeq(const int &i) const
 {
     return 1 << i;
 }
 
-/*!
- * Bit check if the number \a i has sequences \a s1 and \a s2
- */
+//! Bit check if the number \a i has sequences \a s1 and \a s2
 inline bool Node::bitSeqCheck(const int &i, const int &s1, const int &s2) const
 {
     return (i & s1) && (i & s2);
@@ -112,7 +102,8 @@ int Node::getNeigh(vector<Node> &a)
         {
             int costs = 0; // match and mismatch sum-of-pairs cost
             for (auto it = pairwise_costs.begin() ; it != pairwise_costs.end(); ++it)
-                costs += get<0>(*it) * bitSeqCheck(i, get<1>(*it), get<2>(*it));
+                if (bitSeqCheck(i, get<1>(*it), get<2>(*it)))
+                    costs += get<0>(*it);
             a.push_back(Node(m_g + costs + gap_cost, c, pos));
         }
     }
@@ -128,9 +119,7 @@ int Node::getNeigh(vector<Node> &a)
     return 0;
 }
 
-/*!
- * Friend function to compare nodes. Highest priority to lower f's.
- */
+//! Friend function to compare nodes. Highest priority to lower f's.
 bool PriorityNode::operator()(Node& n1, Node& n2)
 {
     if (n1.m_f > n2.m_f)

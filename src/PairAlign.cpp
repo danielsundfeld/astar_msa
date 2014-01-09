@@ -18,6 +18,7 @@ PairAlign::PairAlign()
 {
 }
 
+//! Do a pairwise alignment
 void PairAlign::Align(const string &s1, const string &s2)
 {
     int i;
@@ -56,11 +57,17 @@ void PairAlign::Align(const string &s1, const string &s2)
 */
 }
 
+//! Return the value of the 2D-matrix with coords i and j
 int PairAlign::getScore(const int i, const int j) const
 {
     return m_matrix[i][j];
 }
 
+/*!
+ * Creates a pair align of the sequences \a s1 and \a s2.
+ * It is important to remember wich sequences are using, so save this
+ * infomation as the pair \a p
+ */
 PairAlign::PairAlign(Pair p, const string &s1, const string &s2)
 :   m_par(p)
 {
@@ -69,5 +76,3 @@ PairAlign::PairAlign(Pair p, const string &s1, const string &s2)
     Align(s1, s2);
 //    cout << "Score: " << m_matrix[0][0] << endl;
 }
-
-

@@ -11,6 +11,7 @@
 #include "PairAlign.h"
 #include "Sequences.h"
 
+//! Singleton instance
 HeuristicHPair* HeuristicHPair::instance = NULL;
 
 HeuristicHPair::HeuristicHPair()
@@ -18,12 +19,14 @@ HeuristicHPair::HeuristicHPair()
     mAligns.clear();
 }
 
+//! Free all pairwise alignments
 HeuristicHPair::~HeuristicHPair()
 {
     for (vector<PairAlign*>::iterator it = mAligns.begin() ; it != mAligns.end(); ++it)
         delete *it;
 }
 
+//! Return the current instance. Creates, if needed
 HeuristicHPair* HeuristicHPair::getInstance()
 {
     if (!instance)
@@ -31,12 +34,18 @@ HeuristicHPair* HeuristicHPair::getInstance()
     return instance;
 }
 
+//! Free's the memory, destroying the instance
 void HeuristicHPair::destroyInstance()
 {
     delete instance;
     instance = NULL;
 }
 
+/*!
+ * Call this function, after all Sequences are loaded.
+ * Do the pairwise alignment of all Sequences and set HeuristicHPair
+ * as the a-star Heuristic
+ */
 void HeuristicHPair::init()
 {
     Sequences *seq = Sequences::getInstance();
@@ -57,6 +66,10 @@ void HeuristicHPair::init()
     return;
 }
 
+/*!
+ * Return a h-value to the Coord \a c using HPair logic.
+ * H is the sum of all pairwise values based on reverse strings.
+ */
 int HeuristicHPair::calculate_h(const Coord &c) const
 {
     int h = 0;

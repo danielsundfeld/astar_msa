@@ -20,4 +20,3 @@ SingletonKeep<T>::~SingletonKeep()
 {
     T::destroyInstance();
 }
-

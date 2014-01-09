@@ -15,14 +15,13 @@ Coord::Coord()
 {
 }
 
-/*!
- * Construct a Coord with \a d dimensions initialized as '0'.
- */
+//! Construct a Coord with \a d dimensions initialized as '0'
 Coord::Coord(int d)
 {
     m_coord = vector<int>(d, 0);
 }
 
+//! Construct a 3-dimensions coord
 Coord::Coord(const int x, const int y, const int z)
 {
     m_coord.push_back(x);
@@ -69,26 +68,31 @@ ostream& operator<<(ostream &lhs, const Coord &rhs)
     return lhs;
 }
 
+//! Return the value on the \n - dimension
 const int& Coord::operator[](const int n) const
 {
     return m_coord[n];
 }
 
+//! Return the value on the \n - dimension
 int& Coord::operator[](const int n)
 {
     return m_coord[n];
 }
 
+/*!
+ * Increases de dimension of the current coord, ading \a n as the
+ * last dimension
+ */
 void Coord::append(const int &n)
 {
     m_coord.push_back(n);
 }
 
 /*!
- * Helper function to produce all neighboors.
+ * Helper function to produce a neighboor.
  * If a 3 dimensions coord(x, y, z) call neigh(1) it produces
  * coord(x + 1, y, z), neigh(7) produces coord(x + 1, y + 1, z +1)
- * and so on.
  */
 Coord Coord::neigh(int n) const
 {
