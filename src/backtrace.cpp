@@ -3,9 +3,11 @@
  * \author Daniel Sundfeld
  */
 #include <iostream>
+#include <limits>
 #include <map>
 #include <stack>
 #include <sys/ioctl.h>
+#include <unistd.h>
 
 #include "Coord.h"
 #include "Node.h"
@@ -13,14 +15,18 @@
 
 using namespace std;
 
-// Decide the best size to print on current terminal
-int get_terminal_size()
+// Decide the best lenght size to print
+int get_print_size()
 {
     int size = 80;
 #ifdef __linux
-    // This method works with resized terminal
     struct winsize w;
 
+    // If it is a file, we dont care about lenght
+    if (!isatty(1))
+        return numeric_limits<int>::max();
+
+    // If it is a terminal, get the lenght
     if ((ioctl(0, TIOCGWINSZ, &w) == 0) && (w.ws_col > 1))
         size = w.ws_col - 1;
 #endif
@@ -64,7 +70,7 @@ void backtrace_create_stack(stack<char> *backtrace_stack, std::map<Coord, Node> 
 void backtrace_print_stack(stack<char> *backtrace_stack)
 {
     const int dimensions = Sequences::get_seq_num();
-    int size = get_terminal_size();
+    int size = get_print_size();
 
     while (!backtrace_stack[0].empty())
     {
