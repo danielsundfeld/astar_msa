@@ -18,13 +18,35 @@ PairAlign::PairAlign()
 {
 }
 
+PairAlign::~PairAlign()
+{
+    freeMemory();
+}
+
+//! Initialize the internal matrix with sizes \a size1 and \a size2
+void PairAlign::initMatrix(int size1, int size2)
+{
+    s1_l = size1;
+    s2_l = size2;
+
+    m_matrix = new int*[size1 + 1];
+    for (int i = 0; i < size1 + 1; i++)
+        m_matrix[i] = new int[size2 + 1];
+}
+
+//! Free memory usage by the matrix
+void PairAlign::freeMemory()
+{
+    for (int i = 0; i <= s1_l; i++)
+        delete[] m_matrix[i];
+    delete[] m_matrix;
+}
+
 //! Do a pairwise alignment
 void PairAlign::Align(const string &s1, const string &s2)
 {
-    int i;
-    int j;
-    int s1_l = (int)s1.length();
-    int s2_l = (int)s2.length();
+    int i, j;
+    initMatrix(s1.length(), s2.length());
 
     m_matrix[s1_l][s2_l] = 0;
 
@@ -45,7 +67,7 @@ void PairAlign::Align(const string &s1, const string &s2)
             m_matrix[i][j] = min(c0, min(c1, c2));
         }
     }
-/*
+/*  // Debug code to print pairwise matrix
     for (i = 0; i <= s1_l; i++)
     {
         for (j = 0; j <= s2_l; j++)

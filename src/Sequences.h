@@ -14,8 +14,6 @@
 
 using namespace std;
 
-#define MAX_SEQ_SIZE    1000
-
 class Sequences
 {
     private:
