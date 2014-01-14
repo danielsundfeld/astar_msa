@@ -68,6 +68,12 @@ inline bool Node::bitSeqCheck(const int &i, const int &s1, const int &s2) const
     return (i & s1) && (i & s2);
 }
 
+//! Bit check if the number \a i has some sequence \a s1 or \a s2
+inline bool Node::bitSeqCheckAny(const int &i, const int &s1, const int &s2) const
+{
+    return (i & s1) || (i & s2);
+}
+
 /*!
  * Add all neighboors to a vector \a. If it is not a board node,
  * 2pow(n-1) nodes are added.
@@ -76,7 +82,6 @@ int Node::getNeigh(vector<Node> &a)
 {
     int i;
     Sequences *seq = Sequences::getInstance();
-    const int gap_cost = (Sequences::get_seq_num() - 1) * Cost::GAP;
     Coord c;
 
     /* Vector of tuple. First field cost, Second field, sequence1
@@ -95,26 +100,20 @@ int Node::getNeigh(vector<Node> &a)
     }
 
     int n = bitSeq(Sequences::get_seq_num()) - 1;
-    for (i = 1; i < n; i++)
+    for (i = 1; i <= n; i++)
     {
         c = pos.neigh(i);
         if (borderCheck(c))
         {
             int costs = 0; // match and mismatch sum-of-pairs cost
+            int gap_cost = 0;
             for (auto it = pairwise_costs.begin() ; it != pairwise_costs.end(); ++it)
                 if (bitSeqCheck(i, get<1>(*it), get<2>(*it)))
                     costs += get<0>(*it);
+                else if (bitSeqCheckAny(i, get<1>(*it), get<2>(*it)))
+                    gap_cost += Cost::GAP;
             a.push_back(Node(m_g + costs + gap_cost, c, pos));
         }
-    }
-    // add last neighboor without any gap cost
-    c = pos.neigh(i);
-    if (borderCheck(c))
-    {
-        int costs = 0;
-        for (auto it = pairwise_costs.begin() ; it != pairwise_costs.end(); ++it)
-            costs += get<0>(*it);
-        a.push_back(Node(m_g + costs, c, pos));
     }
     return 0;
 }
