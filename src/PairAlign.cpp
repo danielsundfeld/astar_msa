@@ -67,7 +67,8 @@ void PairAlign::Align(const string &s1, const string &s2)
             m_matrix[i][j] = min(c0, min(c1, c2));
         }
     }
-/*  // Debug code to print pairwise matrix
+/*    // Debug code to print pairwise matrix
+    cout << endl;
     for (i = 0; i <= s1_l; i++)
     {
         for (j = 0; j <= s2_l; j++)
