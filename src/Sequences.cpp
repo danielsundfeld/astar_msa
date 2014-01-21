@@ -39,6 +39,9 @@ void Sequences::destroyInstance()
 {
     delete instance;
     instance = NULL;
+    n_seq = 0;
+    final_coord.clear();
+    initial_coord.clear();
 }
 
 //! Save the string \a x as an Sequence

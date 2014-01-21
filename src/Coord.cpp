@@ -68,13 +68,13 @@ ostream& operator<<(ostream &lhs, const Coord &rhs)
     return lhs;
 }
 
-//! Return the value on the \n - dimension
+//! Return the value on the \a n - dimension
 const int& Coord::operator[](const int n) const
 {
     return m_coord[n];
 }
 
-//! Return the value on the \n - dimension
+//! Return the value on the \a n - dimension
 int& Coord::operator[](const int n)
 {
     return m_coord[n];
@@ -107,4 +107,10 @@ Coord Coord::neigh(int n) const
         i++;
     }
     return c;
+}
+
+//!< Removes all elements from Coord
+void Coord::clear()
+{
+    m_coord.clear();
 }
