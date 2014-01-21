@@ -21,6 +21,8 @@ Sequences::Sequences()
 unsigned int Sequences::n_seq = 0;
 //! Singleton instance
 Sequences* Sequences::instance = NULL;
+//! Source coord
+Coord Sequences::initial_coord;
 //! Destination coord
 Coord Sequences::final_coord;
 
@@ -45,6 +47,7 @@ int Sequences::set_seq(const string &x)
     seqs.push_back(x);
     ++n_seq;
 
+    initial_coord.append(0);
     final_coord.append(x.length());
     return n_seq;
 }

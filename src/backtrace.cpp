@@ -60,7 +60,7 @@ void backtrace_create_stack(stack<char> *backtrace_stack, std::map<Coord, Node> 
             backtrace_stack[i].push(c);
         }
         current = ClosedList[current.get_parent()];
-    } while (current.pos != current.get_parent());
+    } while (current.pos != Sequences::get_initial_coord());
 }
 
 /*!

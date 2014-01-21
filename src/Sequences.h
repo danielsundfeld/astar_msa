@@ -22,12 +22,14 @@ class Sequences
         Sequences();
         vector<string> seqs;
         static Coord final_coord;
+        static Coord initial_coord;
 
     public:
         static Sequences *getInstance();
         static void destroyInstance();
         int set_seq(const string &x);
         static const Coord& get_final_coord() { return final_coord; };
+        static const Coord& get_initial_coord() { return initial_coord; };
         const string& get_seq(int x) const { return seqs.at(x); };
         static unsigned int& get_seq_num() { return n_seq; };
         bool is_final(const Coord &c) const;
