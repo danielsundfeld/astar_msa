@@ -19,7 +19,7 @@ class Coord {
 
     public:
         Coord();
-        Coord(const int d);
+        Coord(const int d, const int init = 0);
         Coord(const int x, const int y, const int z);
         Coord &operator=(const Coord &rhs);
         bool operator!=(const Coord &rhs) const;

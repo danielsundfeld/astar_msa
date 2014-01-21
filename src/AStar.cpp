@@ -49,7 +49,8 @@ int a_star()
     Sequences *seq = Sequences::getInstance();
 
     const Coord coord_zero = Sequences::get_initial_coord();
-    const Node node_zero(0, coord_zero, coord_zero);
+    const Coord coord_negative(Sequences::get_seq_num(), -1);
+    const Node node_zero(0, coord_zero, coord_negative);
     OpenList[coord_zero] = node_zero;
     pq.push(node_zero); //Zero cost, zero coords.
 

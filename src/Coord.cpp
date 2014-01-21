@@ -15,10 +15,10 @@ Coord::Coord()
 {
 }
 
-//! Construct a Coord with \a d dimensions initialized as '0'
-Coord::Coord(int d)
+//! Construct a Coord with \a d dimensions initialized as 'init'
+Coord::Coord(const int d, const int init)
 {
-    m_coord = vector<int>(d, 0);
+    m_coord = vector<int>(d, init);
 }
 
 //! Construct a 3-dimensions coord
