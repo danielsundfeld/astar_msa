@@ -65,13 +65,66 @@ inline int Node::bitSeq(const int &i) const
 //! Bit check if the number \a i has sequences \a s1 and \a s2
 inline bool Node::bitSeqCheck(const int &i, const int &s1, const int &s2) const
 {
-    return (i & s1) && (i & s2);
+    return (i & bitSeq(s1)) && (i & bitSeq(s2));
 }
 
-//! Bit check if the number \a i has some sequence \a s1 or \a s2
-inline bool Node::bitSeqCheckAny(const int &i, const int &s1, const int &s2) const
+//! Bit check if the number \a i has sequence \a s1
+inline bool Node::bitSeqCheck(const int &i, const int &s1) const
 {
-    return (i & s1) || (i & s2);
+    return (i & bitSeq(s1));
+}
+
+/*!
+ * Decide if we have to add a match, mismatch, gap open or gap
+ * extension cost to this pair.
+ * Example: consider the following non-optimal aligment:
+ * AAA-
+ * A--A
+ * A--A
+ *
+ * In graph, it is represented by the path:
+ * (0, 0, 0)
+ * (1, 1, 1)
+ * (2, 1, 1)
+ * (3, 1, 1)
+ * (3, 2, 2)
+ *
+ * From node (0, 0, 0) to (1, 1, 1):
+ * The test bitSeqCheck is always true, so we return mm_cost 3 times
+ *
+ * From node (1, 1, 1) to (2, 1, 1) with s1 = 0 s2 = 1:
+ * The test bitSeqCheck is false.
+ * The test bitSeqCheck with "s1" is true, so we must look at s2:
+ * s2 is 1. (1, 1, 1) parent is (0, 0, 0). son[1] = 1 parent[1] = 0
+ * It is an open gap.
+ * From node (1, 1, 1) to (2, 1, 1) with s1 = 0 s2 = 2, same behavior
+ * From node (1, 1, 1) to (2, 1, 1) with s1 = 1 s2 = 2:
+ * none bitSeqCheck test is true. return 0 (gap/gap cost)
+ *
+ * From node (2, 1, 1) to (3, 1, 1) with s1 = 0 s2 = 1:
+ * Almost same as before, bitSeqCheck with "s1" is true
+ * s2 is 1. (2, 1, 1) parent is (1, 1, 1). son[1] = 1 parent[1] = 1
+ * It is an extension gap.
+ */
+inline int Node::pairCost(const Coord &son, const int neigh_num, const int mm_cost, const int s1, const int s2) const
+{
+    int s; // Sequence to check if is affine or extended gap
+
+    if (bitSeqCheck(neigh_num, s1, s2))
+        return mm_cost;
+
+    if (bitSeqCheck(neigh_num, s1))
+        s = s2;
+    else if (bitSeqCheck(neigh_num, s2))
+        s = s1;
+    else
+        return 0;
+
+    // Compare a node with his grand-parent to decide gap penalty
+    if (son[s] == parent[s])
+        return Cost::GapExtension;
+    else
+        return Cost::GapOpen;
 }
 
 /*!
@@ -84,10 +137,10 @@ int Node::getNeigh(vector<Node> &a)
     Sequences *seq = Sequences::getInstance();
     Coord c;
 
-    /* Vector of tuple. First field cost, Second field, sequence1
-       bits, third field, sequence2 bits.
+    /* Vector of tuple. First field cost, Second field, sequence1.
+       third field, sequence2.
        Example, if sequence 0 and 2 matches, one of the vector fields
-       contains first MATCH, second 1, third 4. */
+       contains first MATCH, second 0, third 2. */
     vector< tuple<int, int, int> > pairwise_costs;
 
     for (unsigned int i = 0; i < Sequences::get_seq_num() - 1; i++)
@@ -95,7 +148,7 @@ int Node::getNeigh(vector<Node> &a)
         for (unsigned int j = i + 1; j < Sequences::get_seq_num(); j++)
         {
             int cost = Cost::cost(seq->get_seq(i)[pos[i]], seq->get_seq(j)[pos[j]]);
-            pairwise_costs.push_back(make_tuple(cost, bitSeq(i), bitSeq(j)));
+            pairwise_costs.push_back(make_tuple(cost, i, j));
         }
     }
 
@@ -105,14 +158,11 @@ int Node::getNeigh(vector<Node> &a)
         c = pos.neigh(i);
         if (borderCheck(c))
         {
-            int costs = 0; // match and mismatch sum-of-pairs cost
-            int gap_cost = 0;
+            int costs = 0; // match, mismatch and gap sum-of-pairs cost
+
             for (auto it = pairwise_costs.begin() ; it != pairwise_costs.end(); ++it)
-                if (bitSeqCheck(i, get<1>(*it), get<2>(*it)))
-                    costs += get<0>(*it);
-                else if (bitSeqCheckAny(i, get<1>(*it), get<2>(*it)))
-                    gap_cost += Cost::GAP;
-            a.push_back(Node(m_g + costs + gap_cost, c, pos));
+                costs += pairCost(c, i, get<0>(*it), get<1>(*it), get<2>(*it));
+            a.push_back(Node(m_g + costs, c, pos));
         }
     }
     return 0;

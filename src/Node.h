@@ -24,7 +24,8 @@ class Node {
         bool borderCheck(const Coord &c) const;
         inline int bitSeq(const int &i) const;
         inline bool bitSeqCheck(const int &i, const int &s1, const int &s2) const;
-        inline bool bitSeqCheckAny(const int &i, const int &s1, const int &s2) const;
+        inline bool bitSeqCheck(const int &i, const int &s1) const;
+        inline int pairCost(const Coord &son, const int neigh_num, const int match, const int s1, const int s2) const;
 
     public: 
         Coord pos;
