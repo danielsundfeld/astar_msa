@@ -2,6 +2,7 @@
  * \class Sequences
  * \filename Sequences.h
  * \author Daniel Sundfeld
+ *
  * \brief Singleton that holds all sequences being aligned
  *
  * INSERT_LICENSE

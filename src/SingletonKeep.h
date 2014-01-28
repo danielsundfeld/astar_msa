@@ -4,6 +4,7 @@
  * \class SingletonKeep
  * \filename SingletonKeep.h
  * \author Daniel Sundfeld
+ *
  * \brief Class that grants the singletons are created before main
  * starts and destroy when the program ends.
  *

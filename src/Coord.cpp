@@ -128,7 +128,7 @@ Coord Coord::parent(int n) const
     return c;
 }
 
-//!< Removes all elements from Coord
+//! Removes all elements from Coord
 void Coord::clear()
 {
     m_coord.clear();

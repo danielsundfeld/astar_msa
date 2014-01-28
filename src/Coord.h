@@ -2,6 +2,7 @@
  * \class Coord
  * \filename Coords.h
  * \author Daniel Sundfeld
+ *
  * \brief A multidimensional coordinate
  *
  * INSERT_LICENSE

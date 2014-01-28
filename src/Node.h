@@ -2,6 +2,7 @@
  * \class Node
  * \filename Node.h
  * \author Daniel Sundfeld
+ *
  * \brief Class that hold all Nodes atributes, like the cost from the
  * origin, heuristic estimative, parent
  *

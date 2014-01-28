@@ -2,6 +2,7 @@
  * \class HeuristicHPair
  * \filename HeuristicHPair.h
  * \author Daniel Sundfeld
+ *
  * \brief Heuristic using all pairwise scores
  *
  * INSERT_LICENSE

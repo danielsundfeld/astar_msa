@@ -2,6 +2,7 @@
  * \class Heuristic
  * \filename Heuristic.h
  * \author Daniel Sundfeld
+ *
  * \brief Abstract class to implement a-star heuristics
  *
  * INSERT_LICENSE

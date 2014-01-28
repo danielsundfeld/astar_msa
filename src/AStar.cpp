@@ -1,6 +1,7 @@
 /*!
  * \filename a_star.cpp
  * \author Daniel Sundfeld
+ *
  * \brief Do a multiple sequence alignment reducing the search space
  * with a-star algorithm alignment
  *
