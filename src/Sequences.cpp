@@ -8,6 +8,7 @@
 #include <string>
 
 #include "Coord.h"
+#include "Node.h"
 #include "Sequences.h"
 
 using namespace std;
@@ -53,6 +54,15 @@ int Sequences::set_seq(const string &x)
     initial_coord.append(0);
     final_coord.append(x.length());
     return n_seq;
+}
+
+//! Create a initial node of the alignment
+Node Sequences::get_initial_node()
+{
+    /* The "father" field must point to a negative coord, so the
+       affine gaps are calculated correctly.  */
+    int coord_negative = (1 << Sequences::get_seq_num()) - 1;
+    return Node(0, Sequences::get_initial_coord(), coord_negative);
 }
 
 //! Check if \a c is the destination

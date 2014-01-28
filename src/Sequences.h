@@ -11,6 +11,7 @@
 #include <string>
 #include <vector>
 #include "Coord.h"
+#include "Node.h"
 
 using namespace std;
 
@@ -32,6 +33,7 @@ class Sequences
         static const Coord& get_initial_coord() { return initial_coord; };
         const string& get_seq(int x) const { return seqs.at(x); };
         static unsigned int& get_seq_num() { return n_seq; };
+        static Node get_initial_node();
         bool is_final(const Coord &c) const;
 };
 #endif
