@@ -2,7 +2,6 @@
  * \filename Node.cpp
  * \author Daniel Sundfeld
  *
- * TODO refactor. Divide it as msa-node and node
  * INSERT_LICENSE
  */
 #include <algorithm>
@@ -21,7 +20,6 @@ Node::Node()
 {
     m_g = 0;
     m_f = 0;
-    m_h = 0;
 }
 
 /*!
@@ -36,13 +34,12 @@ Node::Node(const int g, const Coord& pos, const int &parenti)
   pos(pos)
 {
     m_g = g;
-    m_h = Heuristic::getHeuristic()->calculate_h(pos);
-    m_f = m_g + m_h;
+    m_f = m_g + Heuristic::getHeuristic()->calculate_h(pos);
 }
 
 ostream& operator<<(ostream &lhs, const Node &rhs)
 {
-    lhs << rhs.pos << "\tg - " << rhs.m_g << " (h - " << rhs.m_h
+    lhs << rhs.pos << "\tg - " << rhs.m_g << " (h - " << rhs.get_h()
         << " f - " << rhs.m_f << ")";
     return lhs;
 }
