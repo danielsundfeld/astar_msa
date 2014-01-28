@@ -109,6 +109,25 @@ Coord Coord::neigh(int n) const
     return c;
 }
 
+/*!
+ * Inverse of Coord:neigh(int n)
+ * neigh is a highly called function I dont care about duplicate code
+ */
+Coord Coord::parent(int n) const
+{
+    int i = 0;
+
+    Coord c = *this;
+    while (n)
+    {
+        if (n & 1)
+            c[i] -= 1;
+        n = n >> 1;
+        i++;
+    }
+    return c;
+}
+
 //!< Removes all elements from Coord
 void Coord::clear()
 {

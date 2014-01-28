@@ -31,8 +31,8 @@ Node::Node()
  * \warning this constructor use's Heuristics function, so Heuristic::setHeuristic()
  *          MUST be called.
  */
-Node::Node(const int g, const Coord& pos, const Coord& parent)
-: parent(parent),
+Node::Node(const int g, const Coord& pos, const int &parenti)
+: parenti(parenti),
   pos(pos)
 {
     m_g = g;
@@ -77,17 +77,16 @@ inline bool Node::bitSeqCheck(const int &i, const int &s1) const
 /*!
  * Decide if we have to add a match, mismatch, gap open or gap
  * extension cost to this pair.
- * Example: consider the following non-optimal aligment:
- * AAA-
- * A--A
- * A--A
+ * Example: consider the following aligment:
+ * AAA
+ * A--
+ * A--
  *
  * In graph, it is represented by the path:
  * (0, 0, 0)
  * (1, 1, 1)
  * (2, 1, 1)
  * (3, 1, 1)
- * (3, 2, 2)
  *
  * From node (0, 0, 0) to (1, 1, 1):
  * The test bitSeqCheck is always true, so we return mm_cost 3 times
@@ -106,9 +105,9 @@ inline bool Node::bitSeqCheck(const int &i, const int &s1) const
  * s2 is 1. (2, 1, 1) parent is (1, 1, 1). son[1] = 1 parent[1] = 1
  * It is an extension gap.
  */
-inline int Node::pairCost(const Coord &son, const int neigh_num, const int mm_cost, const int s1, const int s2) const
+inline int Node::pairCost(const Coord &son, const int &neigh_num, const int &mm_cost, const int &s1, const int &s2) const
 {
-    int s; // Sequence to check if is affine or extended gap
+    int s; // Sequence to check if is open or extended gap
 
     if (bitSeqCheck(neigh_num, s1, s2))
         return mm_cost;
@@ -120,11 +119,14 @@ inline int Node::pairCost(const Coord &son, const int neigh_num, const int mm_co
     else
         return 0;
 
-    // Compare a node with his grand-parent to decide gap penalty
-    if (son[s] == parent[s])
+   /* The following code is equivalent to, but much quicker then:
+    Coord parent = pos.parent(parenti);
+    if (son[s] == parent[s]) */
+
+    // Compare a node with his grandparent to decide gap penalty.
+    if (bitSeqCheck(parenti, s) == bitSeqCheck(neigh_num, s))
         return Cost::GapExtension;
-    else
-        return Cost::GapOpen;
+    return Cost::GapOpen;
 }
 
 /*!
@@ -162,7 +164,7 @@ int Node::getNeigh(vector<Node> &a)
 
             for (auto it = pairwise_costs.begin() ; it != pairwise_costs.end(); ++it)
                 costs += pairCost(c, i, get<0>(*it), get<1>(*it), get<2>(*it));
-            a.push_back(Node(m_g + costs, c, pos));
+            a.push_back(Node(m_g + costs, c, i));
         }
     }
     return 0;
