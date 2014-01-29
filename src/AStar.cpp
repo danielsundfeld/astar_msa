@@ -83,6 +83,7 @@ int a_star()
             break;
 
         //cout << "Opening node:\t" << current << endl;
+        OpenList.erase(current.pos);
         ClosedList[current.pos] = current;
 
         vector<Node> neigh;
