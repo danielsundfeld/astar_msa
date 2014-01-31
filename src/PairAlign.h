@@ -17,12 +17,20 @@ typedef pair<int,int> Pair;
 
 class PairAlign {
     private:
+        enum { NoGap, GapX, GapY }; //!< m_affine_matrix values
         int **m_matrix;
+        int **m_affine_matrix;
+
         int s1_l, s2_l;
         Pair m_par;
         void Align(const string &s1, const string &s2);
-        void freeMemory();
+        void destroyScoreMatrix();
+        void destroyAffineMatrix();
         void initMatrix(int size1, int size2);
+        void initScoreMatrix();
+        void initAffineMatrix();
+        int gapCost(int i, int j, int destination);
+        void pairCost(int i, int j, const string &s1, const string &s2);
 
     public:
         PairAlign();

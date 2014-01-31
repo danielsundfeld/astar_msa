@@ -12,7 +12,7 @@
 class Cost {
     public:
         /* Naive cost enum */
-        enum { MATCH = 0, MISMATCH = 1, GAP = 2, GapExtension = 2, GapOpen = 5 };
+        enum { MATCH = 0, MISMATCH = 1, GapExtension = 2, GapOpen = 5 };
 
         static int cost(const char r, const char l);
 };

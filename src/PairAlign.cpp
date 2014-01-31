@@ -20,26 +20,93 @@ PairAlign::PairAlign()
 
 PairAlign::~PairAlign()
 {
-    freeMemory();
+    destroyScoreMatrix();
 }
 
-//! Initialize the internal matrix with sizes \a size1 and \a size2
+//! Initialize all internal matrixes with sizes \a size1 and \a size2
 void PairAlign::initMatrix(int size1, int size2)
 {
     s1_l = size1;
     s2_l = size2;
 
-    m_matrix = new int*[size1 + 1];
-    for (int i = 0; i < size1 + 1; i++)
-        m_matrix[i] = new int[size2 + 1];
+    initScoreMatrix();
+    initAffineMatrix();
+}
+
+//! Initialize the internal matrix
+void PairAlign::initScoreMatrix()
+{
+    m_matrix = new int*[s1_l + 1];
+    for (int i = 0; i < s1_l + 1; i++)
+        m_matrix[i] = new int[s2_l + 1];
+}
+
+//! Initialize the affine matrix
+void PairAlign::initAffineMatrix()
+{
+    m_affine_matrix = new int*[s1_l + 1];
+    for (int i = 0; i < s1_l + 1; i++)
+        m_affine_matrix[i] = new int[s2_l + 1];
 }
 
 //! Free memory usage by the matrix
-void PairAlign::freeMemory()
+void PairAlign::destroyScoreMatrix()
 {
     for (int i = 0; i <= s1_l; i++)
         delete[] m_matrix[i];
     delete[] m_matrix;
+}
+
+//! Free memory usage by the affine matrix
+void PairAlign::destroyAffineMatrix()
+{
+    for (int i = 0; i <= s1_l; i++)
+        delete[] m_affine_matrix[i];
+    delete[] m_affine_matrix;
+}
+
+/*!
+ * Decide if the coord \a x and \a y cost to \a destination is gap
+ * extension or open
+ */
+int PairAlign::gapCost(int i, int j, int destination)
+{
+    if (m_affine_matrix[i][j] == destination)
+        return Cost::GapExtension;
+    return Cost::GapOpen;
+}
+
+/*!
+ * Helper function to calculate and save on the matrix the cost of
+ * the cell with coord \a x and \a y
+ */
+void PairAlign::pairCost(int i, int j, const string &s1, const string &s2)
+{
+    int min_value;
+    int gap_value;
+
+    int c0 = m_matrix[i+1][j] + gapCost(i+1, j, GapX);
+    int c1 = m_matrix[i][j+1] + gapCost(i, j+1, GapY);
+    if (c0 < c1)
+    {
+        min_value = c0;
+        gap_value = GapX;
+    }
+    else
+    {
+        min_value = c1;
+        gap_value = GapY;
+    }
+
+    int c2 = m_matrix[i+1][j+1] + Cost::cost(s1.at(i), s2.at(j));
+    if (c2 < min_value)
+    {
+        min_value = c2;
+        gap_value = NoGap;
+    }
+
+    m_matrix[i][j] = min_value;
+    m_affine_matrix[i][j] = gap_value;
 }
 
 //! Do a pairwise alignment
@@ -48,23 +115,31 @@ void PairAlign::Align(const string &s1, const string &s2)
     int i, j;
     initMatrix(s1.length(), s2.length());
 
-    m_matrix[s1_l][s2_l] = 0;
+    m_matrix[s1_l  ][s2_l  ] = 0;
+    m_matrix[s1_l  ][s2_l-1] = Cost::GapOpen;
+    m_matrix[s1_l-1][s2_l  ] = Cost::GapOpen;
 
-    for (j = s2_l-1; j >= 0; j--)
-        m_matrix[s1_l][j] = m_matrix[s1_l][j+1] + Cost::GAP;
+    m_affine_matrix[s1_l  ][s2_l  ] = NoGap;
+    m_affine_matrix[s1_l  ][s2_l-1] = GapY;
+    m_affine_matrix[s1_l-1][s2_l  ] = GapX;
 
-    for (i = s1_l-1; i >= 0; i--)
-        m_matrix[i][s2_l] = m_matrix[i+1][s2_l] + Cost::GAP;
+    for (j = s2_l-2; j >= 0; j--)
+    {
+        m_matrix[s1_l][j] = m_matrix[s1_l][j+1] + Cost::GapExtension;
+        m_affine_matrix[s1_l][j] = GapY;
+    }
+
+    for (i = s1_l-2; i >= 0; i--)
+    {
+        m_matrix[i][s2_l] = m_matrix[i+1][s2_l] + Cost::GapExtension;
+        m_affine_matrix[i][s2_l] = GapX;
+    }
 
     for (i = s1_l-1; i >= 0; i--)
     {
         for (j = s2_l-1; j >= 0; j--)
         {
-            int c0 = m_matrix[i+1][j]   + Cost::GAP;
-            int c1 = m_matrix[i]  [j+1] + Cost::GAP;
-            int c2 = m_matrix[i+1][j+1] + Cost::cost(s1.at(i), s2.at(j));
-
-            m_matrix[i][j] = min(c0, min(c1, c2));
+            pairCost(i, j, s1, s2);
         }
     }
 /*    // Debug code to print pairwise matrix
@@ -78,6 +153,7 @@ void PairAlign::Align(const string &s1, const string &s2)
         cout << "(" << i << " " << j << ")" << endl;
     }
 */
+    destroyAffineMatrix();
 }
 
 //! Return the value of the 2D-matrix with coords i and j
