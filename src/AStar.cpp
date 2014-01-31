@@ -1,11 +1,10 @@
 /*!
  * \filename a_star.cpp
  * \author Daniel Sundfeld
+ * \copyright MIT License
  *
  * \brief Do a multiple sequence alignment reducing the search space
  * with a-star algorithm alignment
- *
- * INSERT_LICENSE
  */
 #include <iostream>
 #include <map>

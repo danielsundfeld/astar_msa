@@ -2,10 +2,9 @@
  * \class Coord
  * \filename Coords.h
  * \author Daniel Sundfeld
+ * \copyright MIT License
  *
  * \brief A multidimensional coordinate
- *
- * INSERT_LICENSE
  */
 #ifndef _COORDS_H
 #define _COORDS_H

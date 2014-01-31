@@ -2,10 +2,9 @@
  * \class HeuristicHPair
  * \filename HeuristicHPair.h
  * \author Daniel Sundfeld
+ * \copyright MIT License
  *
  * \brief Heuristic using all pairwise scores
- *
- * INSERT_LICENSE
  */
 #ifndef _HEURISTC_ALL_P2_H
 #define _HEURISTC_ALL_P2_H

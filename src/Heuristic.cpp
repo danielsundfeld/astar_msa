@@ -1,8 +1,7 @@
 /*!
  * \filename Heuristic.cpp
  * \author Daniel Sundfeld
- *
- * INSERT_LICENSE
+ * \copyright MIT License
  */
 #include "Heuristic.h"
 

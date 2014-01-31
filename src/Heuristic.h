@@ -2,10 +2,9 @@
  * \class Heuristic
  * \filename Heuristic.h
  * \author Daniel Sundfeld
+ * \copyright MIT License
  *
  * \brief Abstract class to implement a-star heuristics
- *
- * INSERT_LICENSE
  */
 #ifndef _HEURISTC_H
 #define _HEURISTC_H

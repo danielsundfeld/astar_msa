@@ -1,8 +1,7 @@
 /*!
  * \filename read_fasta.h
  * \author Daniel Sundfeld
- *
- * INSERT_LICENSE
+ * \copyright MIT License
  */
 #ifndef _READ_FASTA_FILE
 #define _READ_FASTA_FILE

@@ -1,8 +1,7 @@
 /*!
  * \filename read_fasta.cpp
  * \author Daniel Sundfeld
- *
- * INSERT_LICENSE
+ * \copyright MIT License
  */
 #include <fstream>
 #include <iostream>

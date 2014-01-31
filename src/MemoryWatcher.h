@@ -2,10 +2,9 @@
  * \class MemoryWatcher
  * \filename MemoryWatcher.h
  * \author Daniel Sundfeld
+ * \copyright MIT License
  *
  * \brief Class to clean memory sometimes
- *
- * INSERT_LICENSE
  */
 #ifndef _MEMORYWATCHER_H
 #define _MEMORYWATCHER_H

@@ -2,10 +2,9 @@
  * \class Sequences
  * \filename Sequences.h
  * \author Daniel Sundfeld
+ * \copyright MIT License
  *
  * \brief Singleton that holds all sequences being aligned
- *
- * INSERT_LICENSE
  */
 #ifndef _SEQUENCES_H
 #define _SEQUENCES_H

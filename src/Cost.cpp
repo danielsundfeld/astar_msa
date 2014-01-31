@@ -1,8 +1,7 @@
 /*!
  * \filename Cost.cpp
  * \author Daniel Sundfeld
- *
- * INSERT_LICENSE
+ * \copyright MIT License
  */
 #include "Cost.h"
 

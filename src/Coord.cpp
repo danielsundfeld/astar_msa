@@ -1,8 +1,7 @@
 /*!
  * \filename Coord.cpp
  * \author Daniel Sundfeld
- *
- * INSERT_LICENSE
+ * \copyright MIT License
  */
 #include <iostream>
 #include <vector>

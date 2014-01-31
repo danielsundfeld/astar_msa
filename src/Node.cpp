@@ -1,8 +1,7 @@
 /*!
  * \filename Node.cpp
  * \author Daniel Sundfeld
- *
- * INSERT_LICENSE
+ * \copyright MIT License
  */
 #include <algorithm>
 #include <iostream>

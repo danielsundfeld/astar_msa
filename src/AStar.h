@@ -3,8 +3,7 @@
 /*!
  * \filename AStar.h
  * \author Daniel Sundfeld
- *
- * INSERT_LICENSE
+ * \copyright MIT License
  */
 #include <map>
 #include <queue>

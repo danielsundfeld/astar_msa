@@ -1,10 +1,9 @@
 /*!
  * \filename main.cpp
  * \author Daniel Sundfeld
+ * \copyright MIT License
  *
  * \brief The main fuction from the MSA-A-Star project
- *
- * INSERT_LICENSE
  */
 #include <iostream>
 

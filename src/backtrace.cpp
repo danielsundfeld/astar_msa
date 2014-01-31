@@ -1,6 +1,7 @@
 /*!
  * \filename backtrace.cpp
  * \author Daniel Sundfeld
+ * \copyright MIT License
  */
 #include <iostream>
 #include <limits>

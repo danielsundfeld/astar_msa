@@ -1,8 +1,7 @@
 /*!
  * \filename SingletonKeep.cpp
  * \author Daniel Sundfeld
- *
- * INSERT_LICENSE
+ * \copyright MIT License
  */
 #include "SingletonKeep.h"
 #include "SingletonKeepVariables.h"

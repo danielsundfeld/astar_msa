@@ -1,8 +1,7 @@
 /*!
- * \filename Backtrace.h
+ * \filename backtrace.h
  * \author Daniel Sundfeld
- *
- * INSERT_LICENSE
+ * \copyright MIT License
  */
 #ifndef _BACKTRACE_H
 #define _BACKTRACE_H
