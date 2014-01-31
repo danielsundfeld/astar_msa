@@ -21,6 +21,7 @@ CPP_SRCS = \
     Heuristic.cpp \
     HeuristicHPair.cpp \
     main.cpp \
+    MemoryWatcher.cpp \
     Node.cpp \
     read_fasta.cpp \
     PairAlign.cpp \

@@ -13,8 +13,10 @@
 #include <string>
 #include <vector>
 
+#include "AStar.h"
 #include "backtrace.h"
 #include "Coord.h"
+#include "MemoryWatcher.h"
 #include "Node.h"
 #include "Sequences.h"
 
@@ -44,28 +46,29 @@ using namespace std;
 int a_star()
 {
     Node current;
-    map<Coord, Node> OpenList;
+    ListType OpenList;
     map<Coord, Node> ClosedList;
-    priority_queue<Node, vector<Node>, PriorityNode> pq;
+    PriorityType *pq = new PriorityType();
     Sequences *seq = Sequences::getInstance();
+    MemoryWatcher memWatch;
 
     const Coord coord_zero = Sequences::get_initial_coord();
     const Node node_zero = Sequences::get_initial_node();
     OpenList[coord_zero] = node_zero;
-    pq.push(node_zero); //Zero cost, zero coords.
+    pq->push(node_zero); //Zero cost, zero coords.
 
-    while (!pq.empty())
+    while (!pq->empty())
     {
-        current = pq.top();
+        current = pq->top();
         map<Coord,Node>::iterator search;
-        pq.pop();
+        pq->pop();
 
        // Check if better node is already found
         if ((search = OpenList.find(current.pos)) != OpenList.end())
         {
             if (current.get_g() > search->second.get_g())
             {
-                current = pq.top();
+                current = pq->top();
                 continue;
             }
         }
@@ -74,13 +77,15 @@ int a_star()
         {
             if (current.get_g() >= search->second.get_g())
             {
-                current = pq.top();
+                current = pq->top();
                 continue;
             }
         }
 
         if (seq->is_final(current.pos))
             break;
+        if (memWatch.getMemoryClean())
+            memWatch.performMemoryClean(OpenList, pq);
 
         //cout << "Opening node:\t" << current << endl;
         OpenList.erase(current.pos);
@@ -106,12 +111,13 @@ int a_star()
 
             OpenList[it->pos] = *it;
             //cout << "Adding:\t" << *it << "from\t" << current << endl;
-            pq.push(*it);
+            pq->push(*it);
         }
     }
     ClosedList[current.pos] = current;
     cout << "Final score:\t" << current << endl;
     backtrace(ClosedList);
+    delete pq;
     return 0;
 }
 
