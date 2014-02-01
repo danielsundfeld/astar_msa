@@ -23,7 +23,7 @@ class Node {
         inline int bitSeq(const int &i) const;
         inline bool bitSeqCheck(const int &i, const int &s1, const int &s2) const;
         inline bool bitSeqCheck(const int &i, const int &s1) const;
-        inline int pairCost(const Coord &son, const int &neigh_num, const int &mm_cost, const int &s1, const int &s2) const;
+        inline int pairCost(const int &neigh_num, const int &mm_cost, const int &s1, const int &s2) const;
 
     public: 
         Coord pos; //!< Multidimensional coordinate of the node

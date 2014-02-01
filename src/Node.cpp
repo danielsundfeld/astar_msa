@@ -101,7 +101,7 @@ inline bool Node::bitSeqCheck(const int &i, const int &s1) const
  * s2 is 1. (2, 1, 1) parent is (1, 1, 1). son[1] = 1 parent[1] = 1
  * It is an extension gap.
  */
-inline int Node::pairCost(const Coord &son, const int &neigh_num, const int &mm_cost, const int &s1, const int &s2) const
+inline int Node::pairCost(const int &neigh_num, const int &mm_cost, const int &s1, const int &s2) const
 {
     int s; // Sequence to check if is open or extended gap
 
@@ -159,7 +159,7 @@ int Node::getNeigh(vector<Node> &a)
             int costs = 0; // match, mismatch and gap sum-of-pairs cost
 
             for (auto it = pairwise_costs.begin() ; it != pairwise_costs.end(); ++it)
-                costs += pairCost(c, i, get<0>(*it), get<1>(*it), get<2>(*it));
+                costs += pairCost(i, get<0>(*it), get<1>(*it), get<2>(*it));
             a.push_back(Node(m_g + costs, c, i));
         }
     }

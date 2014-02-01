@@ -4,7 +4,7 @@ TARGET       = msa_a_star
 
 INCDIR       = .
 
-CPPFLAGS   += -Wall -std=c++11
+CPPFLAGS   += -W -Wall -std=c++11
 
 ifdef RELEASE
     CPPFLAGS   += -O2

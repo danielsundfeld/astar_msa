@@ -20,7 +20,8 @@ bool MemoryWatcher::doMemoryClean = false;
 
 void handler(int sig)
 {
-    MemoryWatcher::setMemoryClean(true);
+    if (sig == SIGALRM)
+        MemoryWatcher::setMemoryClean(true);
 }
 
 MemoryWatcher::MemoryWatcher()
