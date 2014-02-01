@@ -1,5 +1,5 @@
 /*!
- * \filename HeuristicHPair.cpp
+ * \class HeuristicHPair
  * \author Daniel Sundfeld
  * \copyright MIT License
  */

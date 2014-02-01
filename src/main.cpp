@@ -1,5 +1,4 @@
 /*!
- * \filename main.cpp
  * \author Daniel Sundfeld
  * \copyright MIT License
  *

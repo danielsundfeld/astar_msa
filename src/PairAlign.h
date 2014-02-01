@@ -1,6 +1,5 @@
 /*!
  * \class PairAlign
- * \filename PairAlign.h
  * \author Daniel Sundfeld
  * \copyright MIT License
  *

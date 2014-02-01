@@ -1,5 +1,4 @@
 /*!
- * \filename backtrace.cpp
  * \author Daniel Sundfeld
  * \copyright MIT License
  */

@@ -1,5 +1,4 @@
 /*!
- * \filename read_fasta.cpp
  * \author Daniel Sundfeld
  * \copyright MIT License
  */

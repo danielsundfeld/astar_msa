@@ -1,5 +1,4 @@
 /*!
- * \filename read_fasta.h
  * \author Daniel Sundfeld
  * \copyright MIT License
  */

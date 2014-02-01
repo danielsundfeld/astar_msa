@@ -1,6 +1,5 @@
 /*!
  * \class Coord
- * \filename Coords.h
  * \author Daniel Sundfeld
  * \copyright MIT License
  *

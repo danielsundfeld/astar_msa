@@ -1,5 +1,5 @@
 /*!
- * \filename Cost.cpp
+ * \class Cost
  * \author Daniel Sundfeld
  * \copyright MIT License
  */

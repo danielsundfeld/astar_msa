@@ -1,5 +1,5 @@
 /*!
- * \filename SingletonKeep.cpp
+ * \class SingletonKeep
  * \author Daniel Sundfeld
  * \copyright MIT License
  */

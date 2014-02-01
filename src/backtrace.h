@@ -1,5 +1,4 @@
 /*!
- * \filename backtrace.h
  * \author Daniel Sundfeld
  * \copyright MIT License
  */

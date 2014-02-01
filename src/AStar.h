@@ -1,7 +1,6 @@
 #ifndef _ASTAR_H
 #define _ASTAR_H
 /*!
- * \filename AStar.h
  * \author Daniel Sundfeld
  * \copyright MIT License
  */

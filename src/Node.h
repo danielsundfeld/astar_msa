@@ -1,6 +1,5 @@
 /*!
  * \class Node
- * \filename Node.h
  * \author Daniel Sundfeld
  * \copyright MIT License
  *

@@ -1,6 +1,5 @@
 /*!
  * \class Sequences
- * \filename Sequences.h
  * \author Daniel Sundfeld
  * \copyright MIT License
  *

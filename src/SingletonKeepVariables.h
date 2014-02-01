@@ -1,5 +1,5 @@
 /*!
- * \filename SingletonKeepVariables.h
+ * \class SingletonKeep
  * \author Daniel Sundfeld
  * \copyright MIT License
  *

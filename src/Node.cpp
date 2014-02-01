@@ -1,5 +1,5 @@
 /*!
- * \filename Node.cpp
+ * \class Node
  * \author Daniel Sundfeld
  * \copyright MIT License
  */
@@ -126,7 +126,7 @@ inline int Node::pairCost(const Coord &son, const int &neigh_num, const int &mm_
 }
 
 /*!
- * Add all neighboors to a vector \a. If it is not a board node,
+ * Add all neighboors to a vector \a a. If it is not a board node,
  * 2pow(n-1) nodes are added.
  */
 int Node::getNeigh(vector<Node> &a)

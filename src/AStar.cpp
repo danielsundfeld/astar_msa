@@ -1,5 +1,4 @@
 /*!
- * \filename a_star.cpp
  * \author Daniel Sundfeld
  * \copyright MIT License
  *

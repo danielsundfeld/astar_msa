@@ -1,5 +1,5 @@
 /*!
- * \filename MemoryWatcher.cpp
+ * \class MemoryWatcher
  * \author Daniel Sundfeld
  * \copyright MIT License
  */

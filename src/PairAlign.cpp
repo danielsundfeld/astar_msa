@@ -1,5 +1,5 @@
 /*!
- * \filename PairAlign.cpp
+ * \class PairAlign
  * \author Daniel Sundfeld
  * \copyright MIT License
  */

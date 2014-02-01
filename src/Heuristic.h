@@ -1,6 +1,5 @@
 /*!
  * \class Heuristic
- * \filename Heuristic.h
  * \author Daniel Sundfeld
  * \copyright MIT License
  *

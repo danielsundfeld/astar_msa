@@ -1,5 +1,5 @@
 /*!
- * \filename Heuristic.cpp
+ * \class Heuristic
  * \author Daniel Sundfeld
  * \copyright MIT License
  */

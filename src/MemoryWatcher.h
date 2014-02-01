@@ -1,6 +1,5 @@
 /*!
  * \class MemoryWatcher
- * \filename MemoryWatcher.h
  * \author Daniel Sundfeld
  * \copyright MIT License
  *

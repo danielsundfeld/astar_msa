@@ -2,7 +2,6 @@
 #define _SINGLETONKEEP_H
 /*!
  * \class SingletonKeep
- * \filename SingletonKeep.h
  * \author Daniel Sundfeld
  * \copyright MIT License
  *

@@ -1,6 +1,5 @@
 /*!
  * \class Cost
- * \filename Cost.h
  * \author Daniel Sundfeld
  * \copyright MIT License
  *

@@ -1,5 +1,5 @@
 /*!
- * \filename Coord.cpp
+ * \class Coord
  * \author Daniel Sundfeld
  * \copyright MIT License
  */

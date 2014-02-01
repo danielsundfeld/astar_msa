@@ -1,5 +1,5 @@
 /*!
- * \filename Sequences.cpp
+ * \class Sequences
  * \author Daniel Sundfeld
  * \copyright MIT License
  */
