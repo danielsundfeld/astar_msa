@@ -113,7 +113,7 @@ inline int Node::pairCost(const int &neigh_num, const int &mm_cost, const int &s
     else if (bitSeqCheck(neigh_num, s2))
         s = s1;
     else
-        return 0;
+        return Cost::GapGap;
 
    /* The following code is equivalent to, but much quicker then:
     Coord parent = pos.parent(parenti);
