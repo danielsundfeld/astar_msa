@@ -22,6 +22,20 @@ PairAlign::~PairAlign()
     destroyScoreMatrix();
 }
 
+//! Print the pairwise matrix on screen (debug only?)
+ostream& operator<<(ostream &lhs, const PairAlign &rhs)
+{
+    lhs << "Pair: " << rhs.m_par.first << "/" << rhs.m_par.second << endl;
+    for (int i = 0; i <= rhs.s1_l; i++)
+    {
+        int j;
+        for (j = 0; j <= rhs.s2_l; j++)
+            lhs << setfill('0') << setw(2) << rhs.m_matrix[i][j] << " ";
+        lhs << "(" << i << " " << j << ")" << endl;
+    }
+    return lhs;
+}
+
 //! Initialize all internal matrixes with sizes \a size1 and \a size2
 void PairAlign::initMatrix(int size1, int size2)
 {
@@ -141,17 +155,7 @@ void PairAlign::Align(const string &s1, const string &s2)
             pairCost(i, j, s1, s2);
         }
     }
-/*    // Debug code to print pairwise matrix
-    cout << endl;
-    for (i = 0; i <= s1_l; i++)
-    {
-        for (j = 0; j <= s2_l; j++)
-        {
-            cout << setfill('0') << setw(2) << m_matrix[i][j] << " ";
-        }
-        cout << "(" << i << " " << j << ")" << endl;
-    }
-*/
+    //cout << endl << *this;
     destroyAffineMatrix();
 }
 
