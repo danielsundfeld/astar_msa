@@ -25,6 +25,7 @@ CPP_SRCS = \
     Node.cpp \
     read_fasta.cpp \
     PairAlign.cpp \
+    PerformanceReport.cpp \
     Sequences.cpp \
     SingletonKeep.cpp \
 

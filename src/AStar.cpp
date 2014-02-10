@@ -16,6 +16,7 @@
 #include "Coord.h"
 #include "MemoryWatcher.h"
 #include "Node.h"
+#include "PerformanceReport.h"
 #include "Sequences.h"
 
 using namespace std;
@@ -45,7 +46,8 @@ int a_star()
 {
     Node current;
     ListType OpenList;
-    map<Coord, Node> ClosedList;
+    ListType ClosedList;
+    PerformanceReport pr(&OpenList, &ClosedList);
     PriorityType *pq = new PriorityType();
     Sequences *seq = Sequences::getInstance();
     MemoryWatcher memWatch;
@@ -80,14 +82,14 @@ int a_star()
             }
         }
 
+        //cout << "Opening node:\t" << current << endl;
+        OpenList.erase(current.pos);
+        ClosedList[current.pos] = current;
+
         if (seq->is_final(current.pos))
             break;
         if (memWatch.getMemoryClean())
             memWatch.performMemoryClean(OpenList, pq);
-
-        //cout << "Opening node:\t" << current << endl;
-        OpenList.erase(current.pos);
-        ClosedList[current.pos] = current;
 
         vector<Node> neigh;
         current.getNeigh(neigh);
@@ -112,7 +114,6 @@ int a_star()
             pq->push(*it);
         }
     }
-    ClosedList[current.pos] = current;
     cout << "Final score:\t" << current << endl;
     backtrace(ClosedList);
     delete pq;
