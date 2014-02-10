@@ -113,16 +113,22 @@ inline int Node::pairCost(const int &neigh_num, const int &mm_cost, const int &s
     else if (bitSeqCheck(neigh_num, s2))
         s = s1;
     else
-        return Cost::GapGap;
+    {
+        // Gap/gap cost: if SOME gap is Open, then gap open.
+        // else, gap extension
+        if (bitSeqCheck(parenti, s1) != bitSeqCheck(neigh_num, s1))
+            return Cost::GapOpen;
+        s = s2;
+    }
 
    /* The following code is equivalent to, but much quicker then:
     Coord parent = pos.parent(parenti);
-    if (son[s] == parent[s]) */
+    if (son[s] != parent[s]) */
 
     // Compare a node with his grandparent to decide gap penalty.
-    if (bitSeqCheck(parenti, s) == bitSeqCheck(neigh_num, s))
-        return Cost::GapExtension;
-    return Cost::GapOpen;
+    if (bitSeqCheck(parenti, s) != bitSeqCheck(neigh_num, s))
+        return Cost::GapOpen;
+    return Cost::GapExtension;
 }
 
 /*!
