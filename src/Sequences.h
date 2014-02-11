@@ -33,6 +33,6 @@ class Sequences
         const string& get_seq(int x) const { return seqs.at(x); };
         static unsigned int& get_seq_num() { return n_seq; };
         static Node get_initial_node();
-        bool is_final(const Coord &c) const;
+        static bool is_final(const Coord &c);
 };
 #endif

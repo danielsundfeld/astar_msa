@@ -65,7 +65,7 @@ Node Sequences::get_initial_node()
 }
 
 //! Check if \a c is the destination
-bool Sequences::is_final(const Coord &c) const
+bool Sequences::is_final(const Coord &c)
 {
     return (c == final_coord);
 }
