@@ -16,5 +16,5 @@ using namespace std;
 typedef map<Coord, Node> ListType;
 typedef priority_queue<Node, vector<Node>, PriorityNode> PriorityType;
 
-int a_star();
+int a_star(const Coord &coord_zero, const Node &node_zero, bool(*is_final)(const Coord &c));
 #endif

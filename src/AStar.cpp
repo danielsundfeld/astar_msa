@@ -17,7 +17,6 @@
 #include "MemoryWatcher.h"
 #include "Node.h"
 #include "PerformanceReport.h"
-#include "Sequences.h"
 
 using namespace std;
 
@@ -42,18 +41,15 @@ using namespace std;
  *     set priority queue rank to g(neighbor) + h(neighbor)
  *     set neighbor's parent to current
  */
-int a_star()
+int a_star(const Coord &coord_zero, const Node &node_zero, bool(*is_final)(const Coord &c))
 {
     Node current;
     ListType OpenList;
     ListType ClosedList;
     PerformanceReport pr(&OpenList, &ClosedList);
     PriorityType *pq = new PriorityType();
-    Sequences *seq = Sequences::getInstance();
     MemoryWatcher memWatch;
 
-    const Coord coord_zero = Sequences::get_initial_coord();
-    const Node node_zero = Sequences::get_initial_node();
     OpenList[coord_zero] = node_zero;
     pq->push(node_zero); //Zero cost, zero coords.
 
@@ -86,14 +82,13 @@ int a_star()
         OpenList.erase(current.pos);
         ClosedList[current.pos] = current;
 
-        if (seq->is_final(current.pos))
+        if (is_final(current.pos))
             break;
         if (memWatch.getMemoryClean())
             memWatch.performMemoryClean(OpenList, pq);
 
         vector<Node> neigh;
         current.getNeigh(neigh);
-
         for (vector<Node>::iterator it = neigh.begin() ; it != neigh.end(); ++it)
         {
             if ((search = OpenList.find(it->pos)) != OpenList.end())
