@@ -6,17 +6,13 @@
  * with a-star algorithm alignment
  */
 #include <iostream>
-#include <map>
-#include <queue>
-#include <string>
 #include <vector>
 
 #include "AStar.h"
 #include "backtrace.h"
 #include "Coord.h"
-#include "MemoryWatcher.h"
 #include "Node.h"
-#include "PerformanceReport.h"
+#include "PriorityList.h"
 
 using namespace std;
 
@@ -44,38 +40,28 @@ using namespace std;
 int a_star(const Coord &coord_zero, const Node &node_zero, bool(*is_final)(const Coord &c))
 {
     Node current;
-    ListType OpenList;
+    PriorityList OpenList;
     ListType ClosedList;
-    PerformanceReport pr(&OpenList, &ClosedList);
-    PriorityType *pq = new PriorityType();
-    MemoryWatcher memWatch;
 
-    OpenList[coord_zero] = node_zero;
-    pq->push(node_zero); //Zero cost, zero coords.
+    OpenList.enqueue(coord_zero, node_zero);
 
-    while (!pq->empty())
+    while (!OpenList.empty())
     {
-        current = pq->top();
-        map<Coord,Node>::iterator search;
-        pq->pop();
+        ListType::const_iterator search;
+
+        OpenList.dequeue(current);
 
        // Check if better node is already found
         if ((search = OpenList.find(current.pos)) != OpenList.end())
         {
             if (current.get_g() > search->second.get_g())
-            {
-                current = pq->top();
                 continue;
-            }
         }
         // Or already opened
         if ((search = ClosedList.find(current.pos)) != ClosedList.end())
         {
             if (current.get_g() >= search->second.get_g())
-            {
-                current = pq->top();
                 continue;
-            }
         }
 
         //cout << "Opening node:\t" << current << endl;
@@ -84,8 +70,8 @@ int a_star(const Coord &coord_zero, const Node &node_zero, bool(*is_final)(const
 
         if (is_final(current.pos))
             break;
-        if (memWatch.getMemoryClean())
-            memWatch.performMemoryClean(OpenList, pq);
+
+        OpenList.verifyMemory();
 
         vector<Node> neigh;
         current.getNeigh(neigh);
@@ -104,14 +90,11 @@ int a_star(const Coord &coord_zero, const Node &node_zero, bool(*is_final)(const
                 ClosedList.erase(it->pos);
             }
 
-            OpenList[it->pos] = *it;
+            OpenList.enqueue(it->pos, *it);
             //cout << "Adding:\t" << *it << "from\t" << current << endl;
-            pq->push(*it);
         }
     }
     cout << "Final score:\t" << current << endl;
     backtrace(ClosedList);
-    delete pq;
     return 0;
 }
-
