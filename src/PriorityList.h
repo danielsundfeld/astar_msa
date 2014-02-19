@@ -40,6 +40,6 @@ class PriorityList {
         const PriorityType::value_type& top() { return m_pq->top(); };
         bool empty() { return m_pq->empty(); };
 
-        void dequeue(PriorityType::value_type& c) { c = top(); return pop(); };
+        void dequeue(PriorityType::value_type& c) { c = top(); erase(c.pos); return pop(); };
 };
 #endif

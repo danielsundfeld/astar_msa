@@ -51,7 +51,7 @@ int a_star(const Coord &coord_zero, const Node &node_zero, bool(*is_final)(const
 
         OpenList.dequeue(current);
 
-       // Check if better node is already found
+        // Check if better node is already found
         if ((search = OpenList.find(current.pos)) != OpenList.end())
         {
             if (current.get_g() > search->second.get_g())
@@ -65,7 +65,6 @@ int a_star(const Coord &coord_zero, const Node &node_zero, bool(*is_final)(const
         }
 
         //cout << "Opening node:\t" << current << endl;
-        OpenList.erase(current.pos);
         ClosedList[current.pos] = current;
 
         if (is_final(current.pos))
