@@ -3,10 +3,17 @@
  * \author Daniel Sundfeld
  * \copyright MIT License
  */
+#ifndef NO_LIB_BOOST
+ #include <boost/multi_index_container.hpp>
+ #include <boost/multi_index/member.hpp>
+ #include <boost/multi_index/ordered_index.hpp>
+#endif
+
 #include "PriorityList.h"
 
 using namespace std;
 
+#ifdef NO_LIB_BOOST
 PriorityList::PriorityList()
 {
     m_pq = new PriorityType();
@@ -29,3 +36,19 @@ void PriorityList::verifyMemory()
         m_memwatch.performMemoryClean(m_openlist, m_pq);
     return;
 }
+#else
+void PriorityList::dequeue(Node &n)
+{
+    auto it = get<priority>(m_openlist).begin();
+    n = *it;
+    m_openlist.erase(it->pos);
+}
+
+bool PriorityList::enqueue(const Node &c)
+{
+    openlist_multiindex::index<pos>::type::iterator it = m_openlist.find(c.pos);
+    if (it == m_openlist.end())
+        return m_openlist.insert(c).second;
+    return m_openlist.modify(it, change_node(c.get_f(), c.get_g(), c.get_parenti()));
+}
+#endif //NO_LIB_BOOST
