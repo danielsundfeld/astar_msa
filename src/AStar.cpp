@@ -37,13 +37,13 @@ using namespace std;
  *     set priority queue rank to g(neighbor) + h(neighbor)
  *     set neighbor's parent to current
  */
-int a_star(const Coord &coord_zero, const Node &node_zero, bool(*is_final)(const Coord &c))
+int a_star(const Node &node_zero, bool(*is_final)(const Coord &c))
 {
     Node current;
     PriorityList OpenList;
     ListType ClosedList;
 
-    OpenList.enqueue(coord_zero, node_zero);
+    OpenList.enqueue(node_zero);
 
     while (!OpenList.empty())
     {
@@ -89,7 +89,7 @@ int a_star(const Coord &coord_zero, const Node &node_zero, bool(*is_final)(const
                 ClosedList.erase(it->pos);
             }
 
-            OpenList.enqueue(it->pos, *it);
+            OpenList.enqueue(*it);
             //cout << "Adding:\t" << *it << "from\t" << current << endl;
         }
     }

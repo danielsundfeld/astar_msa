@@ -17,10 +17,10 @@ PriorityList::~PriorityList()
     delete m_pq;
 }
 
-const ListType::mapped_type& PriorityList::enqueue(const Coord &c, const Node &n)
+const ListType::mapped_type& PriorityList::enqueue(const Node &n)
 {
     m_pq->push(n);
-    return m_openlist[c] = n;
+    return m_openlist[n.pos] = n;
 }
 
 void PriorityList::verifyMemory()

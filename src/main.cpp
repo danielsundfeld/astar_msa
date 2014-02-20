@@ -25,5 +25,5 @@ int main(int argc, char *argv[])
 
     HeuristicHPair::getInstance()->init();
 
-    return a_star(Sequences::get_initial_coord(), Sequences::get_initial_node(), Sequences::is_final);
+    return a_star(Sequences::get_initial_node(), Sequences::is_final);
 }

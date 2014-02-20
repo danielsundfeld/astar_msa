@@ -29,7 +29,7 @@ class PriorityList {
         PriorityList();
         ~PriorityList();
 
-        const ListType::mapped_type& enqueue(const Coord &c, const Node &n);
+        const ListType::mapped_type& enqueue(const Node &n);
         void verifyMemory();
 
         ListType::const_iterator find(const Coord &c) const { return m_openlist.find(c); };
