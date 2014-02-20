@@ -7,7 +7,7 @@
  */
 #ifndef _PERFORMANCE_REPORT_H
 #define _PERFORMANCE_REPORT_H
-#include "AStar.h"
+#include "PriorityTypes.h"
 
 using namespace std;
 

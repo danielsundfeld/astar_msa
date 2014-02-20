@@ -7,7 +7,7 @@
  */
 #ifndef _MEMORYWATCHER_H
 #define _MEMORYWATCHER_H
-#include "AStar.h"
+#include "PriorityTypes.h"
 
 using namespace std;
 

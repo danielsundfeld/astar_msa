@@ -7,10 +7,10 @@
 #include <limits>
 #include <sys/time.h>
 
-#include "AStar.h"
 #include "Coord.h"
 #include "Node.h"
 #include "PerformanceReport.h"
+#include "PriorityTypes.h"
 #include "Sequences.h"
 
 using namespace std;

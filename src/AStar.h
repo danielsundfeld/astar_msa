@@ -10,11 +10,9 @@
 
 #include "Coord.h"
 #include "Node.h"
+#include "PriorityTypes.h"
 
 using namespace std;
-
-typedef map<Coord, Node> ListType;
-typedef priority_queue<Node, vector<Node>, PriorityNode> PriorityType;
 
 int a_star(const Node &node_zero, bool(*is_final)(const Coord &c));
 #endif

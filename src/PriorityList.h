@@ -16,14 +16,12 @@
  #include <boost/multi_index/ordered_index.hpp>
 #endif
 
-#include "AStar.h"
 #include "Coord.h"
 #include "MemoryWatcher.h"
 #include "Node.h"
+#include "PriorityTypes.h"
 
 using namespace std;
-
-typedef ListType::const_iterator closed_list_iterator;
 
 #ifdef NO_LIB_BOOST
 typedef ListType::const_iterator list_type_iterator;
