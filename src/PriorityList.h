@@ -17,6 +17,8 @@
 
 using namespace std;
 
+typedef ListType::const_iterator list_type_iterator;
+
 class PriorityList {
     private:
         MemoryWatcher m_memwatch;

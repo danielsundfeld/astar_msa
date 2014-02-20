@@ -47,7 +47,7 @@ int a_star(const Node &node_zero, bool(*is_final)(const Coord &c))
 
     while (!OpenList.empty())
     {
-        ListType::const_iterator search;
+        list_type_iterator search;
 
         OpenList.dequeue(current);
 
