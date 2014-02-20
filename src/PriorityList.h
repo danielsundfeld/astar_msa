@@ -10,14 +10,12 @@
 #include <map>
 #include <queue>
 
+#include "AStar.h"
 #include "Coord.h"
 #include "MemoryWatcher.h"
 #include "Node.h"
 
 using namespace std;
-
-typedef map<Coord, Node> ListType;
-typedef priority_queue<Node, vector<Node>, PriorityNode> PriorityType;
 
 class PriorityList {
     private:
