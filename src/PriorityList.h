@@ -24,6 +24,7 @@
 using namespace std;
 
 typedef ListType::const_iterator closed_list_iterator;
+
 #ifdef NO_LIB_BOOST
 typedef ListType::const_iterator list_type_iterator;
 
@@ -85,4 +86,7 @@ class PriorityList {
         void dequeue(Node &n);
 };
 #endif //NO_LIB_BOOST
+
+int closed_list_return_g(closed_list_iterator search);
+int open_list_return_g(list_type_iterator search);
 #endif

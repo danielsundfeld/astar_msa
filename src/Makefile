@@ -6,6 +6,9 @@ INCDIR       = .
 
 CPPFLAGS   += -W -Wall -std=c++11 -I/usr/include
 
+ifdef NO_LIB_BOOST
+    CPPFLAGS += -DNO_LIB_BOOST
+endif
 ifdef RELEASE
     CPPFLAGS   += -O2
     LDFLAGS  += -s

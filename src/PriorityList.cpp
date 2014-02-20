@@ -13,6 +13,10 @@
 
 using namespace std;
 
+int closed_list_return_g(closed_list_iterator search)
+{
+    return search->second.get_g();
+}
 #ifdef NO_LIB_BOOST
 PriorityList::PriorityList()
 {
@@ -36,6 +40,11 @@ void PriorityList::verifyMemory()
         m_memwatch.performMemoryClean(m_openlist, m_pq);
     return;
 }
+
+int open_list_return_g(list_type_iterator search)
+{
+    return search->second.get_g();
+}
 #else
 void PriorityList::dequeue(Node &n)
 {
@@ -50,5 +59,10 @@ bool PriorityList::enqueue(const Node &c)
     if (it == m_openlist.end())
         return m_openlist.insert(c).second;
     return m_openlist.modify(it, change_node(c.get_f(), c.get_g(), c.get_parenti()));
+}
+
+int open_list_return_g(list_type_iterator search)
+{
+    return search->get_g();
 }
 #endif //NO_LIB_BOOST

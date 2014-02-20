@@ -55,13 +55,13 @@ int a_star(const Node &node_zero, bool(*is_final)(const Coord &c))
         // Check if better node is already found
         if ((search = OpenList.find(current.pos)) != OpenList.end())
         {
-            if (current.get_g() > search->get_g())
+            if (current.get_g() > open_list_return_g(search))
                 continue;
         }
         // Or already opened
         if ((c_search = ClosedList.find(current.pos)) != ClosedList.end())
         {
-            if (current.get_g() >= c_search->second.get_g())
+            if (current.get_g() >= closed_list_return_g(c_search))
                 continue;
         }
 
@@ -80,12 +80,12 @@ int a_star(const Node &node_zero, bool(*is_final)(const Coord &c))
             if ((search = OpenList.find(it->pos)) != OpenList.end())
             {
                 // if score on open list is better, ignore this neighboor
-                if (it->get_g() > search->get_g())
+                if (it->get_g() > open_list_return_g(search))
                     continue;
             }
             if ((c_search = ClosedList.find(it->pos)) != ClosedList.end())
             {
-                if (it->get_g() >= c_search->second.get_g())
+                if (it->get_g() >= closed_list_return_g(c_search))
                     continue;
                 ClosedList.erase(it->pos);
             }
