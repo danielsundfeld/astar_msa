@@ -24,7 +24,7 @@
 using namespace std;
 
 #ifdef NO_LIB_BOOST
-typedef ListType::const_iterator list_type_iterator;
+typedef ListType::const_iterator open_list_iterator;
 
 class PriorityList {
     private:
@@ -39,8 +39,8 @@ class PriorityList {
         const ListType::mapped_type& enqueue(const Node &n);
         void verifyMemory();
 
-        ListType::const_iterator find(const Coord &c) const { return m_openlist.find(c); };
-        ListType::const_iterator end() const { return m_openlist.end(); };
+        open_list_iterator find(const Coord &c) const { return m_openlist.find(c); };
+        open_list_iterator end() const { return m_openlist.end(); };
         ListType::size_type erase(const Coord &c) { return m_openlist.erase(c); };
 
         void pop() { return m_pq->pop(); };
@@ -65,7 +65,7 @@ typedef multi_index_container<
               tag<priority>, BOOST_MULTI_INDEX_MEMBER(Node,int,m_f)> >
 > openlist_multiindex;
 
-typedef openlist_multiindex::const_iterator list_type_iterator;
+typedef openlist_multiindex::const_iterator open_list_iterator;
 
 class PriorityList {
     private:
@@ -75,8 +75,8 @@ class PriorityList {
         bool enqueue(const Node &n);
         void verifyMemory() { return; };
 
-        list_type_iterator find(const Coord &c) const { return m_openlist.find(c); };
-        list_type_iterator end() const { return m_openlist.end(); };
+        open_list_iterator find(const Coord &c) const { return m_openlist.find(c); };
+        open_list_iterator end() const { return m_openlist.end(); };
         openlist_multiindex::size_type  erase(const Coord &c) { return m_openlist.erase(c); };
 
         bool empty() { return m_openlist.empty(); };
@@ -86,5 +86,5 @@ class PriorityList {
 #endif //NO_LIB_BOOST
 
 int closed_list_return_g(closed_list_iterator search);
-int open_list_return_g(list_type_iterator search);
+int open_list_return_g(open_list_iterator search);
 #endif

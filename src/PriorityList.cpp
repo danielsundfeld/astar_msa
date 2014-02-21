@@ -41,7 +41,7 @@ void PriorityList::verifyMemory()
     return;
 }
 
-int open_list_return_g(list_type_iterator search)
+int open_list_return_g(open_list_iterator search)
 {
     return search->second.get_g();
 }
@@ -61,7 +61,7 @@ bool PriorityList::enqueue(const Node &c)
     return m_openlist.modify(it, change_node(c.get_f(), c.get_g(), c.get_parenti()));
 }
 
-int open_list_return_g(list_type_iterator search)
+int open_list_return_g(open_list_iterator search)
 {
     return search->get_g();
 }

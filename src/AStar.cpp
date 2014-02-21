@@ -47,15 +47,15 @@ int a_star(const Node &node_zero, bool(*is_final)(const Coord &c))
 
     while (!OpenList.empty())
     {
-        list_type_iterator search;
+        open_list_iterator o_search;
         closed_list_iterator c_search;
 
         OpenList.dequeue(current);
 
         // Check if better node is already found
-        if ((search = OpenList.find(current.pos)) != OpenList.end())
+        if ((o_search = OpenList.find(current.pos)) != OpenList.end())
         {
-            if (current.get_g() > open_list_return_g(search))
+            if (current.get_g() > open_list_return_g(o_search))
                 continue;
         }
         // Or already opened
@@ -77,10 +77,10 @@ int a_star(const Node &node_zero, bool(*is_final)(const Coord &c))
         current.getNeigh(neigh);
         for (vector<Node>::iterator it = neigh.begin() ; it != neigh.end(); ++it)
         {
-            if ((search = OpenList.find(it->pos)) != OpenList.end())
+            if ((o_search = OpenList.find(it->pos)) != OpenList.end())
             {
                 // if score on open list is better, ignore this neighboor
-                if (it->get_g() > open_list_return_g(search))
+                if (it->get_g() > open_list_return_g(o_search))
                     continue;
             }
             if ((c_search = ClosedList.find(it->pos)) != ClosedList.end())
