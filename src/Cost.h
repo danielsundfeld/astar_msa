@@ -13,7 +13,7 @@ class Cost {
 
     public:
         Cost();
-        enum { GapExtension = 12, GapOpen = 25, GapGap = GapOpen };
+        enum { GapExtension = 25, GapOpen = 30, GapGap = GapOpen };
 
         static int cost(const char r, const char l);
 };
