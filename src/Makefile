@@ -16,6 +16,11 @@ else
     CPPFLAGS   += -O0 -g
 endif
 
+ifdef PROFILE
+    CPPFLAGS += -pg
+    LDFLAGS += -pg
+endif
+
 CPP_SRCS = \
     AStar.cpp \
     backtrace.cpp \
