@@ -42,6 +42,7 @@ class PriorityList {
         open_list_iterator find(const Coord &c) const { return m_openlist.find(c); };
         open_list_iterator end() const { return m_openlist.end(); };
         ListType::size_type erase(const Coord &c) { return m_openlist.erase(c); };
+        size_t size(void) { return m_openlist.size(); };
 
         void pop() { return m_pq->pop(); };
         const PriorityType::value_type& top() { return m_pq->top(); };
@@ -78,6 +79,7 @@ class PriorityList {
         open_list_iterator find(const Coord &c) const { return m_openlist.find(c); };
         open_list_iterator end() const { return m_openlist.end(); };
         openlist_multiindex::size_type  erase(const Coord &c) { return m_openlist.erase(c); };
+        size_t size(void) { return m_openlist.size(); };
 
         bool empty() { return m_openlist.empty(); };
 
