@@ -9,14 +9,31 @@ CPPFLAGS   += -W -Wall -std=c++11 -I/usr/include
 ifdef NO_LIB_BOOST
     CPPFLAGS += -DNO_LIB_BOOST
 endif
+
 ifdef RELEASE
-    CPPFLAGS   += -O2
-    LDFLAGS  += -s
+    OPTIMIZE = yes
+    LDFLAGS += -s
 else
-    CPPFLAGS   += -O0 -g
+    CPPFLAGS += -g
 endif
 
-ifdef PROFILE
+ifdef OPTIMIZE
+    CPPFLAGS += -O2
+else
+    CPPFLAGS += -O0
+endif
+
+ifdef PROFILE_GENERATE
+    CPPFLAGS += -fprofile-generate
+    LDFLAGS  += -fprofile-generate
+endif
+
+ifdef PROFILE_USE
+    CPPFLAGS += -fprofile-use
+    LDFLAGS += -fprofile-use
+endif
+
+ifdef PROFILE_INFORMATION
     CPPFLAGS += -pg
     LDFLAGS += -pg
 endif
