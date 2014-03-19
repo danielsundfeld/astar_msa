@@ -31,13 +31,12 @@ class PairAlign {
         void pairCost(int i, int j, const string &s1, const string &s2);
 
     public:
-        PairAlign();
+        PairAlign(Pair p, const string &s1, const string &s2);
         ~PairAlign();
         friend ostream& operator<<(ostream &lhs, const PairAlign &rhs);
 
         const Pair& getPair() const { return m_par; };
         int getScore(const int i, const int j) const;
-        PairAlign(Pair p, const string &s1, const string &s2);
 };
 
 #endif

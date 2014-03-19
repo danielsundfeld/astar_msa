@@ -13,8 +13,18 @@
 
 using namespace std;
 
-PairAlign::PairAlign()
+/*!
+ * Creates a pair align of the sequences \a s1 and \a s2.
+ * It is important to remember which sequences we are using, so save this
+ * infomation as the pair \a p
+ */
+PairAlign::PairAlign(Pair p, const string &s1, const string &s2)
+:   m_par(p)
 {
+    
+//    cout << "Pairwise alignment: " << p.first << " " << p.second << endl << s1 << endl << s2 << endl;
+    Align(s1, s2);
+//    cout << "Score: " << m_matrix[0][0] << endl;
 }
 
 PairAlign::~PairAlign()
@@ -22,7 +32,10 @@ PairAlign::~PairAlign()
     destroyScoreMatrix();
 }
 
-//! Print the pairwise matrix on screen (debug only?)
+/*! 
+ * Print the pairwise matrix on screen. Hopefully debug only. You have problems
+ * if you use this function for other purpose.
+ */
 ostream& operator<<(ostream &lhs, const PairAlign &rhs)
 {
     lhs << "Pair: " << rhs.m_par.first << "/" << rhs.m_par.second << endl;
@@ -163,18 +176,4 @@ void PairAlign::Align(const string &s1, const string &s2)
 int PairAlign::getScore(const int i, const int j) const
 {
     return m_matrix[i][j];
-}
-
-/*!
- * Creates a pair align of the sequences \a s1 and \a s2.
- * It is important to remember wich sequences are using, so save this
- * infomation as the pair \a p
- */
-PairAlign::PairAlign(Pair p, const string &s1, const string &s2)
-:   m_par(p)
-{
-    
-//    cout << "Pairwise alignment: " << p.first << " " << p.second << endl << s1 << endl << s2 << endl;
-    Align(s1, s2);
-//    cout << "Score: " << m_matrix[0][0] << endl;
 }
