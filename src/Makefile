@@ -50,6 +50,7 @@ CPP_SRCS = \
     Node.cpp \
     read_fasta.cpp \
     PairAlign.cpp \
+    PFA2DDD.cpp \
     PriorityList.cpp \
     Sequences.cpp \
     SingletonKeep.cpp \
