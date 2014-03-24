@@ -5,6 +5,7 @@ TARGET       = msa_a_star
 INCDIR       = .
 
 CPPFLAGS   += -W -Wall -std=c++11 -I/usr/include
+LDFLAGS    += -lpthread
 
 ifdef NO_LIB_BOOST
     CPPFLAGS += -DNO_LIB_BOOST

@@ -6,6 +6,7 @@
  * with pfa2ddd algorithm
  */
 #include <iostream>
+#include <thread>
 #include <vector>
 
 #include "AStar.h"
@@ -16,10 +17,12 @@
 
 using namespace std;
 
+#define THREADS_NUM 1
+
 /*!
  * Same a_star() function usage
  */
-int pfa2ddd(const Node &node_zero, bool(*is_final)(const Coord &c))
+int pfa2ddd_worker(int tid, const Node &node_zero, bool(*is_final)(const Coord &c))
 {
     Node current;
     PriorityList OpenList;
@@ -78,5 +81,17 @@ int pfa2ddd(const Node &node_zero, bool(*is_final)(const Coord &c))
     }
     cout << "Final score:\t" << current << endl;
     backtrace(ClosedList);
+    return 0;
+}
+
+int pfa2ddd(const Node &node_zero, bool(*is_final)(const Coord &c))
+{
+    std::vector<std::thread> threads;
+
+    for (int i = 0; i < 1; ++i)
+        threads.push_back(std::thread(pfa2ddd_worker, i, node_zero, is_final));
+
+    for (auto& th : threads)
+        th.join();
     return 0;
 }
