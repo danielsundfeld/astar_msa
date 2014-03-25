@@ -50,7 +50,7 @@ int a_star(const Node &node_zero, bool(*is_final)(const Coord &c))
         open_list_iterator o_search;
         closed_list_iterator c_search;
 
-        OpenList.dequeue(0, current);
+        OpenList.dequeue(current);
 
         // Check if better node is already found
         if ((o_search = OpenList.find(current.pos)) != OpenList.end())
@@ -74,7 +74,7 @@ int a_star(const Node &node_zero, bool(*is_final)(const Coord &c))
         OpenList.verifyMemory();
 
         vector<Node> neigh;
-        current.getNeigh(neigh);
+        current.getNeigh(&neigh, 1);
         for (vector<Node>::iterator it = neigh.begin() ; it != neigh.end(); ++it)
         {
             if ((o_search = OpenList.find(it->pos)) != OpenList.end())

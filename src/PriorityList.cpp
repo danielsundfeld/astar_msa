@@ -46,20 +46,14 @@ int open_list_return_g(open_list_iterator search)
     return search->second.get_g();
 }
 #else
-void PriorityList::dequeue(int skip, Node &n)
+bool PriorityList::dequeue(Node &n)
 {
     auto it = get<priority>(m_openlist).begin();
-    for (int i = 0; i < skip; i++)
-    {
-        ++it;
-        if (it == get<priority>(m_openlist).end())
-        {
-            it = get<priority>(m_openlist).begin();
-            break;
-        }
-    }
+    if (it == get<priority>(m_openlist).end())
+        return false;
     n = *it;
     m_openlist.erase(it->pos);
+    return true;
 }
 
 bool PriorityList::enqueue(const Node &c)

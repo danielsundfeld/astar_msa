@@ -129,7 +129,7 @@ inline int Node::pairCost(const int &neigh_num, const int &mm_cost, const int &s
  * Add all neighboors to a vector \a a. If it is not a board node,
  * 2pow(n-1) nodes are added.
  */
-int Node::getNeigh(vector<Node> &a)
+int Node::getNeigh(vector<Node> a[], int vec_size)
 {
     int i;
     Sequences *seq = Sequences::getInstance();
@@ -160,7 +160,7 @@ int Node::getNeigh(vector<Node> &a)
 
             for (auto it = pairwise_costs.begin() ; it != pairwise_costs.end(); ++it)
                 costs += pairCost(i, get<0>(*it), get<1>(*it), get<2>(*it));
-            a.push_back(Node(m_g + costs, c, i));
+            a[c.get_sum() % vec_size].push_back(Node(m_g + costs, c, i));
         }
     }
     return 0;
