@@ -74,6 +74,7 @@ class PriorityList {
 
     public: 
         bool enqueue(const Node &n);
+        bool conditional_enqueue(const Node &n);
         void verifyMemory() { return; };
 
         open_list_iterator find(const Coord &c) const { return m_openlist.find(c); };
@@ -83,7 +84,8 @@ class PriorityList {
 
         bool empty() { return m_openlist.empty(); };
 
-        void dequeue(Node &n);
+        void dequeue(int skip, Node &n);
+        void merge(const PriorityList& other);
 };
 #endif //NO_LIB_BOOST
 

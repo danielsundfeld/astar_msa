@@ -46,9 +46,18 @@ int open_list_return_g(open_list_iterator search)
     return search->second.get_g();
 }
 #else
-void PriorityList::dequeue(Node &n)
+void PriorityList::dequeue(int skip, Node &n)
 {
     auto it = get<priority>(m_openlist).begin();
+    for (int i = 0; i < skip; i++)
+    {
+        ++it;
+        if (it == get<priority>(m_openlist).end())
+        {
+            it = get<priority>(m_openlist).begin();
+            break;
+        }
+    }
     n = *it;
     m_openlist.erase(it->pos);
 }
@@ -61,8 +70,30 @@ bool PriorityList::enqueue(const Node &c)
     return m_openlist.modify(it, change_node(c.get_f(), c.get_g(), c.get_parenti()));
 }
 
+bool PriorityList::conditional_enqueue(const Node &c)
+{
+    openlist_multiindex::index<pos>::type::iterator it = m_openlist.find(c.pos);
+    if (it == m_openlist.end())
+        return m_openlist.insert(c).second;
+    if (c.get_f() >= it->get_f())
+        return true;
+    return m_openlist.modify(it, change_node(c.get_f(), c.get_g(), c.get_parenti()));
+}
+
+void PriorityList::merge(const PriorityList& other)
+{
+    auto it = get<priority>(other.m_openlist).begin();
+    while (it != get<priority>(other.m_openlist).end())
+    {
+        conditional_enqueue(*it);
+        ++it;
+    }
+    return; 
+}
+
 int open_list_return_g(open_list_iterator search)
 {
     return search->get_g();
 }
+
 #endif //NO_LIB_BOOST

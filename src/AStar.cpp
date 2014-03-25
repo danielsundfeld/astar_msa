@@ -50,7 +50,7 @@ int a_star(const Node &node_zero, bool(*is_final)(const Coord &c))
         open_list_iterator o_search;
         closed_list_iterator c_search;
 
-        OpenList.dequeue(current);
+        OpenList.dequeue(0, current);
 
         // Check if better node is already found
         if ((o_search = OpenList.find(current.pos)) != OpenList.end())
