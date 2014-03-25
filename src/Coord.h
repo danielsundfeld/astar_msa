@@ -14,6 +14,7 @@ using namespace std;
 
 class Coord {
     private:
+        int m_sum;
         vector<int> m_coord;
 
     public:
@@ -31,6 +32,7 @@ class Coord {
         Coord neigh(int n) const;
         Coord parent(int n) const;
         void clear();
+        int get_sum() { return m_sum; };
 };
 
 #endif
