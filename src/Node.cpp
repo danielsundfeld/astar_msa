@@ -36,6 +36,16 @@ Node::Node(const int g, const Coord& pos, const int &parenti)
     m_f = m_g + Heuristic::getHeuristic()->calculate_h(pos);
 }
 
+/*!
+ * Build a node with maximum values on every camp
+ */
+Node::Node(const int i)
+{
+    parenti = i;
+    m_g = m_f = std::numeric_limits<int>::max();
+    pos = Sequences::get_final_coord();
+}
+
 ostream& operator<<(ostream &lhs, const Node &rhs)
 {
     lhs << rhs.pos << "\tg - " << rhs.m_g << " (h - " << rhs.get_h()

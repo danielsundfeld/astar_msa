@@ -29,6 +29,7 @@ class Node {
         int m_f; //!< priority
         Coord pos; //!< Multidimensional coordinate of the node
         Node();
+        Node(int i);
         Node(const int g, const Coord &pos, const int &parenti);
         friend ostream &operator<<(ostream &lhs, const Node &rhs);
         int getNeigh(vector<Node> a[], int vec_size);
