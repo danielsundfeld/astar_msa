@@ -18,7 +18,6 @@ Coord::Coord()
 Coord::Coord(const int d, const int init)
 {
     m_coord = vector<int>(d, init);
-    m_sum = d * init;
 }
 
 //! Construct a 3-dimensions coord
@@ -27,7 +26,6 @@ Coord::Coord(const int x, const int y, const int z)
     m_coord.push_back(x);
     m_coord.push_back(y);
     m_coord.push_back(z);
-    m_sum = x + y + z;
 }
 
 Coord& Coord::operator=(const Coord &rhs)
@@ -35,7 +33,6 @@ Coord& Coord::operator=(const Coord &rhs)
     if (this == &rhs) // identify self-assignment
         return *this; // do nothing
     m_coord = rhs.m_coord;
-    m_sum = rhs.m_sum;
     return *this;
 }
 
@@ -89,7 +86,6 @@ int& Coord::operator[](const int n)
 void Coord::append(const int &n)
 {
     m_coord.push_back(n);
-    m_sum += n;
 }
 
 /*!
@@ -105,10 +101,7 @@ Coord Coord::neigh(int n) const
     while (n)
     {
         if (n & 1)
-        {
             c[i] += 1;
-            c.m_sum += 1;
-        }
         n = n >> 1;
         i++;
     }
@@ -127,10 +120,7 @@ Coord Coord::parent(int n) const
     while (n)
     {
         if (n & 1)
-        {
             c[i] -= 1;
-            c.m_sum -= 1;
-        }
         n = n >> 1;
         i++;
     }
@@ -141,5 +131,13 @@ Coord Coord::parent(int n) const
 void Coord::clear()
 {
     m_coord.clear();
-    m_sum = 0;
+}
+
+//! Return the sum of elements
+int Coord::get_sum() const
+{
+    int sum = 0;
+    for (auto it = m_coord.cbegin(); it != m_coord.cend(); ++it)
+        sum += *it;
+    return sum;
 }
