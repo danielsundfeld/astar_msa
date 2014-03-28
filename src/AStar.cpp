@@ -74,7 +74,7 @@ int a_star(const Node &node_zero, bool(*is_final)(const Coord &c))
         OpenList.verifyMemory();
 
         vector<Node> neigh;
-        current.getNeigh(&neigh, 1);
+        current.getNeigh(&neigh);
         for (vector<Node>::iterator it = neigh.begin() ; it != neigh.end(); ++it)
         {
             if ((o_search = OpenList.find(it->pos)) != OpenList.end())
@@ -95,6 +95,6 @@ int a_star(const Node &node_zero, bool(*is_final)(const Coord &c))
         }
     }
     cout << "Final score:\t" << current << endl;
-    backtrace(ClosedList);
+    backtrace(&ClosedList);
     return 0;
 }

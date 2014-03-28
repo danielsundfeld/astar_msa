@@ -37,16 +37,18 @@ int get_print_size()
  * Using the last node on \a ClosedList do a backtrace, verifing
  * gaps, matches and mismatches, saving characteres o the
  * \a backstrace_stack.
+ * The \a ClosedList is an array with size \a list_size
  *
  * At the end of the process, \a backstrace_stack contains the
  * answer for every sequence.
  */
-void backtrace_create_stack(stack<char> *backtrace_stack, std::map<Coord, Node> &ClosedList)
+void backtrace_create_stack(stack<char> *backtrace_stack, std::map<Coord, Node> ClosedList[], int list_size)
 {
     const int dimensions = Sequences::get_seq_num();
     Sequences *seq = Sequences::getInstance();
 
-    Node current = ClosedList[seq->get_final_coord()];
+    int id = seq->get_final_coord().get_id(list_size);
+    Node current = ClosedList[id][seq->get_final_coord()];
     do 
     {
         //cout << "Backtrace:\t" << current << endl;
@@ -59,7 +61,8 @@ void backtrace_create_stack(stack<char> *backtrace_stack, std::map<Coord, Node> 
                 c = '-';
             backtrace_stack[i].push(c);
         }
-        current = ClosedList[current.get_parent()];
+        id = current.get_parent().get_id(list_size);
+        current = ClosedList[id][current.get_parent()];
     } while (current.pos != Sequences::get_initial_coord());
 }
 
@@ -93,11 +96,11 @@ void backtrace_print_stack(stack<char> *backtrace_stack)
  * MSA-Node backtrace functions prints the answer. Using the
  * \a ClosedList it backtrace every node until the origin is reached
  */
-void backtrace(std::map<Coord, Node> &ClosedList)
+void backtrace(std::map<Coord, Node> ClosedList[], int list_size)
 {
     stack<char> *backtrace_stack = new stack<char>[Sequences::get_seq_num()];
 
-    backtrace_create_stack(backtrace_stack, ClosedList);
+    backtrace_create_stack(backtrace_stack, ClosedList, list_size);
     backtrace_print_stack(backtrace_stack);
     delete[] backtrace_stack;
 }

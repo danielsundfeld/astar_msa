@@ -173,5 +173,6 @@ int pfa2ddd(const Node &node_zero, bool(*is_final)(const Coord &c))
 
     for (auto& th : threads)
         th.join();
+    backtrace(ClosedList, THREADS_NUM);
     return 0;
 }
