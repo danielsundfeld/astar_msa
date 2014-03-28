@@ -170,7 +170,7 @@ int Node::getNeigh(vector<Node> a[], int vec_size)
 
             for (auto it = pairwise_costs.begin() ; it != pairwise_costs.end(); ++it)
                 costs += pairCost(i, get<0>(*it), get<1>(*it), get<2>(*it));
-            a[c.get_sum() % vec_size].push_back(Node(m_g + costs, c, i));
+            a[c.get_id(vec_size)].push_back(Node(m_g + costs, c, i));
         }
     }
     return 0;

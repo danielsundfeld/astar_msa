@@ -32,7 +32,8 @@ class Coord {
         Coord neigh(int n) const;
         Coord parent(int n) const;
         void clear();
-        int get_sum() { return m_sum; };
+        int get_sum() const { return m_sum; };
+        int get_id(const int size) const { return get_sum() % size; };
 };
 
 #endif
