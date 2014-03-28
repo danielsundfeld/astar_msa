@@ -1,6 +1,9 @@
-# msa_a_star bin Makefile
+# msa_astar and msa_pfa2dd Makefile
 
-TARGET       = msa_a_star
+ASTAR_BIN   = msa_astar
+PFA2DDD_BIN = msa_pfa2ddd
+
+TARGET      = $(ASTAR_BIN) $(PFA2DDD_BIN)
 
 INCDIR       = .
 
@@ -39,22 +42,27 @@ ifdef PROFILE_INFORMATION
     LDFLAGS += -pg
 endif
 
-CPP_SRCS = \
-    AStar.cpp \
+COMMON_CPP_SRCS = \
     backtrace.cpp \
     Coord.cpp \
     Cost.cpp \
     Heuristic.cpp \
     HeuristicHPair.cpp \
-    main.cpp \
     MemoryWatcher.cpp \
     Node.cpp \
     read_fasta.cpp \
     PairAlign.cpp \
-    PFA2DDD.cpp \
     PriorityList.cpp \
     Sequences.cpp \
     SingletonKeep.cpp \
+
+ASTAR_SRCS = \
+    AStar.cpp \
+    msa_astar_main.cpp \
+
+PFA2DDD_SRCS = \
+    msa_pfa2ddd_main.cpp \
+    PFA2DDD.cpp \
 
 INCPATH += \
     -I$(INCDIR) \
@@ -62,10 +70,14 @@ INCPATH += \
 CPPFLAGS += \
     $(INCPATH) \
 
-CPP_OBJS  = $(CPP_SRCS:.cpp=.o)
+COMMON_OBJS = $(COMMON_CPP_SRCS:.cpp=.o)
+ASTAR_OBJS  = $(ASTAR_SRCS:.cpp=.o)
+PFA2DDD_OBJS= $(PFA2DDD_SRCS:.cpp=.o)
 
 all:		$(TARGET)
-$(TARGET):	$(CPP_OBJS)
+$(ASTAR_BIN):	$(COMMON_OBJS) $(ASTAR_OBJS)
+		$(CXX) $(LDFLAGS) $^ -o $@
+$(PFA2DDD_BIN):	$(COMMON_OBJS) $(PFA2DDD_OBJS)
 		$(CXX) $(LDFLAGS) $^ -o $@
 clean:
-		rm -f $(TARGET) $(CPP_OBJS)
+		rm -f $(TARGET) $(COMMON_OBJS) $(ASTAR_OBJS) $(PFA2DDD_OBJS)

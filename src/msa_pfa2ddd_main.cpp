@@ -2,16 +2,15 @@
  * \author Daniel Sundfeld
  * \copyright MIT License
  *
- * \brief The main fuction from the MSA-A-Star project
+ * \brief The main function for msa_pfa2ddd project
  */
 #include <iostream>
 
 using namespace std;
 
-#include "AStar.h"
 #include "HeuristicHPair.h"
-#include "read_fasta.h"
 #include "PFA2DDD.h"
+#include "read_fasta.h"
 
 int usage(char progname[])
 {
@@ -26,14 +25,6 @@ int main(int argc, char *argv[])
 
     HeuristicHPair::getInstance()->init();
 
-    if (argc == 2)
-    {
-        cout << "Sequential code...\n";
-        return a_star(Sequences::get_initial_node(), Sequences::is_final);
-    }
-    else
-    {
-        cout << "Parallel code...\n";
-        return pfa2ddd(Sequences::get_initial_node(), Sequences::is_final);
-    }
+    cout << "Parallel code...\n";
+    return pfa2ddd(Sequences::get_initial_node(), Sequences::is_final);
 }
