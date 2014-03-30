@@ -62,6 +62,29 @@ void pfa2ddd_enqueue(std::vector<Node> &nodes, PriorityList &OpenList, ListType 
     return;
 }
 
+//! Check if the answer is found
+bool pfa2ddd_check_end(int tid, const Node &final_node, const Node &last_opened_node)
+{
+
+    // Check if my found node is the answer
+    if (final_node.get_f() < last_opened_node.get_f())
+    {
+        int i;
+        for (i = 0; i < THREADS_NUM; i++)
+        {
+            if (final_node.get_f() > priorities[i])
+                break;
+        }
+        if (i == THREADS_NUM)
+        {
+            cout << "[" << tid << "] Final score:\t" << final_node << endl;
+            end_cond = true;
+            return true;
+        }
+    }
+    return false;
+}
+
 //! Consume the queue with id \a tid
 void pfa2ddd_consume_queue(int tid)
 {
@@ -90,21 +113,8 @@ int pfa2ddd_worker(int tid, const Node &node_zero, bool(*is_final)(const Coord &
 
         // Start phase
         // Check end condition
-        if (final_node.get_f() < current.get_f())
-        {
-            int i;
-            for (i = 0; i < THREADS_NUM; i++)
-            {
-                if (final_node.get_f() > priorities[i])
-                    break;
-            }
-            if (i == THREADS_NUM)
-            {
-                cout << "[" << tid << "] Final score:\t" << final_node << endl;
-                end_cond = true;
-                break;
-            }
-        }
+        if (pfa2ddd_check_end(tid, final_node, current))
+            continue;
         // Reduce the queue
         pfa2ddd_consume_queue(tid);
 
@@ -164,15 +174,20 @@ int pfa2ddd(const Node &node_zero, bool(*is_final)(const Coord &c))
 {
     std::vector<std::thread> threads;
 
+    // Initialize variables
     end_cond = false;
     for (int i = 0; i < THREADS_NUM; ++i)
         priorities[i] = std::numeric_limits<int>::max();
 
+    // Create threads
     for (int i = 0; i < THREADS_NUM; ++i)
         threads.push_back(std::thread(pfa2ddd_worker, i, node_zero, is_final));
 
+    // Wait for the end of all threads
     for (auto& th : threads)
         th.join();
+
+    // Print answer
     backtrace(ClosedList, THREADS_NUM);
     return 0;
 }
