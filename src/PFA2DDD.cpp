@@ -29,7 +29,10 @@ std::mutex queue_mutex[THREADS_NUM];
 std::vector<Node> queue_nodes[THREADS_NUM];
 
 std::atomic<bool> end_cond;
-std::atomic<int> priorities[THREADS_NUM];
+
+std::mutex final_node_mutex;
+Node final_node(0);
+std::atomic<int> final_node_count;
 
 /*!
  * Add a vector of nodes \a nodes to the PriorityList \a OpenList. Use the
@@ -62,27 +65,46 @@ void pfa2ddd_enqueue(std::vector<Node> &nodes, PriorityList &OpenList, ListType 
     return;
 }
 
-//! Check if the answer is found
-bool pfa2ddd_check_end(int tid, const Node &final_node, const Node &last_opened_node)
+/*!
+ * Process \a n as an possible answer
+ */
+void pfa2ddd_process_final_node(int tid, const Node &n)
 {
+    std::unique_lock<std::mutex> final_node_lock(final_node_mutex);
 
-    // Check if my found node is the answer
-    if (final_node.get_f() < last_opened_node.get_f())
+    // Better possible answer already found, discard n
+    if (final_node.get_f() < n.get_f())
+        return;
+
+    if (n.pos.get_id(THREADS_NUM) == tid)
     {
-        int i;
-        for (i = 0; i < THREADS_NUM; i++)
+        //cout << "[" << tid << "] Possible answer found: " << n << endl;
+        // Broadcast the node
+        final_node = n;
+        final_node_count = 1;
+        final_node_lock.unlock();
+
+        for (int i = 0; i < THREADS_NUM; i++)
         {
-            if (final_node.get_f() > priorities[i])
-                break;
+            if (i != tid)
+            {
+                std::unique_lock<std::mutex> queue_lock(queue_mutex[i]);
+                queue_nodes[i].push_back(n);
+            }
         }
-        if (i == THREADS_NUM)
-        {
-            cout << "[" << tid << "] Final score:\t" << final_node << endl;
-            end_cond = true;
-            return true;
-        }
+        return;
     }
-    return false;
+    //cout << "[" << tid << "] Agreed with possible answer! " << n << "/" << final_node << endl;
+    //if (n != final_node) cout << "BUG HERE!\n";
+    final_node_lock.unlock();
+
+    // Process a broadcast node
+    if (++final_node_count == THREADS_NUM)
+    {
+        end_cond = true;
+        return;
+    }
+    return;
 }
 
 //! Consume the queue with id \a tid
@@ -100,8 +122,7 @@ void pfa2ddd_consume_queue(int tid)
 //! Execute a pfa2ddd_worker thread. This thread have id \a tid
 int pfa2ddd_worker(int tid, const Node &node_zero, bool(*is_final)(const Coord &c))
 {
-    Node current(0);
-    Node final_node(0);
+    Node current;
 
     if (tid == 0)
         OpenList[tid].enqueue(node_zero);
@@ -112,16 +133,12 @@ int pfa2ddd_worker(int tid, const Node &node_zero, bool(*is_final)(const Coord &
         closed_list_iterator c_search;
 
         // Start phase
-        // Check end condition
-        if (pfa2ddd_check_end(tid, final_node, current))
-            continue;
         // Reduce the queue
         pfa2ddd_consume_queue(tid);
 
         // Dequeue phase
         if (OpenList[tid].dequeue(current) == false)
             continue;
-        priorities[tid] = current.get_f();
 
         // Check if better node is already found
         if ((o_search = OpenList[tid].find(current.pos)) != OpenList[tid].end())
@@ -141,8 +158,7 @@ int pfa2ddd_worker(int tid, const Node &node_zero, bool(*is_final)(const Coord &
 
         if (is_final(current.pos))
         {
-            if (current.get_f() < final_node.get_f())
-                final_node = current;
+            pfa2ddd_process_final_node(tid, current);
             continue;
         }
         OpenList[tid].verifyMemory();
@@ -176,8 +192,6 @@ int pfa2ddd(const Node &node_zero, bool(*is_final)(const Coord &c))
 
     // Initialize variables
     end_cond = false;
-    for (int i = 0; i < THREADS_NUM; ++i)
-        priorities[i] = std::numeric_limits<int>::max();
 
     // Create threads
     for (int i = 0; i < THREADS_NUM; ++i)
@@ -188,6 +202,7 @@ int pfa2ddd(const Node &node_zero, bool(*is_final)(const Coord &c))
         th.join();
 
     // Print answer
+    cout << "Final score:\t" << final_node << endl;
     backtrace(ClosedList, THREADS_NUM);
     return 0;
 }
