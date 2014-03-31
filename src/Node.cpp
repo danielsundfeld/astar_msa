@@ -53,6 +53,15 @@ ostream& operator<<(ostream &lhs, const Node &rhs)
     return lhs;
 }
 
+bool operator!=(const Node &lhs, const Node &rhs)
+{
+    if (lhs.m_f != rhs.m_f)
+        return true;
+    if (lhs.pos != rhs.pos)
+        return true;
+    return false;
+}
+
 //! Check if coord \a c belongs to the sequences' search space
 bool Node::borderCheck(const Coord &c) const
 {

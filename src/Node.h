@@ -32,6 +32,7 @@ class Node {
         Node(int i);
         Node(const int g, const Coord &pos, const int &parenti);
         friend ostream &operator<<(ostream &lhs, const Node &rhs);
+        friend bool operator!=(const Node &lhs, const Node &rhs);
         int getNeigh(vector<Node> a[], int vec_size = 1);
         int get_g() const { return m_g; };
         int get_f() const { return m_f; };
