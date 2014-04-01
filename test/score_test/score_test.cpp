@@ -16,7 +16,7 @@ void add_to_closed_list(Node &father, const Coord &son, std::map<Coord, Node> &C
 {
     vector<Node> neigh;
 
-    father.getNeigh(neigh);
+    father.getNeigh(&neigh);
 
     for (vector<Node>::iterator it = neigh.begin() ; it != neigh.end(); ++it)
         if ((*it).pos == son)
@@ -47,13 +47,20 @@ void test_init(vector< string > &a)
     current = node_zero;
 }
 
-void test_end()
+void test_end(vector< string > &a)
 {
     cout << "Final score:\t" << ClosedList[Sequences::get_final_coord()] << endl;
-    backtrace(ClosedList);
+
+    cout << "Compare answers:" << endl;
+    cout << "#####Original#####" << endl;
+    for (auto it = a.begin(); it != a.end(); ++it)
+        cout << *it << endl;
+    cout << "#####Backtraced#####";
+    backtrace(&ClosedList);
     Sequences::destroyInstance();
     HeuristicHPair::destroyInstance();
     ClosedList.clear();
+    cout << "#####Test end!#####\n\n";
 }
 
 void sanity_check(vector< string > &a)
@@ -96,7 +103,7 @@ void run_all(vector< string > &a)
     test_init(a);
     sanity_check(a);
     run_test(a);
-    test_end();
+    test_end(a);
 }
 
 int run_test1(void)
