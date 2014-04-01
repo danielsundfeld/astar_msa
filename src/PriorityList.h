@@ -36,6 +36,7 @@ class PriorityList {
         PriorityList();
         ~PriorityList();
 
+        bool dequeue(Node &n);
         const ListType::mapped_type& enqueue(const Node &n);
         void verifyMemory();
 
@@ -47,8 +48,6 @@ class PriorityList {
         void pop() { return m_pq->pop(); };
         const PriorityType::value_type& top() { return m_pq->top(); };
         bool empty() { return m_pq->empty(); };
-
-        bool dequeue(PriorityType::value_type& c) { c = top(); erase(c.pos); pop(); return true; };
 };
 #else
 using boost::multi_index_container;
@@ -73,6 +72,7 @@ class PriorityList {
         openlist_multiindex m_openlist;
 
     public: 
+        bool dequeue(Node &n);
         bool enqueue(const Node &n);
         bool conditional_enqueue(const Node &n);
         void verifyMemory() { return; };
@@ -84,7 +84,6 @@ class PriorityList {
 
         bool empty() { return m_openlist.empty(); };
 
-        bool dequeue(Node &n);
         void merge(const PriorityList& other);
 };
 #endif //NO_LIB_BOOST

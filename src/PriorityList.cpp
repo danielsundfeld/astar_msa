@@ -28,6 +28,16 @@ PriorityList::~PriorityList()
     delete m_pq;
 }
 
+bool PriorityList::dequeue(Node &n)
+{
+    if (empty())
+        return false;
+    n = top();
+    erase(n.pos);
+    pop();
+    return true;
+}
+
 const ListType::mapped_type& PriorityList::enqueue(const Node &n)
 {
     m_pq->push(n);
@@ -45,6 +55,7 @@ int open_list_return_g(open_list_iterator search)
 {
     return search->second.get_g();
 }
+
 #else
 bool PriorityList::dequeue(Node &n)
 {
