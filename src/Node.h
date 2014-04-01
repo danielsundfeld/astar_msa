@@ -14,8 +14,11 @@
 using namespace std;
 
 class Node {
+#ifdef NO_LIB_BOOST
     friend class PriorityNode;
+#else
     friend class change_node;
+#endif
     private:
         int m_g; //!< exact cost of the path from the start
         int parenti; //!< Integer representing the parent
@@ -41,9 +44,18 @@ class Node {
         inline Coord get_parent() const { return pos.parent(parenti); };
 };
 
-#ifndef NO_LIB_BOOST
+#ifdef NO_LIB_BOOST
 /*!
- * On an "update" operation, Coord always have the same value and must
+ * \brief Class to compare Nodes on a STL priority_queue
+ */
+class PriorityNode {
+    public:
+        bool operator()(Node& n1, Node& n2);
+};
+#else
+/*!
+ * While using libboost implementation, it is possible to use a function
+ * on an "update" operation. Coord always have the same value and must
  * not be updated.
  */
 struct change_node
@@ -61,13 +73,5 @@ struct change_node
         int new_g;
         int new_parenti;
 };
-#endif
-
-/*!
- * \brief Class to compare Nodes on a priority_queue
- */
-class PriorityNode {
-    public:
-        bool operator()(Node& n1, Node& n2);
-};
-#endif
+#endif //NO_LIB_BOOST
+#endif //_NODE_H

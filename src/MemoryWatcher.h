@@ -4,9 +4,13 @@
  * \copyright MIT License
  *
  * \brief Class to clean memory sometimes
+ *
+ * This class does not makes sense on libboost implementation and should
+ * not be used
  */
 #ifndef _MEMORYWATCHER_H
 #define _MEMORYWATCHER_H
+#ifdef NO_LIB_BOOST // Memory Watcher only used on STL implementation
 #include "PriorityTypes.h"
 
 using namespace std;
@@ -22,4 +26,5 @@ class MemoryWatcher {
         static inline void setMemoryClean(bool v) { doMemoryClean = v; };
         void performMemoryClean(ListType &openList, PriorityType* &pq);
 };
-#endif
+#endif // NO_LIB_BOOST
+#endif // _MEMORYWATCHER_H

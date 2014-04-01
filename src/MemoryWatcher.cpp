@@ -3,6 +3,7 @@
  * \author Daniel Sundfeld
  * \copyright MIT License
  */
+#ifdef NO_LIB_BOOST
 #include <iostream>
 #include <map>
 #include <queue>
@@ -50,3 +51,4 @@ void MemoryWatcher::performMemoryClean(ListType &openList, PriorityType* &pq)
     cout << " done!\n";
     return;
 }
+#endif

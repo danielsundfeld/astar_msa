@@ -12,6 +12,7 @@ LDFLAGS    += -lpthread
 
 ifdef NO_LIB_BOOST
     CPPFLAGS += -DNO_LIB_BOOST
+    COMMON_CPP_SRCS += MemoryWatcher.cpp
 endif
 
 ifdef RELEASE
@@ -42,13 +43,12 @@ ifdef PROFILE_INFORMATION
     LDFLAGS += -pg
 endif
 
-COMMON_CPP_SRCS = \
+COMMON_CPP_SRCS += \
     backtrace.cpp \
     Coord.cpp \
     Cost.cpp \
     Heuristic.cpp \
     HeuristicHPair.cpp \
-    MemoryWatcher.cpp \
     Node.cpp \
     read_fasta.cpp \
     PairAlign.cpp \

@@ -16,7 +16,9 @@
 using namespace std;
 
 typedef map<Coord, Node> ListType;
+#ifdef NO_LIB_BOOST
 typedef priority_queue<Node, vector<Node>, PriorityNode> PriorityType;
+#endif
 
 //! ClosedList is always a STL map
 typedef ListType::const_iterator closed_list_iterator;

@@ -185,6 +185,7 @@ int Node::getNeigh(vector<Node> a[], int vec_size)
     return 0;
 }
 
+#ifdef NO_LIB_BOOST
 //! Friend function to compare nodes. Highest priority to lower f's.
 bool PriorityNode::operator()(Node& n1, Node& n2)
 {
@@ -192,3 +193,4 @@ bool PriorityNode::operator()(Node& n1, Node& n2)
         return true;
     return false;
 }
+#endif
