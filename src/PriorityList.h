@@ -38,6 +38,7 @@ class PriorityList {
 
         bool dequeue(Node &n);
         const ListType::mapped_type& enqueue(const Node &n);
+        const ListType::mapped_type& conditional_enqueue(const Node &n);
         int get_highest_priority() const;
         void verifyMemory();
 

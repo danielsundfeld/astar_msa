@@ -45,6 +45,14 @@ const ListType::mapped_type& PriorityList::enqueue(const Node &n)
     return m_openlist[n.pos] = n;
 }
 
+const ListType::mapped_type& PriorityList::conditional_enqueue(const Node &n)
+{
+    open_list_iterator s = find(n.pos);
+    if (s == end() || open_list_return_g(s) > n.get_g())
+        return enqueue(n);
+    return s->second;
+}
+
 int PriorityList::get_highest_priority() const
 {
     if (empty())
