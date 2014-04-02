@@ -3,6 +3,7 @@
  * \author Daniel Sundfeld
  * \copyright MIT License
  */
+#include <limits>
 #ifndef NO_LIB_BOOST
  #include <boost/multi_index_container.hpp>
  #include <boost/multi_index/member.hpp>
@@ -44,6 +45,13 @@ const ListType::mapped_type& PriorityList::enqueue(const Node &n)
     return m_openlist[n.pos] = n;
 }
 
+int PriorityList::get_highest_priority() const
+{
+    if (empty())
+        return std::numeric_limits<int>::max();
+    return top().get_f();
+}
+
 void PriorityList::verifyMemory()
 {
     if (m_memwatch.getMemoryClean())
@@ -83,6 +91,14 @@ bool PriorityList::conditional_enqueue(const Node &c)
     if (c.get_f() >= it->get_f())
         return true;
     return m_openlist.modify(it, change_node(c.get_f(), c.get_g(), c.get_parenti()));
+}
+
+int PriorityList::get_highest_priority() const
+{
+    auto it = get<priority>(m_openlist).begin();
+    if (it == get<priority>(m_openlist).end())
+        return std::numeric_limits<int>::max();
+    return it->get_f();
 }
 
 void PriorityList::merge(const PriorityList& other)

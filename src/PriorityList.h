@@ -38,6 +38,7 @@ class PriorityList {
 
         bool dequeue(Node &n);
         const ListType::mapped_type& enqueue(const Node &n);
+        int get_highest_priority() const;
         void verifyMemory();
 
         open_list_iterator find(const Coord &c) const { return m_openlist.find(c); };
@@ -46,8 +47,8 @@ class PriorityList {
         size_t size(void) { return m_openlist.size(); };
 
         void pop() { return m_pq->pop(); };
-        const PriorityType::value_type& top() { return m_pq->top(); };
-        bool empty() { return m_pq->empty(); };
+        const PriorityType::value_type& top() const { return m_pq->top(); };
+        bool empty() const { return m_pq->empty(); };
 };
 #else
 using boost::multi_index_container;
@@ -75,6 +76,7 @@ class PriorityList {
         bool dequeue(Node &n);
         bool enqueue(const Node &n);
         bool conditional_enqueue(const Node &n);
+        int get_highest_priority() const;
         void verifyMemory() { return; };
 
         open_list_iterator find(const Coord &c) const { return m_openlist.find(c); };
