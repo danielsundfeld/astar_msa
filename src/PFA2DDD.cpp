@@ -34,6 +34,10 @@ std::mutex final_node_mutex;
 Node final_node(0);
 std::atomic<int> final_node_count;
 
+std::mutex sync_mutex;
+std::atomic<int> sync_count;
+std::condition_variable sync_condition;
+
 /*!
  * Add a vector of nodes \a nodes to the PriorityList \a OpenList. Use the
  * \a ClosedList information to ignore expanded nodes.
@@ -66,7 +70,7 @@ void pfa2ddd_enqueue(std::vector<Node> &nodes, PriorityList &OpenList, ListType 
 }
 
 /*!
- * Process \a n as an possible answer
+ * Process \a n as an possible answer. Check end phase 1
  */
 void pfa2ddd_process_final_node(int tid, const Node &n)
 {
@@ -101,6 +105,7 @@ void pfa2ddd_process_final_node(int tid, const Node &n)
     // Process a broadcast node
     if (++final_node_count == THREADS_NUM)
     {
+        // This node have the highest priority between all Openlist.
         end_cond = true;
         return;
     }
@@ -119,14 +124,25 @@ void pfa2ddd_consume_queue(int tid)
     return;
 }
 
-//! Execute a pfa2ddd_worker thread. This thread have id \a tid
-int pfa2ddd_worker(int tid, const Node &node_zero, bool(*is_final)(const Coord &c))
+//! Sync all threads
+void pfa2ddd_sync_threads()
+{
+    std::unique_lock<std::mutex> sync_lock(sync_mutex);
+    if (++sync_count < THREADS_NUM)
+        sync_condition.wait(sync_lock);
+    else
+    {
+        sync_condition.notify_all();
+        sync_count = 0;
+    }
+}
+
+//! Execute the pfa2ddd algorithm until all nodes expand the same final node
+void pfa2ddd_worker_inner(int tid, bool(*is_final)(const Coord &c))
 {
     Node current;
 
-    if (tid == 0)
-        OpenList[tid].enqueue(node_zero);
-
+    // Loop ended by pfa2ddd_process_final_node
     while (end_cond == false)
     {
         open_list_iterator o_search;
@@ -179,6 +195,42 @@ int pfa2ddd_worker(int tid, const Node &node_zero, bool(*is_final)(const Coord &
             }
         }
     }
+    return;
+}
+
+/*! 
+ * Check end phase 2.
+ * After everyone agreed that a possible answer is found, we must syncronize
+ * the threads, consume the queue and check again, if the answer have the
+ * lowest priority between all OpenLists
+ * The queue consume and/or thread scheduling might have caused the final_node
+ * to not have the lowest priority.
+ */
+bool pfa2ddd_check_stop(int tid)
+{
+    pfa2ddd_sync_threads();
+    pfa2ddd_consume_queue(tid);
+    if (OpenList[tid].get_highest_priority() < final_node.get_f())
+    {
+        //cout << "[" << tid << "] reporting early end!\n";
+        end_cond = false;
+    }
+    pfa2ddd_sync_threads();
+    return (end_cond == false);
+}
+
+//! Execute a pfa2ddd_worker thread. This thread have id \a tid
+int pfa2ddd_worker(int tid, const Node &node_zero, bool(*is_final)(const Coord &c))
+{
+    if (tid == 0)
+        OpenList[tid].enqueue(node_zero);
+
+    // worker_inner is the main inner loop
+    // check_stop syncs and check if is the optimal answer
+    do {
+        pfa2ddd_worker_inner(tid, is_final);
+    } while (pfa2ddd_check_stop(tid));
+
     return 0;
 }
 
@@ -192,6 +244,7 @@ int pfa2ddd(const Node &node_zero, bool(*is_final)(const Coord &c))
 
     // Initialize variables
     end_cond = false;
+    sync_count = 0;
 
     // Create threads
     for (int i = 0; i < THREADS_NUM; ++i)
