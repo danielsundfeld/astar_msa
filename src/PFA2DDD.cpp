@@ -209,6 +209,7 @@ void pfa2ddd_worker_inner(int tid, bool(*is_final)(const Coord &c))
 bool pfa2ddd_check_stop(int tid)
 {
     pfa2ddd_sync_threads();
+    Node n = final_node;
     pfa2ddd_consume_queue(tid);
     if (OpenList[tid].get_highest_priority() < final_node.get_f())
     {
@@ -216,7 +217,14 @@ bool pfa2ddd_check_stop(int tid)
         end_cond = false;
     }
     pfa2ddd_sync_threads();
-    return (end_cond == false);
+    if (end_cond == false)
+    {
+        ClosedList[tid].erase(n.pos);
+        if (n.pos.get_id(THREADS_NUM) == tid)
+            OpenList[tid].conditional_enqueue(n);
+        return true;
+    }
+    return false;
 }
 
 //! Execute a pfa2ddd_worker thread. This thread have id \a tid
