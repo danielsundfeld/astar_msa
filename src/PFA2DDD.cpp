@@ -71,7 +71,11 @@ void pfa2ddd_enqueue(int tid, std::vector<Node> &nodes)
 }
 
 /*!
- * Process \a n as an possible answer. Check end phase 1
+ * Process \a n as an possible answer. Check end phase 1.
+ * When a final node is first opened, it is broadcasted in all OpenLists.
+ * When all OpenList open this node, it have the lowest priority among all
+ * openlists, then it must proceed to Check end phase 2.
+ * This is functions does not require synchronization between the threads.
  */
 void pfa2ddd_process_final_node(int tid, const Node &n)
 {
@@ -206,6 +210,7 @@ void pfa2ddd_worker_inner(int tid, bool(*is_final)(const Coord &c))
  * lowest priority between all OpenLists
  * The queue consume and/or thread scheduling might have caused the final_node
  * to not have the lowest priority.
+ * This is a very costly function, threads syncronization are called twice.
  */
 bool pfa2ddd_check_stop(int tid)
 {
