@@ -229,11 +229,8 @@ bool pfa2ddd_check_stop(int tid)
 }
 
 //! Execute a pfa2ddd_worker thread. This thread have id \a tid
-int pfa2ddd_worker(int tid, const Node &node_zero, bool(*is_final)(const Coord &c))
+int pfa2ddd_worker(int tid, bool(*is_final)(const Coord &c))
 {
-    if (tid == 0)
-        OpenList[tid].enqueue(node_zero);
-
     // worker_inner is the main inner loop
     // check_stop syncs and check if is the optimal answer
     do {
@@ -251,13 +248,16 @@ int pfa2ddd(const Node &node_zero, bool(*is_final)(const Coord &c))
 {
     std::vector<std::thread> threads;
 
+    // Enqueue first node
+    OpenList[0].enqueue(node_zero);
+
     // Initialize variables
     end_cond = false;
     sync_count = 0;
 
     // Create threads
     for (int i = 0; i < THREADS_NUM; ++i)
-        threads.push_back(std::thread(pfa2ddd_worker, i, node_zero, is_final));
+        threads.push_back(std::thread(pfa2ddd_worker, i, is_final));
 
     // Wait for the end of all threads
     for (auto& th : threads)
