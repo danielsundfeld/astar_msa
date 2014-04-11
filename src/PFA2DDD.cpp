@@ -39,32 +39,33 @@ std::atomic<int> sync_count;
 std::condition_variable sync_condition;
 
 /*!
- * Add a vector of nodes \a nodes to the PriorityList \a OpenList. Use the
- * \a ClosedList information to ignore expanded nodes.
+ * Add a vector of nodes \a nodes to the OpenList with id \a tid. Use the
+ * ClosedList information to ignore expanded nodes.
  * This function is a expensive function and should be called with no locks.
- * Parallel access should never occur on \a OpenList and \a ClosedList
+ * Parallel access should never occur on OpenList and ClosedList with
+ * same tids.
  */
-void pfa2ddd_enqueue(std::vector<Node> &nodes, PriorityList &OpenList, ListType &ClosedList)
+void pfa2ddd_enqueue(int tid, std::vector<Node> &nodes)
 {
     open_list_iterator o_search;
     closed_list_iterator c_search;
 
     for (vector<Node>::iterator it = nodes.begin() ; it != nodes.end(); ++it)
     {
-        if ((o_search = OpenList.find(it->pos)) != OpenList.end())
+        if ((o_search = OpenList[tid].find(it->pos)) != OpenList[tid].end())
         {
             // if score on open list is better, ignore this neighboor
             if (it->get_g() > open_list_return_g(o_search))
                 continue;
         }
-        if ((c_search = ClosedList.find(it->pos)) != ClosedList.end())
+        if ((c_search = ClosedList[tid].find(it->pos)) != ClosedList[tid].end())
         {
             if (it->get_g() >= closed_list_return_g(c_search))
                 continue;
-            ClosedList.erase(it->pos);
+            ClosedList[tid].erase(it->pos);
         }
         //cout << Adding:\t" << *it << endl;
-        OpenList.enqueue(*it);
+        OpenList[tid].enqueue(*it);
     }
     return;
 }
@@ -120,7 +121,7 @@ void pfa2ddd_consume_queue(int tid)
     queue_nodes[tid].clear();
     queue_lock.unlock();
 
-    pfa2ddd_enqueue(nodes_to_expand, OpenList[tid], ClosedList[tid]);
+    pfa2ddd_enqueue(tid, nodes_to_expand);
     return;
 }
 
@@ -187,7 +188,7 @@ void pfa2ddd_worker_inner(int tid, bool(*is_final)(const Coord &c))
         for (int i = 0; i < THREADS_NUM; i++)
         {
             if (i == tid)
-                pfa2ddd_enqueue(neigh[i], OpenList[i], ClosedList[i]);
+                pfa2ddd_enqueue(tid, neigh[i]);
             else
             {
                 std::unique_lock<std::mutex> queue_lock(queue_mutex[i]);
