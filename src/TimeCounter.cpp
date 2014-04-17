@@ -12,7 +12,7 @@
 
 using namespace std;
 
-TimeCounter::TimeCounter(string msg)
+TimeCounter::TimeCounter(const string &msg)
 : m_msg(msg)
 {
     m_begin = chrono::high_resolution_clock::now();

@@ -20,7 +20,7 @@ class TimeCounter
         string m_msg;
 
     public:
-        TimeCounter(string msg = "");
+        TimeCounter(const string &msg = "");
         ~TimeCounter();
 };
 #endif
