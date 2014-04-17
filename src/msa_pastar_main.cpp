@@ -2,14 +2,14 @@
  * \author Daniel Sundfeld
  * \copyright MIT License
  *
- * \brief The main function for msa_pfa2ddd project
+ * \brief The main function for msa_pastar project
  */
 #include <iostream>
 
 using namespace std;
 
 #include "HeuristicHPair.h"
-#include "PFA2DDD.h"
+#include "PAStar.h"
 #include "read_fasta.h"
 
 int usage(char progname[])
@@ -26,5 +26,5 @@ int main(int argc, char *argv[])
     HeuristicHPair::getInstance()->init();
 
     cout << "Parallel code...\n";
-    return pfa2ddd(Sequences::get_initial_node(), Sequences::is_final);
+    return pa_star(Sequences::get_initial_node(), Sequences::is_final);
 }

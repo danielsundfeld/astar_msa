@@ -3,7 +3,7 @@
  * \copyright MIT License
  *
  * \brief Do a multiple sequence alignment reducing the search space
- * with pfa2ddd algorithm
+ * with parallel a-star algorithm
  */
 #include <atomic>
 #include <condition_variable>
@@ -45,7 +45,7 @@ std::condition_variable sync_condition;
  * Parallel access should never occur on OpenList and ClosedList with
  * same tids.
  */
-void pfa2ddd_enqueue(int tid, std::vector<Node> &nodes)
+void pa_star_enqueue(int tid, std::vector<Node> &nodes)
 {
     open_list_iterator o_search;
     closed_list_iterator c_search;
@@ -77,7 +77,7 @@ void pfa2ddd_enqueue(int tid, std::vector<Node> &nodes)
  * openlists, then it must proceed to Check end phase 2.
  * This is functions does not require synchronization between the threads.
  */
-void pfa2ddd_process_final_node(int tid, const Node &n)
+void pa_star_process_final_node(int tid, const Node &n)
 {
     std::unique_lock<std::mutex> final_node_lock(final_node_mutex);
 
@@ -118,19 +118,19 @@ void pfa2ddd_process_final_node(int tid, const Node &n)
 }
 
 //! Consume the queue with id \a tid
-void pfa2ddd_consume_queue(int tid)
+void pa_star_consume_queue(int tid)
 {
     std::unique_lock<std::mutex> queue_lock(queue_mutex[tid]);
     std::vector<Node> nodes_to_expand(queue_nodes[tid]);
     queue_nodes[tid].clear();
     queue_lock.unlock();
 
-    pfa2ddd_enqueue(tid, nodes_to_expand);
+    pa_star_enqueue(tid, nodes_to_expand);
     return;
 }
 
 //! Sync all threads
-void pfa2ddd_sync_threads()
+void pa_star_sync_threads()
 {
     std::unique_lock<std::mutex> sync_lock(sync_mutex);
     if (++sync_count < THREADS_NUM)
@@ -142,12 +142,12 @@ void pfa2ddd_sync_threads()
     }
 }
 
-//! Execute the pfa2ddd algorithm until all nodes expand the same final node
-void pfa2ddd_worker_inner(int tid, bool(*is_final)(const Coord &c))
+//! Execute the pa_star algorithm until all nodes expand the same final node
+void pa_star_worker_inner(int tid, bool(*is_final)(const Coord &c))
 {
     Node current;
 
-    // Loop ended by pfa2ddd_process_final_node
+    // Loop ended by pa_star_process_final_node
     while (end_cond == false)
     {
         open_list_iterator o_search;
@@ -155,7 +155,7 @@ void pfa2ddd_worker_inner(int tid, bool(*is_final)(const Coord &c))
 
         // Start phase
         // Reduce the queue
-        pfa2ddd_consume_queue(tid);
+        pa_star_consume_queue(tid);
 
         // Dequeue phase
         if (OpenList[tid].dequeue(current) == false)
@@ -179,7 +179,7 @@ void pfa2ddd_worker_inner(int tid, bool(*is_final)(const Coord &c))
 
         if (is_final(current.pos))
         {
-            pfa2ddd_process_final_node(tid, current);
+            pa_star_process_final_node(tid, current);
             continue;
         }
         OpenList[tid].verifyMemory();
@@ -192,7 +192,7 @@ void pfa2ddd_worker_inner(int tid, bool(*is_final)(const Coord &c))
         for (int i = 0; i < THREADS_NUM; i++)
         {
             if (i == tid)
-                pfa2ddd_enqueue(tid, neigh[i]);
+                pa_star_enqueue(tid, neigh[i]);
             else
             {
                 std::unique_lock<std::mutex> queue_lock(queue_mutex[i]);
@@ -212,17 +212,17 @@ void pfa2ddd_worker_inner(int tid, bool(*is_final)(const Coord &c))
  * to not have the lowest priority.
  * This is a very costly function, threads syncronization are called twice.
  */
-bool pfa2ddd_check_stop(int tid)
+bool pa_star_check_stop(int tid)
 {
-    pfa2ddd_sync_threads();
+    pa_star_sync_threads();
     Node n = final_node;
-    pfa2ddd_consume_queue(tid);
+    pa_star_consume_queue(tid);
     if (OpenList[tid].get_highest_priority() < final_node.get_f())
     {
         //cout << "[" << tid << "] reporting early end!\n";
         end_cond = false;
     }
-    pfa2ddd_sync_threads();
+    pa_star_sync_threads();
     if (end_cond == false)
     {
         ClosedList[tid].erase(n.pos);
@@ -233,23 +233,23 @@ bool pfa2ddd_check_stop(int tid)
     return false;
 }
 
-//! Execute a pfa2ddd_worker thread. This thread have id \a tid
-int pfa2ddd_worker(int tid, bool(*is_final)(const Coord &c))
+//! Execute a pa_star_worker thread. This thread have id \a tid
+int pa_star_worker(int tid, bool(*is_final)(const Coord &c))
 {
     // worker_inner is the main inner loop
     // check_stop syncs and check if is the optimal answer
     do {
-        pfa2ddd_worker_inner(tid, is_final);
-    } while (pfa2ddd_check_stop(tid));
+        pa_star_worker_inner(tid, is_final);
+    } while (pa_star_check_stop(tid));
 
     return 0;
 }
 
 /*!
  * Same a_star() function usage.
- * Starting function to do a pfa2ddd search.
+ * Starting function to do a pa_star search.
  */
-int pfa2ddd(const Node &node_zero, bool(*is_final)(const Coord &c))
+int pa_star(const Node &node_zero, bool(*is_final)(const Coord &c))
 {
     std::vector<std::thread> threads;
 
@@ -262,7 +262,7 @@ int pfa2ddd(const Node &node_zero, bool(*is_final)(const Coord &c))
 
     // Create threads
     for (int i = 0; i < THREADS_NUM; ++i)
-        threads.push_back(std::thread(pfa2ddd_worker, i, is_final));
+        threads.push_back(std::thread(pa_star_worker, i, is_final));
 
     // Wait for the end of all threads
     for (auto& th : threads)
