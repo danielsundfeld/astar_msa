@@ -53,12 +53,6 @@ int a_star(const Node &node_zero, bool(*is_final)(const Coord &c))
         OpenList.dequeue(current);
 
         // Check if better node is already found
-        if ((o_search = OpenList.find(current.pos)) != OpenList.end())
-        {
-            if (current.get_g() > open_list_return_g(o_search))
-                continue;
-        }
-        // Or already opened
         if ((c_search = ClosedList.find(current.pos)) != ClosedList.end())
         {
             if (current.get_g() >= closed_list_return_g(c_search))

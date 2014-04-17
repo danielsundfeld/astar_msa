@@ -150,7 +150,6 @@ void pa_star_worker_inner(int tid, bool(*is_final)(const Coord &c))
     // Loop ended by pa_star_process_final_node
     while (end_cond == false)
     {
-        open_list_iterator o_search;
         closed_list_iterator c_search;
 
         // Start phase
@@ -162,12 +161,6 @@ void pa_star_worker_inner(int tid, bool(*is_final)(const Coord &c))
             continue;
 
         // Check if better node is already found
-        if ((o_search = OpenList[tid].find(current.pos)) != OpenList[tid].end())
-        {
-            if (current.get_g() > open_list_return_g(o_search))
-                continue;
-        }
-        // Or already opened
         if ((c_search = ClosedList[tid].find(current.pos)) != ClosedList[tid].end())
         {
             if (current.get_g() >= closed_list_return_g(c_search))
