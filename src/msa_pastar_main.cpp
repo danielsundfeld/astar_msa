@@ -25,6 +25,6 @@ int main(int argc, char *argv[])
 
     HeuristicHPair::getInstance()->init();
 
-    cout << "Parallel code...\n";
+    cout << initial_message;
     return pa_star(Sequences::get_initial_node(), Sequences::is_final);
 }

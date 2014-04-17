@@ -25,6 +25,6 @@ int main(int argc, char *argv[])
 
     HeuristicHPair::getInstance()->init();
 
-    cout << "Sequential code...\n";
+    cout << initial_message;
     return a_star(Sequences::get_initial_node(), Sequences::is_final);
 }
