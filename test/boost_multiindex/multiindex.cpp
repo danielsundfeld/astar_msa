@@ -102,6 +102,7 @@ typedef multi_index_container<
   Node,
   indexed_by<
     ordered_unique<
+        /* THIS HAS BEEN CHANGED TO NON-UNIQUE*/
       tag<pos>,  BOOST_MULTI_INDEX_MEMBER(Node,Coord,pos)>,
     ordered_non_unique<
       tag<priority>, BOOST_MULTI_INDEX_MEMBER(Node,int,m_f)> >
@@ -115,7 +116,7 @@ void add_to_closed_list(Node &father, const Coord &son)
 {
     vector<Node> neigh;
 
-    father.getNeigh(neigh);
+    father.getNeigh(&neigh);
 
     for (vector<Node>::iterator it = neigh.begin() ; it != neigh.end(); ++it)
         if ((*it).pos == son)
