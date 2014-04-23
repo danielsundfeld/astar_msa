@@ -47,17 +47,10 @@ std::condition_variable sync_condition;
  */
 void pa_star_enqueue(int tid, std::vector<Node> &nodes)
 {
-    open_list_iterator o_search;
     closed_list_iterator c_search;
 
     for (vector<Node>::iterator it = nodes.begin() ; it != nodes.end(); ++it)
     {
-        if ((o_search = OpenList[tid].find(it->pos)) != OpenList[tid].end())
-        {
-            // if score on open list is better, ignore this neighboor
-            if (it->get_g() > open_list_return_g(o_search))
-                continue;
-        }
         if ((c_search = ClosedList[tid].find(it->pos)) != ClosedList[tid].end())
         {
             if (it->get_g() >= closed_list_return_g(c_search))
@@ -65,7 +58,7 @@ void pa_star_enqueue(int tid, std::vector<Node> &nodes)
             ClosedList[tid].erase(it->pos);
         }
         //cout << Adding:\t" << *it << endl;
-        OpenList[tid].enqueue(*it);
+        OpenList[tid].conditional_enqueue(*it);
     }
     return;
 }

@@ -71,12 +71,6 @@ int a_star(const Node &node_zero, bool(*is_final)(const Coord &c))
         current.getNeigh(&neigh);
         for (vector<Node>::iterator it = neigh.begin() ; it != neigh.end(); ++it)
         {
-            if ((o_search = OpenList.find(it->pos)) != OpenList.end())
-            {
-                // if score on open list is better, ignore this neighboor
-                if (it->get_g() > open_list_return_g(o_search))
-                    continue;
-            }
             if ((c_search = ClosedList.find(it->pos)) != ClosedList.end())
             {
                 if (it->get_g() >= closed_list_return_g(c_search))
@@ -84,7 +78,7 @@ int a_star(const Node &node_zero, bool(*is_final)(const Coord &c))
                 ClosedList.erase(it->pos);
             }
 
-            OpenList.enqueue(*it);
+            OpenList.conditional_enqueue(*it);
             //cout << "Adding:\t" << *it << "from\t" << current << endl;
         }
     }
