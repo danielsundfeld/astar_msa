@@ -79,7 +79,7 @@ bool PriorityList::dequeue(Node &n)
     if (it == get<priority>(m_openlist).end())
         return false;
     n = *it;
-    m_openlist.erase(it->pos);
+    m_openlist.get<priority>().erase(it);
     return true;
 }
 
