@@ -38,6 +38,16 @@ std::mutex sync_mutex;
 std::atomic<int> sync_count;
 std::condition_variable sync_condition;
 
+#include <sched.h>
+
+int pa_star_affinity(int tid)
+{
+    cpu_set_t  mask;
+    CPU_ZERO(&mask);
+    CPU_SET(1 << tid, &mask);
+    return sched_setaffinity(0, sizeof(mask), &mask);
+}
+
 /*!
  * Add a vector of nodes \a nodes to the OpenList with id \a tid. Use the
  * ClosedList information to ignore expanded nodes.
@@ -222,6 +232,7 @@ bool pa_star_check_stop(int tid)
 //! Execute a pa_star_worker thread. This thread have id \a tid
 int pa_star_worker(int tid, bool(*is_final)(const Coord &c))
 {
+    pa_star_affinity(tid);
     // worker_inner is the main inner loop
     // check_stop syncs and check if is the optimal answer
     do {
