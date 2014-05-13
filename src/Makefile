@@ -46,6 +46,7 @@ endif
 COMMON_CPP_SRCS += \
     backtrace.cpp \
     Coord.cpp \
+    CoordHash.cpp \
     Cost.cpp \
     Heuristic.cpp \
     HeuristicHPair.cpp \

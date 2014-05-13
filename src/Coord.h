@@ -10,6 +10,8 @@
 #include <iostream>
 #include <vector>
 
+#include "CoordHash.h"
+
 using namespace std;
 
 class Coord {
@@ -32,7 +34,7 @@ class Coord {
         Coord parent(int n) const;
         void clear();
         int get_sum() const;
-        int get_id(const int size) const { return get_sum() % size; };
+        inline int get_id(const int size) const { return CoordHash::get_id(*this, size); };
 };
 
 #endif
