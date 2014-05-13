@@ -9,7 +9,9 @@
 #define _COORD_HASH_H
 
 /*! The size of the shift on the get_id() function */
-#define HASH_SHIFT  5
+#ifndef HASH_SHIFT
+    #define HASH_SHIFT  5
+#endif
 
 class Coord;
 

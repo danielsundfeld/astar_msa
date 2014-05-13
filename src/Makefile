@@ -10,6 +10,10 @@ INCDIR       = .
 CPPFLAGS   += -W -Wall -std=c++11 -I/usr/include
 LDFLAGS    += -lpthread
 
+ifdef HASH
+    CPPFLAGS += -DHASH_SHIFT=$(HASH)
+endif
+
 ifdef NO_LIB_BOOST
     CPPFLAGS += -DNO_LIB_BOOST
     COMMON_CPP_SRCS += MemoryWatcher.cpp
