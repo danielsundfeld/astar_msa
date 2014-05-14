@@ -132,12 +132,3 @@ void Coord::clear()
 {
     m_coord.clear();
 }
-
-//! Return the sum of elements
-int Coord::get_sum() const
-{
-    int sum = 0;
-    for (auto it = m_coord.cbegin(); it != m_coord.cend(); ++it)
-        sum += *it;
-    return sum;
-}

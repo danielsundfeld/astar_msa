@@ -33,8 +33,15 @@ class Coord {
         Coord neigh(int n) const;
         Coord parent(int n) const;
         void clear();
+
+        // CoordHash functions helpers
         int get_sum() const;
-        inline int get_id(const int size) const { return CoordHash::get_id(*this, size); };
+
+        // CoordHash hash functions
+        int full_sum_hash(const int size) const;
+
+        // CoordHash main function
+        int get_id(const int size) const;
 };
 
 #endif
