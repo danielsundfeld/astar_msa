@@ -39,6 +39,7 @@ class Coord {
 
         // CoordHash hash functions
         int full_sum_hash(const int size) const;
+        unsigned int z_order_curve_hash() const;
 
         // CoordHash main function
         int get_id(const int size) const;
