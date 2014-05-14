@@ -7,7 +7,7 @@
 #include "Coord.h"
 
 //! Return the sum of elements
-int Coord::get_sum() const
+unsigned int Coord::get_sum() const
 {
     int sum = 0;
     for (auto it = m_coord.cbegin(); it != m_coord.cend(); ++it)
@@ -16,7 +16,7 @@ int Coord::get_sum() const
 }
 
 //! Return the full-sum-hash
-int Coord::full_sum_hash(const int size) const
+unsigned int Coord::full_sum_hash(const int size) const
 {
     return (get_sum() >> HASH_SHIFT) % size;
 }
@@ -41,7 +41,7 @@ unsigned int Coord::z_order_curve_hash() const
 }
 
 //! Main CoordHash function: return the hash to the space \a size
-int Coord::get_id(const int size) const
+unsigned int Coord::get_id(const int size) const
 {
     return full_sum_hash(size);
 }

@@ -88,7 +88,7 @@ void pa_star_process_final_node(int tid, const Node &n)
     if (final_node.get_f() < n.get_f())
         return;
 
-    if (n.pos.get_id(THREADS_NUM) == tid)
+    if (n.pos.get_id(THREADS_NUM) == (unsigned int)tid)
     {
         //cout << "[" << tid << "] Possible answer found: " << n << endl;
         // Broadcast the node
@@ -222,7 +222,7 @@ bool pa_star_check_stop(int tid)
     if (end_cond == false)
     {
         ClosedList[tid].erase(n.pos);
-        if (n.pos.get_id(THREADS_NUM) == tid)
+        if (n.pos.get_id(THREADS_NUM) == (unsigned int) tid)
             OpenList[tid].conditional_enqueue(n);
         return true;
     }

@@ -35,14 +35,14 @@ class Coord {
         void clear();
 
         // CoordHash functions helpers
-        int get_sum() const;
+        unsigned int get_sum() const;
 
         // CoordHash hash functions
-        int full_sum_hash(const int size) const;
+        unsigned int full_sum_hash(const int size) const;
         unsigned int z_order_curve_hash() const;
 
         // CoordHash main function
-        int get_id(const int size) const;
+        unsigned int get_id(const int size) const;
 };
 
 #endif
