@@ -16,7 +16,7 @@ unsigned int Coord::get_sum() const
 }
 
 //! Return the full-sum-hash
-unsigned int Coord::full_sum_hash(const int size) const
+unsigned int Coord::sum_hash(const int size) const
 {
     return (get_sum() >> HASH_SHIFT) % size;
 }
@@ -43,5 +43,5 @@ unsigned int Coord::z_order_curve_hash() const
 //! Main CoordHash function: return the hash to the space \a size
 unsigned int Coord::get_id(const int size) const
 {
-    return full_sum_hash(size);
+    return sum_hash(size);
 }
