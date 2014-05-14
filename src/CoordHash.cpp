@@ -21,8 +21,8 @@ unsigned int Coord::sum_hash(const int size) const
     return (get_sum() >> HASH_SHIFT) % size;
 }
 
-//! z_order_curve hash on multidimension coordinates
-unsigned int Coord::z_order_curve_hash() const
+//! z_order_curve on multidimension coordinates
+unsigned int Coord::get_z_order_curve() const
 {
     int hash = 0;
     int bit_to_read = 0;
