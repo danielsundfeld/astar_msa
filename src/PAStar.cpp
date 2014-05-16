@@ -20,7 +20,9 @@
 
 using namespace std;
 
-#define THREADS_NUM 4
+#ifndef THREADS_NUM
+    #define THREADS_NUM 4
+#endif
 
 PriorityList OpenList[THREADS_NUM];
 ListType ClosedList[THREADS_NUM];

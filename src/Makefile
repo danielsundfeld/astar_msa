@@ -10,6 +10,10 @@ INCDIR       = .
 CPPFLAGS   += -W -Wall -std=c++11 -I/usr/include
 LDFLAGS    += -lpthread
 
+ifdef THREADS
+    CPPFLAGS += -DTHREADS_NUM=$(THREADS)
+endif
+
 ifdef HASH
     CPPFLAGS += -DHASH_SHIFT=$(HASH)
 endif
