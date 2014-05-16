@@ -49,5 +49,9 @@ unsigned int Coord::z_order_hash(const int size) const
 //! Main CoordHash function: return the hash to the space \a size
 unsigned int Coord::get_id(const int size) const
 {
+#ifdef HASHFZORDER
+    return z_order_hash(size);
+#else
     return sum_hash(size);
+#endif
 }

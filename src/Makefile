@@ -18,6 +18,12 @@ ifdef HASH_SHIFT
     CPPFLAGS += -DHASH_SHIFT=$(HASH_SHIFT)
 endif
 
+ifeq ($(HASH),FZORDER)
+    CPPFLAGS += -DHASHFZORDER
+else
+    CPPFLAGS += -DHASHFSUM
+endif
+
 ifdef NO_LIB_BOOST
     CPPFLAGS += -DNO_LIB_BOOST
     COMMON_CPP_SRCS += MemoryWatcher.cpp
