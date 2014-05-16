@@ -40,6 +40,12 @@ unsigned int Coord::get_z_order_curve() const
     return hash;
 }
 
+//! Return the full z-order-hash
+unsigned int Coord::z_order_hash(const int size) const
+{
+    return (get_z_order_curve() >> HASH_SHIFT) % size;
+}
+
 //! Main CoordHash function: return the hash to the space \a size
 unsigned int Coord::get_id(const int size) const
 {
