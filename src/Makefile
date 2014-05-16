@@ -14,8 +14,8 @@ ifdef THREADS
     CPPFLAGS += -DTHREADS_NUM=$(THREADS)
 endif
 
-ifdef HASH
-    CPPFLAGS += -DHASH_SHIFT=$(HASH)
+ifdef HASH_SHIFT
+    CPPFLAGS += -DHASH_SHIFT=$(HASH_SHIFT)
 endif
 
 ifdef NO_LIB_BOOST
