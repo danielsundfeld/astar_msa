@@ -21,6 +21,18 @@ unsigned int Coord::sum_hash(const int size) const
     return (get_sum() >> HASH_SHIFT) % size;
 }
 
+//! Return the sum of first and second elements
+unsigned int Coord::get_part_sum() const
+{
+    return m_coord[0] + m_coord[1];
+}
+
+//! Return the part-sum-hash
+unsigned int Coord::part_sum_hash(const int size) const
+{
+    return (get_part_sum() >> HASH_SHIFT) % size;
+}
+
 //! z_order_curve on multidimension coordinates
 unsigned int Coord::get_z_order_curve() const
 {
@@ -51,6 +63,8 @@ unsigned int Coord::get_id(const int size) const
 {
 #ifdef HASHFZORDER
     return z_order_hash(size);
+#elif HASHPSUM
+    return part_sum_hash(size);
 #else
     return sum_hash(size);
 #endif

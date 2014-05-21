@@ -36,10 +36,12 @@ class Coord {
 
         // CoordHash functions helpers
         unsigned int get_sum() const;
+	unsigned int get_part_sum() const;
         unsigned int get_z_order_curve() const;
 
         // CoordHash hash functions
         unsigned int sum_hash(const int size) const;
+	unsigned int part_sum_hash(const int size) const;
         unsigned int z_order_hash(const int size) const;
 
         // CoordHash main function
