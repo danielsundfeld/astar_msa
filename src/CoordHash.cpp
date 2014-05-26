@@ -132,6 +132,9 @@ unsigned int Coord::get_id(const int size) const
 #elif HASHPSUM
     return part_sum_hash(size);
 #else
+    #ifndef HASHFSUM
+        #warning HASH NOT DEFINED, USING FULL-SUM
+    #endif
     return sum_hash(size);
 #endif
 }

@@ -24,7 +24,7 @@ else ifeq ($(HASH),PZORDER)
     CPPFLAGS += -DHASHPZORDER
 else ifeq ($(HASH),PSUM)
     CPPFLAGS += -DHASHPSUM
-else
+else ifeq ($(HASH),FSUM)
     CPPFLAGS += -DHASHFSUM
 endif
 
