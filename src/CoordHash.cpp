@@ -78,11 +78,11 @@ unsigned int Coord::z_order_hash(const int size) const
     int bit_to_read = HASH_SHIFT / m_coord.size();
 
     // MOD operation, stop writing after total_bits
-    unsigned int total = 1 << (size - 1);
+    unsigned int total = 1 << (size);
 
-    for (unsigned int bit_to_write = 1; bit_to_write < total; )
+    for (unsigned int bit_to_write = 1; bit_to_write <= total; )
     {
-        for (unsigned int j = 0; j < m_coord.size() && bit_to_write < total; ++j)
+        for (unsigned int j = 0; j < m_coord.size() && bit_to_write <= total; ++j)
         {
             if (m_coord[j] & (1 << bit_to_read))
                 hash |= bit_to_write;
@@ -92,7 +92,8 @@ unsigned int Coord::z_order_hash(const int size) const
     }
     /* HASH_SHIFT 1 means: discard the first bit from the first sequence, but
     use the first bit of the other sequences. */
-    return hash >> (HASH_SHIFT % m_coord.size());
+    //TODO: optimize this MOD size operation
+    return (hash >> (HASH_SHIFT % m_coord.size())) % size;
 }
 
 //! Main CoordHash function: return the hash to the space \a size
