@@ -100,9 +100,13 @@ void minor_test()
     cout << c_zero << "/" << c_zero.get_z_order_curve() << " " << c_zero.z_order_hash(4) << ' ' << c_zero.z_order_hash_slow(4) << endl;
 
     Coord c(DIM);
-    c[2] = 2;
-    c[3] = 128;
-    cout << c.z_order_hash_slow(THREADS) << " " << c.z_order_hash(THREADS) << endl;
+    c[0] = 0xFFFFFF;
+    c[1] = 3;
+    cout << c.z_order_hash_slow(THREADS) << " " << c.z_order_hash(THREADS) << " " << c.part_z_order_hash(THREADS) << endl;
+
+    c[2] = 0xFFFFFF;
+    c[3] = 0xFFFFFF;
+    cout << c.z_order_hash_slow(THREADS) << " " << c.z_order_hash(THREADS) << " " << c.part_z_order_hash(THREADS) << endl;
 }
 
 int main(void)

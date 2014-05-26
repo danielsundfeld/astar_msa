@@ -96,11 +96,39 @@ unsigned int Coord::z_order_hash(const int size) const
     return (hash >> (HASH_SHIFT % m_coord.size())) % size;
 }
 
+//! Same Coord::z_order_hash usage
+unsigned int Coord::part_z_order_hash(const int size) const
+{
+    int hash = 0;
+    // Shift operation, start reading
+    int bit_to_read = HASH_SHIFT / 2;
+
+    // MOD operation, stop writing after total_bits
+    unsigned int total = 1 << (size);
+
+    for (unsigned int bit_to_write = 1; bit_to_write <= total; )
+    {
+        for (unsigned int j = 0; j < 2 && bit_to_write <= total; ++j)
+        {
+            if (m_coord[j] & (1 << bit_to_read))
+                hash |= bit_to_write;
+            bit_to_write <<= 1;
+        }
+        ++bit_to_read;
+    }
+    /* HASH_SHIFT 1 means: discard the first bit from the first sequence, but
+    use the first bit of the other sequences. */
+    //TODO: optimize this MOD size operation
+    return (hash >> (HASH_SHIFT % 2)) % size;
+}
+
 //! Main CoordHash function: return the hash to the space \a size
 unsigned int Coord::get_id(const int size) const
 {
 #ifdef HASHFZORDER
     return z_order_hash(size);
+#elif HASHPZORDER
+    return part_z_order_hash(size);
 #elif HASHPSUM
     return part_sum_hash(size);
 #else

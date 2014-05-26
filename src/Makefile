@@ -20,6 +20,8 @@ endif
 
 ifeq ($(HASH),FZORDER)
     CPPFLAGS += -DHASHFZORDER
+else ifeq ($(HASH),PZORDER)
+    CPPFLAGS += -DHASHPZORDER
 else ifeq ($(HASH),PSUM)
     CPPFLAGS += -DHASHPSUM
 else
