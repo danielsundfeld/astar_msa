@@ -4,6 +4,8 @@
  *
  * This file implements the Hash Functions to class Coord
  */
+#include <limits>
+
 #include "Coord.h"
 
 //! Return the sum of elements
@@ -78,7 +80,10 @@ unsigned int Coord::z_order_hash(const int size) const
     int bit_to_read = HASH_SHIFT / m_coord.size();
 
     // MOD operation, stop writing after total_bits
+    // TODO:FIXME  this is wrong
     unsigned int total = 1 << (size);
+    if (total == 0)
+        total = std::numeric_limits<unsigned int>::max();
 
     for (unsigned int bit_to_write = 1; bit_to_write <= total; )
     {
@@ -104,7 +109,10 @@ unsigned int Coord::part_z_order_hash(const int size) const
     int bit_to_read = HASH_SHIFT / 2;
 
     // MOD operation, stop writing after total_bits
+    // TODO:FIXME  this is wrong
     unsigned int total = 1 << (size);
+    if (total == 0)
+        total = std::numeric_limits<unsigned int>::max();
 
     for (unsigned int bit_to_write = 1; bit_to_write <= total; )
     {
