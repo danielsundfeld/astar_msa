@@ -28,6 +28,7 @@ PriorityList OpenList[THREADS_NUM];
 ListType ClosedList[THREADS_NUM];
 
 std::mutex queue_mutex[THREADS_NUM];
+std::condition_variable queue_condition[THREADS_NUM];
 std::vector<Node> queue_nodes[THREADS_NUM];
 
 std::atomic<bool> end_cond;
@@ -104,7 +105,15 @@ void pa_star_process_final_node(int tid, const Node &n)
             {
                 std::unique_lock<std::mutex> queue_lock(queue_mutex[i]);
                 queue_nodes[i].push_back(n);
+                queue_condition[i].notify_one();
             }
+        }
+        // Process a broadcast node
+        if (final_node_count == THREADS_NUM)
+        {
+            // This node have the highest priority between all Openlist.
+            end_cond = true;
+            return;
         }
         return;
     }
@@ -131,6 +140,28 @@ void pa_star_consume_queue(int tid)
     queue_lock.unlock();
 
     pa_star_enqueue(tid, nodes_to_expand);
+    return;
+}
+
+//! Wait something on the queue
+void pa_star_wait_queue(int tid)
+{
+    std::unique_lock<std::mutex> queue_lock(queue_mutex[tid]);
+    if (queue_nodes[tid].size() != 0)
+        return;
+
+    queue_condition[tid].wait(queue_lock);
+    return;
+}
+
+//! Wake up everyone waiting on the queue
+void pa_star_wake_all_queue()
+{
+    for (int i = 0; i < THREADS_NUM; ++i)
+    {
+        std::unique_lock<std::mutex> queue_lock(queue_mutex[i]);
+        queue_condition[i].notify_one();
+    }
     return;
 }
 
@@ -163,7 +194,10 @@ void pa_star_worker_inner(int tid, bool(*is_final)(const Coord &c))
 
         // Dequeue phase
         if (OpenList[tid].dequeue(current) == false)
+        {
+            pa_star_wait_queue(tid);
             continue;
+        }
 
         // Check if better node is already found
         if ((c_search = ClosedList[tid].find(current.pos)) != ClosedList[tid].end())
@@ -191,10 +225,11 @@ void pa_star_worker_inner(int tid, bool(*is_final)(const Coord &c))
         {
             if (i == tid)
                 pa_star_enqueue(tid, neigh[i]);
-            else
+            else if (neigh[i].size() != 0)
             {
                 std::unique_lock<std::mutex> queue_lock(queue_mutex[i]);
                 queue_nodes[i].insert(queue_nodes[i].end(), neigh[i].begin(), neigh[i].end());
+                queue_condition[i].notify_one();
             }
         }
     }
@@ -212,6 +247,7 @@ void pa_star_worker_inner(int tid, bool(*is_final)(const Coord &c))
  */
 bool pa_star_check_stop(int tid)
 {
+    pa_star_wake_all_queue();
     pa_star_sync_threads();
     Node n = final_node;
     pa_star_consume_queue(tid);
