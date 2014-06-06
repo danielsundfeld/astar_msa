@@ -8,6 +8,7 @@
 #include <atomic>
 #include <condition_variable>
 #include <iostream>
+#include <sched.h>
 #include <thread>
 #include <vector>
 
@@ -16,7 +17,6 @@
 #include "Coord.h"
 #include "Node.h"
 #include "PriorityList.h"
-#include "Sequences.h"
 
 using namespace std;
 
@@ -40,8 +40,6 @@ std::atomic<int> final_node_count;
 std::mutex sync_mutex;
 std::atomic<int> sync_count;
 std::condition_variable sync_condition;
-
-#include <sched.h>
 
 int pa_star_affinity(int tid)
 {
