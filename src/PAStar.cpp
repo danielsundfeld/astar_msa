@@ -31,6 +31,9 @@ std::mutex queue_mutex[THREADS_NUM];
 std::condition_variable queue_condition[THREADS_NUM];
 std::vector<Node> queue_nodes[THREADS_NUM];
 
+long long int nodes_count[THREADS_NUM] = { };
+long long int nodes_reopen[THREADS_NUM] = { };
+
 std::atomic<bool> end_cond;
 
 std::mutex final_node_mutex;
@@ -67,6 +70,7 @@ void pa_star_enqueue(int tid, std::vector<Node> &nodes)
             if (it->get_g() >= closed_list_return_g(c_search))
                 continue;
             ClosedList[tid].erase(it->pos);
+            nodes_reopen[tid] += 1;
         }
         //cout << Adding:\t" << *it << endl;
         OpenList[tid].conditional_enqueue(*it);
@@ -196,12 +200,14 @@ void pa_star_worker_inner(int tid, bool(*is_final)(const Coord &c))
             pa_star_wait_queue(tid);
             continue;
         }
+        nodes_count[tid] += 1;
 
         // Check if better node is already found
         if ((c_search = ClosedList[tid].find(current.pos)) != ClosedList[tid].end())
         {
             if (current.get_g() >= closed_list_return_g(c_search))
                 continue;
+            nodes_reopen[tid] += 1;
         }
 
         //cout << "[" << tid << "] Opening node:\t" << current << endl;
@@ -278,6 +284,33 @@ int pa_star_worker(int tid, bool(*is_final)(const Coord &c))
     return 0;
 }
 
+void pa_star_nodes_count()
+{
+    long long int nodes_total = 0;
+    long long int open_list_total = 0;
+    long long int closed_list_total = 0;
+    long long int nodes_reopen_total = 0;
+
+    cout << "Total nodes count:" << endl;
+    for (int i = 0; i < THREADS_NUM; ++i)
+    {
+        cout << "tid " << i
+             << "\tOpenList:" << OpenList[i].size()
+             << "\tClosedList:" << ClosedList[i].size()
+             << "\tReopen:" << nodes_reopen[i]
+             << "\tTotal: " << nodes_count[i] << endl;
+        open_list_total += OpenList[i].size();
+        closed_list_total += ClosedList[i].size();
+        nodes_reopen_total += nodes_reopen[i];
+        nodes_total += nodes_count[i];
+    }
+    cout << "Sum"
+          << "\tOpenList:" << open_list_total
+          << "\tClosedList:" << closed_list_total
+          << "\tReopen:" << nodes_reopen_total
+          << "\tTotal: " << nodes_total << endl;
+}
+
 /*!
  * Same a_star() function usage.
  * Starting function to do a pa_star search.
@@ -304,5 +337,6 @@ int pa_star(const Node &node_zero, bool(*is_final)(const Coord &c))
     // Print answer
     cout << "Final score:\t" << final_node << endl;
     backtrace(ClosedList, THREADS_NUM);
+    pa_star_nodes_count();
     return 0;
 }
