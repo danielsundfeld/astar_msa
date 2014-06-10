@@ -134,16 +134,16 @@ unsigned int Coord::part_z_order_hash(const int size) const
 //! Main CoordHash function: return the hash to the space \a size
 unsigned int Coord::get_id(const int size) const
 {
-#ifdef HASHFZORDER
-    return z_order_hash(size);
-#elif HASHPZORDER
-    return part_z_order_hash(size);
+#ifdef HASHFSUM
+    return sum_hash(size);
 #elif HASHPSUM
     return part_sum_hash(size);
+#elif HASHPZORDER
+    return part_z_order_hash(size);
 #else
-    #ifndef HASHFSUM
-        #warning HASH NOT DEFINED, USING FULL-SUM
+    #ifndef HASHFZORDER
+        #warning HASH NOT DEFINED, USING FULL-ZORDER
     #endif
-    return sum_hash(size);
+    return z_order_hash(size);
 #endif
 }

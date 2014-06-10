@@ -9,7 +9,7 @@
 
 #ifndef HASH_SHIFT
     //! The size of the shift on most hash functions
-    #define HASH_SHIFT  5
+    #define HASH_SHIFT  12
 #endif
 
 #endif
