@@ -4,6 +4,8 @@
  *
  * \brief Do a multiple sequence alignment reducing the search space
  * with parallel a-star algorithm
+ *
+ * TODO: make this a class
  */
 #include <atomic>
 #include <condition_variable>
