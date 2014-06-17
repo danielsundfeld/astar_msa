@@ -1,11 +1,6 @@
 /*!
  * \author Daniel Sundfeld
  * \copyright MIT License
- *
- * \brief Do a multiple sequence alignment reducing the search space
- * with parallel a-star algorithm
- *
- * TODO: make this a class
  */
 #include <atomic>
 #include <condition_variable>
@@ -14,10 +9,10 @@
 #include <thread>
 #include <vector>
 
-#include "AStar.h"
 #include "backtrace.h"
 #include "Coord.h"
 #include "Node.h"
+#include "PAStar.h"
 #include "PriorityList.h"
 
 using namespace std;
@@ -46,7 +41,12 @@ std::mutex sync_mutex;
 std::atomic<int> sync_count;
 std::condition_variable sync_condition;
 
-int pa_star_affinity(int tid)
+PAStar::PAStar()
+{
+
+}
+
+int PAStar::set_affinity(int tid)
 {
     cpu_set_t  mask;
     CPU_ZERO(&mask);
@@ -61,7 +61,7 @@ int pa_star_affinity(int tid)
  * Parallel access should never occur on OpenList and ClosedList with
  * same tids.
  */
-void pa_star_enqueue(int tid, std::vector<Node> &nodes)
+void PAStar::enqueue(int tid, std::vector<Node> &nodes)
 {
     closed_list_iterator c_search;
 
@@ -80,6 +80,113 @@ void pa_star_enqueue(int tid, std::vector<Node> &nodes)
     return;
 }
 
+//! Consume the queue with id \a tid
+void PAStar::consume_queue(int tid)
+{
+    std::unique_lock<std::mutex> queue_lock(queue_mutex[tid]);
+    std::vector<Node> nodes_to_expand(queue_nodes[tid]);
+    queue_nodes[tid].clear();
+    queue_lock.unlock();
+
+    enqueue(tid, nodes_to_expand);
+    return;
+}
+
+//! Wait something on the queue
+void PAStar::wait_queue(int tid)
+{
+    std::unique_lock<std::mutex> queue_lock(queue_mutex[tid]);
+    if (queue_nodes[tid].size() != 0)
+        return;
+
+    queue_condition[tid].wait(queue_lock);
+    return;
+}
+
+//! Wake up everyone waiting on the queue
+void PAStar::wake_all_queue()
+{
+    for (int i = 0; i < THREADS_NUM; ++i)
+    {
+        std::unique_lock<std::mutex> queue_lock(queue_mutex[i]);
+        queue_condition[i].notify_one();
+    }
+    return;
+}
+
+//! Sync all threads
+void PAStar::sync_threads()
+{
+    std::unique_lock<std::mutex> sync_lock(sync_mutex);
+    if (++sync_count < THREADS_NUM)
+        sync_condition.wait(sync_lock);
+    else
+    {
+        sync_condition.notify_all();
+        sync_count = 0;
+    }
+}
+
+//! Execute the pa_star algorithm until all nodes expand the same final node
+void PAStar::worker_inner(int tid, bool(*is_final)(const Coord &c))
+{
+    Node current;
+
+    // Loop ended by process_final_node
+    while (end_cond == false)
+    {
+        closed_list_iterator c_search;
+
+        // Start phase
+        // Reduce the queue
+        consume_queue(tid);
+
+        // Dequeue phase
+        if (OpenList[tid].dequeue(current) == false)
+        {
+            wait_queue(tid);
+            continue;
+        }
+        nodes_count[tid] += 1;
+
+        // Check if better node is already found
+        if ((c_search = ClosedList[tid].find(current.pos)) != ClosedList[tid].end())
+        {
+            if (current.get_g() >= closed_list_return_g(c_search))
+                continue;
+            nodes_reopen[tid] += 1;
+        }
+
+        //cout << "[" << tid << "] Opening node:\t" << current << endl;
+        ClosedList[tid][current.pos] = current;
+
+        if (is_final(current.pos))
+        {
+            process_final_node(tid, current);
+            continue;
+        }
+        OpenList[tid].verifyMemory();
+
+        // Expand phase
+        vector<Node> neigh[THREADS_NUM] = {} ;
+        current.getNeigh(neigh, THREADS_NUM);
+
+        // Reconciliation phase
+        for (int i = 0; i < THREADS_NUM; i++)
+        {
+            if (i == tid)
+                enqueue(tid, neigh[i]);
+            else if (neigh[i].size() != 0)
+            {
+                std::unique_lock<std::mutex> queue_lock(queue_mutex[i]);
+                queue_nodes[i].insert(queue_nodes[i].end(), neigh[i].begin(), neigh[i].end());
+                queue_condition[i].notify_one();
+            }
+        }
+    }
+    return;
+}
+
 /*!
  * Process \a n as an possible answer. Check end phase 1.
  * When a final node is first opened, it is broadcasted in all OpenLists.
@@ -87,7 +194,7 @@ void pa_star_enqueue(int tid, std::vector<Node> &nodes)
  * openlists, then it must proceed to Check end phase 2.
  * This is functions does not require synchronization between the threads.
  */
-void pa_star_process_final_node(int tid, const Node &n)
+void PAStar::process_final_node(int tid, const Node &n)
 {
     std::unique_lock<std::mutex> final_node_lock(final_node_mutex);
 
@@ -135,113 +242,6 @@ void pa_star_process_final_node(int tid, const Node &n)
     return;
 }
 
-//! Consume the queue with id \a tid
-void pa_star_consume_queue(int tid)
-{
-    std::unique_lock<std::mutex> queue_lock(queue_mutex[tid]);
-    std::vector<Node> nodes_to_expand(queue_nodes[tid]);
-    queue_nodes[tid].clear();
-    queue_lock.unlock();
-
-    pa_star_enqueue(tid, nodes_to_expand);
-    return;
-}
-
-//! Wait something on the queue
-void pa_star_wait_queue(int tid)
-{
-    std::unique_lock<std::mutex> queue_lock(queue_mutex[tid]);
-    if (queue_nodes[tid].size() != 0)
-        return;
-
-    queue_condition[tid].wait(queue_lock);
-    return;
-}
-
-//! Wake up everyone waiting on the queue
-void pa_star_wake_all_queue()
-{
-    for (int i = 0; i < THREADS_NUM; ++i)
-    {
-        std::unique_lock<std::mutex> queue_lock(queue_mutex[i]);
-        queue_condition[i].notify_one();
-    }
-    return;
-}
-
-//! Sync all threads
-void pa_star_sync_threads()
-{
-    std::unique_lock<std::mutex> sync_lock(sync_mutex);
-    if (++sync_count < THREADS_NUM)
-        sync_condition.wait(sync_lock);
-    else
-    {
-        sync_condition.notify_all();
-        sync_count = 0;
-    }
-}
-
-//! Execute the pa_star algorithm until all nodes expand the same final node
-void pa_star_worker_inner(int tid, bool(*is_final)(const Coord &c))
-{
-    Node current;
-
-    // Loop ended by pa_star_process_final_node
-    while (end_cond == false)
-    {
-        closed_list_iterator c_search;
-
-        // Start phase
-        // Reduce the queue
-        pa_star_consume_queue(tid);
-
-        // Dequeue phase
-        if (OpenList[tid].dequeue(current) == false)
-        {
-            pa_star_wait_queue(tid);
-            continue;
-        }
-        nodes_count[tid] += 1;
-
-        // Check if better node is already found
-        if ((c_search = ClosedList[tid].find(current.pos)) != ClosedList[tid].end())
-        {
-            if (current.get_g() >= closed_list_return_g(c_search))
-                continue;
-            nodes_reopen[tid] += 1;
-        }
-
-        //cout << "[" << tid << "] Opening node:\t" << current << endl;
-        ClosedList[tid][current.pos] = current;
-
-        if (is_final(current.pos))
-        {
-            pa_star_process_final_node(tid, current);
-            continue;
-        }
-        OpenList[tid].verifyMemory();
-
-        // Expand phase
-        vector<Node> neigh[THREADS_NUM] = {} ;
-        current.getNeigh(neigh, THREADS_NUM);
-
-        // Reconciliation phase
-        for (int i = 0; i < THREADS_NUM; i++)
-        {
-            if (i == tid)
-                pa_star_enqueue(tid, neigh[i]);
-            else if (neigh[i].size() != 0)
-            {
-                std::unique_lock<std::mutex> queue_lock(queue_mutex[i]);
-                queue_nodes[i].insert(queue_nodes[i].end(), neigh[i].begin(), neigh[i].end());
-                queue_condition[i].notify_one();
-            }
-        }
-    }
-    return;
-}
-
 /*! 
  * Check end phase 2.
  * After everyone agreed that a possible answer is found, we must syncronize
@@ -251,18 +251,18 @@ void pa_star_worker_inner(int tid, bool(*is_final)(const Coord &c))
  * to not have the lowest priority.
  * This is a very costly function, threads syncronization are called twice.
  */
-bool pa_star_check_stop(int tid)
+bool PAStar::check_stop(int tid)
 {
-    pa_star_wake_all_queue();
-    pa_star_sync_threads();
+    wake_all_queue();
+    sync_threads();
     Node n = final_node;
-    pa_star_consume_queue(tid);
+    consume_queue(tid);
     if (OpenList[tid].get_highest_priority() < final_node.get_f())
     {
         //cout << "[" << tid << "] reporting early end!\n";
         end_cond = false;
     }
-    pa_star_sync_threads();
+    sync_threads();
     if (end_cond == false)
     {
         ClosedList[tid].erase(n.pos);
@@ -273,20 +273,20 @@ bool pa_star_check_stop(int tid)
     return false;
 }
 
-//! Execute a pa_star_worker thread. This thread have id \a tid
-int pa_star_worker(int tid, bool(*is_final)(const Coord &c))
+//! Execute a worker thread. This thread have id \a tid
+int PAStar::worker(int tid, bool(*is_final)(const Coord &c))
 {
-    pa_star_affinity(tid);
+    set_affinity(tid);
     // worker_inner is the main inner loop
     // check_stop syncs and check if is the optimal answer
     do {
-        pa_star_worker_inner(tid, is_final);
-    } while (pa_star_check_stop(tid));
+        worker_inner(tid, is_final);
+    } while (check_stop(tid));
 
     return 0;
 }
 
-void pa_star_nodes_count()
+void PAStar::print_nodes_count()
 {
     long long int nodes_total = 0;
     long long int open_list_total = 0;
@@ -317,8 +317,9 @@ void pa_star_nodes_count()
  * Same a_star() function usage.
  * Starting function to do a pa_star search.
  */
-int pa_star(const Node &node_zero, bool(*is_final)(const Coord &c))
+int PAStar::pa_star(const Node &node_zero, bool(*is_final)(const Coord &c))
 {
+    PAStar pastar_instance;
     std::vector<std::thread> threads;
 
     // Enqueue first node
@@ -330,7 +331,7 @@ int pa_star(const Node &node_zero, bool(*is_final)(const Coord &c))
 
     // Create threads
     for (int i = 0; i < THREADS_NUM; ++i)
-        threads.push_back(std::thread(pa_star_worker, i, is_final));
+        threads.push_back(std::thread(&PAStar::worker, pastar_instance, i, is_final));
 
     // Wait for the end of all threads
     for (auto& th : threads)
@@ -339,6 +340,6 @@ int pa_star(const Node &node_zero, bool(*is_final)(const Coord &c))
     // Print answer
     cout << "Final score:\t" << final_node << endl;
     backtrace(ClosedList, THREADS_NUM);
-    pa_star_nodes_count();
+    pastar_instance.print_nodes_count();
     return 0;
 }
