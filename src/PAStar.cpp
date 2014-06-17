@@ -13,42 +13,24 @@
 #include "Coord.h"
 #include "Node.h"
 #include "PAStar.h"
-#include "PriorityList.h"
 
 using namespace std;
 
-#ifndef THREADS_NUM
-    #define THREADS_NUM 4
-#endif
-
-PriorityList OpenList[THREADS_NUM];
-ListType ClosedList[THREADS_NUM];
-
-std::mutex queue_mutex[THREADS_NUM];
-std::condition_variable queue_condition[THREADS_NUM];
-std::vector<Node> queue_nodes[THREADS_NUM];
-
-long long int nodes_count[THREADS_NUM] = { };
-long long int nodes_reopen[THREADS_NUM] = { };
-
-std::atomic<bool> end_cond;
-
-std::mutex final_node_mutex;
-Node final_node(0);
-std::atomic<int> final_node_count;
-
-std::mutex sync_mutex;
-std::atomic<int> sync_count;
-std::condition_variable sync_condition;
-
-PAStar::PAStar()
+PAStar::PAStar(const Node &node_zero)
+: nodes_count { },
+  nodes_reopen { },
+  final_node(0)
 {
+    end_cond = false;
+    sync_count = 0;
 
+    // Enqueue first node
+    OpenList[0].enqueue(node_zero);
 }
 
 int PAStar::set_affinity(int tid)
 {
-    cpu_set_t  mask;
+    cpu_set_t mask;
     CPU_ZERO(&mask);
     CPU_SET(1 << tid, &mask);
     return sched_setaffinity(0, sizeof(mask), &mask);
@@ -313,33 +295,30 @@ void PAStar::print_nodes_count()
           << "\tTotal: " << nodes_total << endl;
 }
 
+void PAStar::print_answer()
+{
+    cout << "Final score:\t" << final_node << endl;
+    backtrace(ClosedList, THREADS_NUM);
+    print_nodes_count();
+}
+
 /*!
  * Same a_star() function usage.
  * Starting function to do a pa_star search.
  */
 int PAStar::pa_star(const Node &node_zero, bool(*is_final)(const Coord &c))
 {
-    PAStar pastar_instance;
+    PAStar pastar_instance(node_zero);
     std::vector<std::thread> threads;
-
-    // Enqueue first node
-    OpenList[0].enqueue(node_zero);
-
-    // Initialize variables
-    end_cond = false;
-    sync_count = 0;
 
     // Create threads
     for (int i = 0; i < THREADS_NUM; ++i)
-        threads.push_back(std::thread(&PAStar::worker, pastar_instance, i, is_final));
+        threads.push_back(std::thread(&PAStar::worker, &pastar_instance, i, is_final));
 
     // Wait for the end of all threads
     for (auto& th : threads)
         th.join();
 
-    // Print answer
-    cout << "Final score:\t" << final_node << endl;
-    backtrace(ClosedList, THREADS_NUM);
-    pastar_instance.print_nodes_count();
+    pastar_instance.print_answer();
     return 0;
 }
