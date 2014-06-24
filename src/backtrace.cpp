@@ -9,11 +9,10 @@
 #include <sys/ioctl.h>
 #include <unistd.h>
 
+#include "backtrace.h"
 #include "Coord.h"
 #include "Node.h"
 #include "Sequences.h"
-
-using namespace std;
 
 // Decide the best lenght size to print
 int get_print_size()
@@ -24,7 +23,7 @@ int get_print_size()
 
     // If it is a file, we dont care about lenght
     if (!isatty(1))
-        return numeric_limits<int>::max();
+        return std::numeric_limits<int>::max();
 
     // If it is a terminal, get the lenght
     if ((ioctl(0, TIOCGWINSZ, &w) == 0) && (w.ws_col > 1))
@@ -42,17 +41,18 @@ int get_print_size()
  * At the end of the process, \a backstrace_stack contains the
  * answer for every sequence.
  */
-void backtrace_create_stack(stack<char> *backtrace_stack, std::map<Coord, Node> ClosedList[], int list_size)
+template <int N>
+void backtrace_create_stack(std::stack<char> *backtrace_stack, std::map<Coord<N>, Node<N> > *ClosedList, int list_size)
 {
-    const int dimensions = Sequences::get_seq_num();
     Sequences *seq = Sequences::getInstance();
 
-    int id = seq->get_final_coord().get_id(list_size);
-    Node current = ClosedList[id][seq->get_final_coord()];
+    int id = seq->get_final_coord<N>().get_id(list_size);
+    Node<N> current = ClosedList[id][seq->get_final_coord<N>()];
+    std::cout << "Final Score: " << current << std::endl;
     do 
     {
-        //cout << "Backtrace:\t" << current << endl;
-        for (int i = 0; i < dimensions; i++)
+        //std::cout << "Backtrace:\t" << current << std::endl;
+        for (int i = 0; i < N; i++)
         {
             char c;
             if (current.pos[i] != current.get_parent()[i])
@@ -63,31 +63,31 @@ void backtrace_create_stack(stack<char> *backtrace_stack, std::map<Coord, Node> 
         }
         id = current.get_parent().get_id(list_size);
         current = ClosedList[id][current.get_parent()];
-    } while (current.pos != Sequences::get_initial_coord());
+    } while (current.pos != Sequences::get_initial_coord<N>());
 }
 
 /*!
  * Print the answer in \a backstrace_stack. Use a good lenght to print
  * considering the current terminal (linux-only).
  */
-void backtrace_print_stack(stack<char> *backtrace_stack)
+template <int N>
+void backtrace_print_stack(std::stack<char> *backtrace_stack)
 {
-    const int dimensions = Sequences::get_seq_num();
     int size = get_print_size();
 
     while (!backtrace_stack[0].empty())
     {
-        cout << endl;
-        for (int j = 0; j < dimensions; j++)
+        std::cout << std::endl;
+        for (int j = 0; j < N; j++)
         {
             for (int i = 0; i < size; i++)
             {
                 if (backtrace_stack[j].empty())
                     break;
-                cout << backtrace_stack[j].top();
+                std::cout << backtrace_stack[j].top();
                 backtrace_stack[j].pop();
             }
-            cout << endl;
+            std::cout << std::endl;
         }
     }
 }
@@ -96,11 +96,16 @@ void backtrace_print_stack(stack<char> *backtrace_stack)
  * MSA-Node backtrace functions prints the answer. Using the
  * \a ClosedList it backtrace every node until the origin is reached
  */
-void backtrace(std::map<Coord, Node> ClosedList[], int list_size)
+template <int N>
+void backtrace(std::map< Coord<N>, Node<N> > *ClosedList, int list_size)
 {
-    stack<char> *backtrace_stack = new stack<char>[Sequences::get_seq_num()];
+    std::stack<char> backtrace_stack[N];
 
-    backtrace_create_stack(backtrace_stack, ClosedList, list_size);
-    backtrace_print_stack(backtrace_stack);
-    delete[] backtrace_stack;
+    backtrace_create_stack<N>(backtrace_stack, ClosedList, list_size);
+    backtrace_print_stack<N>(backtrace_stack);
 }
+
+#define DECLARE_BACKTRACE_TEMPLATE( X ) \
+template void backtrace< X >(std::map< Coord< X >, Node< X > >*ClosedList, int list_size); \
+
+MAX_NUM_SEQ_TEMPLATE_HELPER(DECLARE_BACKTRACE_TEMPLATE);

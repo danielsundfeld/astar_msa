@@ -4,88 +4,84 @@
  * \copyright MIT License
  */
 #include <iostream>
-#include <vector>
 
 #include "Coord.h"
 
-using namespace std;
+#pragma GCC push_options
+#pragma GCC optimize ("unroll-loops")
 
-Coord::Coord()
+//! Construct a Coord<N> with N dimensions initialized as 'init'
+template < int N >
+Coord<N>::Coord(const int init)
 {
+    for (int i = 0; i < N; ++i)
+        m_coord[i] = init;
 }
 
-//! Construct a Coord with \a d dimensions initialized as 'init'
-Coord::Coord(const int d, const int init)
-{
-    m_coord = vector<uint16_t>(d, init);
-}
-
-//! Construct a 3-dimensions coord
-Coord::Coord(const int x, const int y, const int z)
-{
-    m_coord.push_back(x);
-    m_coord.push_back(y);
-    m_coord.push_back(z);
-}
-
-Coord& Coord::operator=(const Coord &rhs)
+template < int N >
+Coord<N>& Coord<N>::operator=(const Coord<N> &rhs)
 {
     if (this == &rhs) // identify self-assignment
         return *this; // do nothing
-    m_coord = rhs.m_coord;
+    for (int i = 0; i < N; ++i)
+        m_coord[i] = rhs.m_coord[i];
     return *this;
 }
 
-bool Coord::operator!=(const Coord &rhs) const
-{
-    return (m_coord != rhs.m_coord);
-}
 
-bool Coord::operator==(const Coord &rhs) const
+template < int N >
+std::ostream& operator<<(std::ostream &lhs, const Coord<N> &rhs)
 {
-    return (m_coord == rhs.m_coord);
-}
-
-bool Coord::operator<(const Coord &rhs) const
-{
-    return (m_coord < rhs.m_coord);
-}
-
-ostream& operator<<(ostream &lhs, const Coord &rhs)
-{
-    auto it = rhs.m_coord.cbegin();
-
-    if (it == rhs.m_coord.cend())
+    if (N == 0)
         return lhs;
-    lhs << "(" << *it;
-    ++it;
 
-    for (; it != rhs.m_coord.cend(); ++it)
-        lhs << " " << *it;
-
+    lhs << "(" << rhs.m_coord[0];
+    for (int i = 1; i < N; ++i)
+        lhs << " " << rhs.m_coord[i];
     lhs << ")";
     return lhs;
 }
 
+template < int N >
+bool Coord<N>::operator!=(const Coord<N> &rhs) const
+{
+    for (int i = 0; i < N; ++i)
+        if (m_coord[i] != rhs.m_coord[i])
+            return true;
+    return false;
+}
+
+template < int N >
+bool Coord<N>::operator==(const Coord<N> &rhs) const
+{
+    return !(*this != rhs);
+}
+
+template < int N >
+bool Coord<N>::operator<(const Coord<N> &rhs) const
+{
+    for (int i = 0; i < N; ++i)
+    {
+        if (m_coord[i] > rhs.m_coord[i])
+            return false;
+        if (m_coord[i] < rhs.m_coord[i])
+            return true;
+    }
+    return false;
+}
+
 //! Return the value on the \a n - dimension
-const uint16_t& Coord::operator[](const uint16_t n) const
+template < int N >
+const uint16_t& Coord<N>::operator[](const uint16_t n) const
 {
     return m_coord[n];
 }
 
 //! Return the value on the \a n - dimension
-uint16_t& Coord::operator[](const uint16_t n)
+template < int N >
+uint16_t& Coord<N>::operator[](const uint16_t n)
 {
     return m_coord[n];
-}
-
-/*!
- * Increases de dimension of the current coord, ading \a n as the
- * last dimension
- */
-void Coord::append(const int &n)
-{
-    m_coord.push_back(n);
 }
 
 /*!
@@ -93,11 +89,12 @@ void Coord::append(const int &n)
  * If a 3 dimensions coord(x, y, z) call neigh(1) it produces
  * coord(x + 1, y, z), neigh(7) produces coord(x + 1, y + 1, z +1)
  */
-Coord Coord::neigh(int n) const
+template < int N >
+Coord<N> Coord<N>::neigh(int n) const
 {
     int i = 0;
 
-    Coord c = *this;
+    Coord<N> c(*this);
     while (n)
     {
         if (n & 1)
@@ -112,11 +109,12 @@ Coord Coord::neigh(int n) const
  * Inverse of Coord:neigh(int n)
  * neigh is a highly called function I dont care about duplicate code
  */
-Coord Coord::parent(int n) const
+template < int N >
+Coord<N> Coord<N>::parent(int n) const
 {
     int i = 0;
 
-    Coord c = *this;
+    Coord<N> c(*this);
     while (n)
     {
         if (n & 1)
@@ -127,8 +125,11 @@ Coord Coord::parent(int n) const
     return c;
 }
 
-//! Removes all elements from Coord
-void Coord::clear()
-{
-    m_coord.clear();
-}
+// This file have a friend function that also need to be templated to max seq
+#define COORD_DECLARE_FRIEND( X ) \
+template std::ostream& operator<< < X >(std::ostream&, Coord< X > const&); \
+
+MAX_NUM_SEQ_TEMPLATE_HELPER(COORD_DECLARE_FRIEND);
+MAX_NUM_SEQ_TEMPLATE_HELPER(COORD_DECLARE_COORD_TEMPLATE);
+
+#pragma GCC pop_options

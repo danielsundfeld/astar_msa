@@ -9,30 +9,30 @@
 #define _SEQUENCES_H
 #include <string>
 #include <vector>
+
 #include "Coord.h"
 #include "Node.h"
-
-using namespace std;
 
 class Sequences
 {
     private:
+        enum seq { MaxSequences = 64 };
         static unsigned int n_seq;
         static Sequences *instance;
+        std::vector<std::string> seqs;
+        static int final_coord[MaxSequences];
+
         Sequences();
-        vector<string> seqs;
-        static Coord final_coord;
-        static Coord initial_coord;
 
     public:
         static Sequences *getInstance();
         static void destroyInstance();
-        int set_seq(const string &x);
-        static const Coord& get_final_coord() { return final_coord; };
-        static const Coord& get_initial_coord() { return initial_coord; };
-        const string& get_seq(int x) const { return seqs.at(x); };
+        int set_seq(const std::string &x);
+        const std::string& get_seq(int x) const { return seqs.at(x); };
         static unsigned int& get_seq_num() { return n_seq; };
-        static Node get_initial_node();
-        static bool is_final(const Coord &c);
+        template <int N> static Coord<N> get_final_coord();
+        template <int N> static Coord<N> get_initial_coord();
+        template <int N> static Node<N> get_initial_node();
+        template <int N> static bool is_final(const Coord<N> &c);
 };
 #endif

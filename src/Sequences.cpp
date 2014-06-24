@@ -10,8 +10,6 @@
 #include "Node.h"
 #include "Sequences.h"
 
-using namespace std;
-
 Sequences::Sequences()
 {
     n_seq = 0;
@@ -21,10 +19,8 @@ Sequences::Sequences()
 unsigned int Sequences::n_seq = 0;
 //! Singleton instance
 Sequences* Sequences::instance = NULL;
-//! Source coord
-Coord Sequences::initial_coord;
 //! Destination coord
-Coord Sequences::final_coord;
+int Sequences::final_coord[MaxSequences] = {};
 
 //! Return the instance, creates if it doesn't exist
 Sequences* Sequences::getInstance()
@@ -40,32 +36,69 @@ void Sequences::destroyInstance()
     delete instance;
     instance = NULL;
     n_seq = 0;
-    final_coord.clear();
-    initial_coord.clear();
+
+    for (int i = 0; i < MaxSequences; ++i)
+        final_coord[i] = 0;
 }
 
 //! Save the string \a x as an Sequence
-int Sequences::set_seq(const string &x)
+int Sequences::set_seq(const std::string &x)
 {
     seqs.push_back(x);
+    final_coord[n_seq] = x.length();
     ++n_seq;
-
-    initial_coord.append(0);
-    final_coord.append(x.length());
     return n_seq;
 }
 
+template <int N>
+Coord<N> Sequences::get_final_coord()
+{
+    Coord<N> c;
+    for (int i = 0; i < N; ++i)
+        c[i] = final_coord[i];
+    return c;
+}
+
+template <int N>
+Coord<N> Sequences::get_initial_coord()
+{
+    Coord<N> c;
+    return c;
+}
+
 //! Create a initial node of the alignment
-Node Sequences::get_initial_node()
+template <int N>
+Node<N> Sequences::get_initial_node()
 {
     /* The "father" field must point to a negative coord, so the
        affine gaps are calculated correctly.  */
-    int coord_negative = (1 << Sequences::get_seq_num()) - 1;
-    return Node(0, Sequences::get_initial_coord(), coord_negative);
+    int coord_negative = (1 << N) - 1;
+    return Node<N>(0, Sequences::get_initial_coord<N>(), coord_negative);
 }
 
 //! Check if \a c is the destination
-bool Sequences::is_final(const Coord &c)
+template <int N>
+bool Sequences::is_final(const Coord<N> &c)
 {
-    return (c == final_coord);
+    for (int i = 0; i < N; ++i)
+        if (c[i] != final_coord[i])
+            return false;
+    return true;
 }
+
+#define DECLARE_SEQUENCE_TEMPLATE( X ) \
+template class Coord< X > Sequences::get_final_coord< X >(); \
+
+#define DECLARE_INITIAL_COORD_TEMPLATE( X ) \
+template class Coord< X > Sequences::get_initial_coord< X >(); \
+
+#define DECLARE_IS_FINAL_TEMPLATE( X ) \
+template bool Sequences::is_final(const Coord < X > &c); \
+
+#define DECLARE_INITIAL_NODE_TEMPLATE( X ) \
+template class Node< X > Sequences::get_initial_node< X >(); \
+
+MAX_NUM_SEQ_TEMPLATE_HELPER(DECLARE_SEQUENCE_TEMPLATE);
+MAX_NUM_SEQ_TEMPLATE_HELPER(DECLARE_INITIAL_COORD_TEMPLATE);
+MAX_NUM_SEQ_TEMPLATE_HELPER(DECLARE_IS_FINAL_TEMPLATE);
+MAX_NUM_SEQ_TEMPLATE_HELPER(DECLARE_INITIAL_NODE_TEMPLATE);

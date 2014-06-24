@@ -1,4 +1,5 @@
 /*!
+ * \class Coord
  * \author Daniel Sundfeld
  * \copyright MIT License
  *
@@ -9,42 +10,50 @@
 
 #include "Coord.h"
 
+#pragma GCC push_options
+#pragma GCC optimize ("unroll-loops")
+
 //! Return the sum of elements
-unsigned int Coord::get_sum() const
+template < int N >
+unsigned int Coord<N>::get_sum() const
 {
     int sum = 0;
-    for (auto it = m_coord.cbegin(); it != m_coord.cend(); ++it)
-        sum += *it;
+    for (int i = 0; i < N; ++i)
+        sum += m_coord[i];
     return sum;
 }
 
 //! Return the full-sum-hash
-unsigned int Coord::sum_hash(const int size) const
+template < int N >
+unsigned int Coord<N>::sum_hash(const int size) const
 {
     return (get_sum() >> HASH_SHIFT) % size;
 }
 
 //! Return the sum of first and second elements
-unsigned int Coord::get_part_sum() const
+template < int N >
+unsigned int Coord<N>::get_part_sum() const
 {
     return m_coord[0] + m_coord[1];
 }
 
 //! Return the part-sum-hash
-unsigned int Coord::part_sum_hash(const int size) const
+template < int N >
+unsigned int Coord<N>::part_sum_hash(const int size) const
 {
     return (get_part_sum() >> HASH_SHIFT) % size;
 }
 
 //! z_order_curve on multidimension coordinates
-unsigned int Coord::get_z_order_curve() const
+template < int N >
+unsigned int Coord<N>::get_z_order_curve() const
 {
     int hash = 0;
     int bit_to_read = 0;
 
     for (unsigned int bit_to_write = 1; bit_to_write != 0; )
     {
-        for (unsigned int j = 0; j < m_coord.size() && bit_to_write != 0; ++j)
+        for (unsigned int j = 0; j < N && bit_to_write != 0; ++j)
         {
             if (m_coord[j] & (1 << bit_to_read))
                 hash |= bit_to_write;
@@ -57,9 +66,10 @@ unsigned int Coord::get_z_order_curve() const
 
 /*!
  * Return the full z-order-hash
- * \deprecated See Coord::z_order_hash
+ * \deprecated See Coord<N>::z_order_hash
  */
-unsigned int Coord::z_order_hash_slow(const int size) const
+template < int N >
+unsigned int Coord<N>::z_order_hash_slow(const int size) const
 {
     return (get_z_order_curve() >> HASH_SHIFT) % size;
 }
@@ -67,28 +77,29 @@ unsigned int Coord::z_order_hash_slow(const int size) const
 /*!
  * Return the full z-order-hash fast. A full z-order-curve calculus
  * includes all bits. We want to use this as a hash (check the
- * Coord::z_order_hash_slow() function to see the idea), but not all
+ * Coord<N>::z_order_hash_slow() function to see the idea), but not all
  * bits must be calculated. The shift operation discards the less
  * significant bits, and the mod operation discards the higher
  * significant bits. This function do not calculate these bits,
  * instead of discarding them, producing the same result with less
  * operations. Wow. Much faster. Such speed. Very intelligent.
  */
-unsigned int Coord::z_order_hash(const int size) const
+template < int N >
+unsigned int Coord<N>::z_order_hash(const int size) const
 {
     int hash = 0;
     // Shift operation, start reading
-    int bit_to_read = HASH_SHIFT / m_coord.size();
+    int bit_to_read = HASH_SHIFT / N;
 
     // MOD operation, stop writing after bits
-    unsigned int bits = log2(size) + (HASH_SHIFT % m_coord.size()) + 1;
+    unsigned int bits = log2(size) + (HASH_SHIFT % N) + 1;
     unsigned int total = 1 << bits;
     if (total == 0)
         total = std::numeric_limits<unsigned int>::max();
 
     for (unsigned int bit_to_write = 1; bit_to_write <= total; )
     {
-        for (unsigned int j = 0; j < m_coord.size() && bit_to_write <= total; ++j)
+        for (unsigned int j = 0; j < N && bit_to_write <= total; ++j)
         {
             if (m_coord[j] & (1 << bit_to_read))
                 hash |= bit_to_write;
@@ -99,11 +110,12 @@ unsigned int Coord::z_order_hash(const int size) const
     /* HASH_SHIFT 1 means: discard the first bit from the first sequence, but
     use the first bit of the other sequences. */
     //TODO: optimize this MOD size operation
-    return (hash >> (HASH_SHIFT % m_coord.size())) % size;
+    return (hash >> (HASH_SHIFT % N)) % size;
 }
 
-//! Same Coord::z_order_hash usage
-unsigned int Coord::part_z_order_hash(const int size) const
+//! Same Coord<N>::z_order_hash usage
+template < int N >
+unsigned int Coord<N>::part_z_order_hash(const int size) const
 {
     int hash = 0;
     // Shift operation, start reading
@@ -126,13 +138,14 @@ unsigned int Coord::part_z_order_hash(const int size) const
         ++bit_to_read;
     }
     /* HASH_SHIFT 1 means: discard the first bit from the first sequence, but
-    use the first bit of the other sequences. */
+       use the first bit of the other sequences. */
     //TODO: optimize this MOD size operation
     return (hash >> (HASH_SHIFT % 2)) % size;
 }
 
 //! Main CoordHash function: return the hash to the space \a size
-unsigned int Coord::get_id(const int size) const
+template < int N >
+unsigned int Coord<N>::get_id(const int size) const
 {
 #ifdef HASHFSUM
     return sum_hash(size);
@@ -147,3 +160,7 @@ unsigned int Coord::get_id(const int size) const
     return z_order_hash(size);
 #endif
 }
+
+MAX_NUM_SEQ_TEMPLATE_HELPER(COORD_DECLARE_COORD_TEMPLATE);
+
+#pragma GCC pop_options

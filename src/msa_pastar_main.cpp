@@ -6,15 +6,40 @@
  */
 #include <iostream>
 
-using namespace std;
-
 #include "HeuristicHPair.h"
 #include "PAStar.h"
+#include "Sequences.h"
 #include "read_fasta.h"
 
 int usage(char progname[])
 {
-    cout << "Usage:\n" << progname << " <fasta_file>\n";
+    std::cout << "Usage:\n" << progname << " <fasta_file>\n";
+    return -1;
+}
+
+int pa_star_run()
+{
+    switch (Sequences::get_seq_num())
+    {
+        case 3:
+            return PAStar<3>::pa_star(Sequences::get_initial_node<3>(), Sequences::is_final);
+        case 4:
+            return PAStar<4>::pa_star(Sequences::get_initial_node<4>(), Sequences::is_final);
+        case 5:
+            return PAStar<5>::pa_star(Sequences::get_initial_node<5>(), Sequences::is_final);
+        case 6:
+            return PAStar<6>::pa_star(Sequences::get_initial_node<6>(), Sequences::is_final);
+        case 7:
+            return PAStar<7>::pa_star(Sequences::get_initial_node<7>(), Sequences::is_final);
+        case 8:
+            return PAStar<8>::pa_star(Sequences::get_initial_node<8>(), Sequences::is_final);
+        case 9:
+            return PAStar<9>::pa_star(Sequences::get_initial_node<9>(), Sequences::is_final);
+        case 10:
+            return PAStar<10>::pa_star(Sequences::get_initial_node<10>(), Sequences::is_final);
+        default:
+            std::cout << "Invalid number of sequences: " << Sequences::get_seq_num() << std::endl;
+    }
     return -1;
 }
 
@@ -25,6 +50,6 @@ int main(int argc, char *argv[])
 
     HeuristicHPair::getInstance()->init();
 
-    cout << initial_message;
-    return PAStar::pa_star(Sequences::get_initial_node(), Sequences::is_final);
+    std::cout << initial_message;
+    return pa_star_run();
 }

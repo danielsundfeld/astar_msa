@@ -1,11 +1,9 @@
-# msa_a_star bin Makefile
-
-TARGET       = z_order_ops
+TARGET       = node_ops
 
 INCDIR       = ../../src/
 VPATH        = ../../src/
 
-CPPFLAGS   += -Wall -std=c++11
+CPPFLAGS   += -Wall -std=c++11 -DHASHFZORDER
 
 ifdef RELEASE
     CPPFLAGS   += -O2
@@ -15,9 +13,16 @@ else
 endif
 
 CPP_SRCS = \
+    backtrace.cpp \
     Coord.cpp \
     CoordHash.cpp \
-    z_order_ops.cpp \
+    Cost.cpp \
+    fasta_ops.cpp \
+	 HeuristicHPair.cpp \
+    Node.cpp \
+	 PairAlign.cpp \
+    Sequences.cpp \
+    read_fasta.cpp \
 
 INCPATH += \
     -I$(INCDIR) \

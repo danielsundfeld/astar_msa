@@ -1,11 +1,11 @@
 # msa_a_star bin Makefile
 
-TARGET       = z_order_ops
+TARGET       = coord_ops
 
 INCDIR       = ../../src/
 VPATH        = ../../src/
 
-CPPFLAGS   += -Wall -std=c++11
+CPPFLAGS   += -Wall -std=c++11 -DHASHFZORDER
 
 ifdef RELEASE
     CPPFLAGS   += -O2
@@ -17,7 +17,7 @@ endif
 CPP_SRCS = \
     Coord.cpp \
     CoordHash.cpp \
-    z_order_ops.cpp \
+    coord_ops.cpp \
 
 INCPATH += \
     -I$(INCDIR) \

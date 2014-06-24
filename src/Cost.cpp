@@ -5,8 +5,6 @@
  */
 #include "Cost.h"
 
-using namespace std;
-
 static Cost c;
 
 int Cost::pam250['Z']['Z'] = { };

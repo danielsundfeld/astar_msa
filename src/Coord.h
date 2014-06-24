@@ -3,36 +3,36 @@
  * \author Daniel Sundfeld
  * \copyright MIT License
  *
- * \brief A multidimensional coordinate
+ * \brief A multidimensional coordinate with fixed size
  */
-#ifndef _COORDS_H
-#define _COORDS_H
+#ifndef _COORD_H
+#define _COORD_H
 #include <iostream>
 #include <vector>
 
 #include "CoordHash.h"
+#include "max_seq_template_helper.h"
 
-using namespace std;
+template < int N > class Coord;
+template < int N > std::ostream& operator<< (std::ostream &lhs, const Coord<N> &rhs);
 
+template < int N >
 class Coord {
     private:
-        vector<uint16_t> m_coord;
+        uint16_t m_coord[N];
 
     public:
-        Coord();
-        Coord(const int d, const int init = 0);
-        Coord(const int x, const int y, const int z);
-        Coord &operator=(const Coord &rhs);
+        Coord(const int init = 0);
+        Coord<N>& operator=(const Coord<N> &rhs);
+        friend std::ostream &operator<< <>(std::ostream &lhs, const Coord<N> &rhs);
         bool operator!=(const Coord &rhs) const;
         bool operator==(const Coord &rhs) const;
         bool operator<(const Coord &rhs) const;
-        friend ostream &operator<<(ostream &lhs, const Coord &rhs);
         const uint16_t& operator[](const uint16_t n) const;
         uint16_t& operator[](const uint16_t n);
-        void append(const int &n);
+
         Coord neigh(int n) const;
         Coord parent(int n) const;
-        void clear();
 
         // CoordHash functions helpers
         unsigned int get_sum() const;
@@ -50,4 +50,8 @@ class Coord {
         unsigned int get_id(const int size) const;
 };
 
+// Coord implementation files must call this
+#define COORD_DECLARE_COORD_TEMPLATE( X ) \
+template class Coord< X >; \
+// Add other defines on cpp files only, not here
 #endif

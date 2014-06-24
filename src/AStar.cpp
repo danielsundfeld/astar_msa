@@ -14,8 +14,6 @@
 #include "Node.h"
 #include "PriorityList.h"
 
-using namespace std;
-
 /*!
  * A classic A-Star implentation resume:
  *
@@ -37,53 +35,56 @@ using namespace std;
  *     set priority queue rank to g(neighbor) + h(neighbor)
  *     set neighbor's parent to current
  */
-int a_star(const Node &node_zero, bool(*is_final)(const Coord &c))
+template <int N>
+int a_star(const Node<N> &node_zero, bool(*is_final)(const Coord<N> &c))
 {
-    Node current;
-    PriorityList OpenList;
-    ListType ClosedList;
-    vector<Node> neigh;
+    Node<N> current;
+    PriorityList<N> OpenList;
+    std::map< Coord<N>, Node<N> > ClosedList;
+    std::vector< Node<N> > neigh;
 
     OpenList.enqueue(node_zero);
 
     while (!OpenList.empty())
     {
-        open_list_iterator o_search;
-        closed_list_iterator c_search;
+        typename openlist_multiindex<N>::type::iterator o_search;
+        typename std::map< Coord<N>, Node<N> >::iterator c_search;
 
         OpenList.dequeue(current);
 
         // Check if better node is already found
         if ((c_search = ClosedList.find(current.pos)) != ClosedList.end())
         {
-            if (current.get_g() >= closed_list_return_g(c_search))
+            if (current.get_g() >= c_search->second.get_g())
                 continue;
         }
 
-        //cout << "Opening node:\t" << current << endl;
+        //std::cout << "Opening node:\t" << current << std::endl;
         ClosedList[current.pos] = current;
 
         if (is_final(current.pos))
             break;
 
-        OpenList.verifyMemory();
-
         neigh.clear();
         current.getNeigh(&neigh);
-        for (vector<Node>::iterator it = neigh.begin() ; it != neigh.end(); ++it)
+        for (typename std::vector< Node<N> >::iterator it = neigh.begin() ; it != neigh.end(); ++it)
         {
             if ((c_search = ClosedList.find(it->pos)) != ClosedList.end())
             {
-                if (it->get_g() >= closed_list_return_g(c_search))
+                if (it->get_g() >= c_search->second.get_g())
                     continue;
                 ClosedList.erase(it->pos);
             }
 
             OpenList.conditional_enqueue(*it);
-            //cout << "Adding:\t" << *it << "from\t" << current << endl;
+            //std::cout << "Adding:\t" << *it << "from\t" << current << std::endl;
         }
     }
-    cout << "Final score:\t" << current << endl;
-    backtrace(&ClosedList);
+    backtrace<N>(&ClosedList, 1);
     return 0;
 }
+
+#define A_STAR_DECLARE_TEMPLATE( X ) \
+template int a_star< X >(const Node< X > &node_zero, bool(*is_final)(const Coord< X > &c)); \
+
+MAX_NUM_SEQ_TEMPLATE_HELPER(A_STAR_DECLARE_TEMPLATE);

@@ -21,7 +21,7 @@ HeuristicHPair::HeuristicHPair()
 //! Free all pairwise alignments
 HeuristicHPair::~HeuristicHPair()
 {
-    for (vector<PairAlign*>::iterator it = mAligns.begin() ; it != mAligns.end(); ++it)
+    for (std::vector<PairAlign*>::iterator it = mAligns.begin() ; it != mAligns.end(); ++it)
         delete *it;
 }
 
@@ -40,6 +40,18 @@ void HeuristicHPair::destroyInstance()
     instance = NULL;
 }
 
+//! Return the current heuristic
+HeuristicHPair* HeuristicHPair::getHeuristic()
+{
+    return instance;
+}
+
+//! Set the current heuristic as \a p
+void HeuristicHPair::setHeuristic(HeuristicHPair *p)
+{
+    instance = p;
+}
+
 /*!
  * Call this function, after all Sequences are loaded.
  * Do the pairwise alignment of all Sequences and set HeuristicHPair
@@ -51,7 +63,7 @@ void HeuristicHPair::init()
     int seq_num = Sequences::get_seq_num();
     setHeuristic(instance);
 
-    cout << "Starting pairwise alignments... " << flush;
+    std::cout << "Starting pairwise alignments... " << std::flush;
     for (int i = 0; i < seq_num - 1; i++)
     {
         for (int j = i + 1; j < seq_num; j++)
@@ -61,7 +73,7 @@ void HeuristicHPair::init()
             mAligns.push_back(a);
         }
     }
-    cout << "done!\n";
+    std::cout << "done!\n";
     return;
 }
 
@@ -69,10 +81,11 @@ void HeuristicHPair::init()
  * Return a h-value to the Coord \a c using HPair logic.
  * H is the sum of all pairwise values based on reverse strings.
  */
-int HeuristicHPair::calculate_h(const Coord &c) const
+template <int N>
+int HeuristicHPair::calculate_h(const Coord<N> &c) const
 {
     int h = 0;
-    for (vector<PairAlign*>::const_iterator it = mAligns.begin() ; it != mAligns.end(); ++it)
+    for (std::vector<PairAlign*>::const_iterator it = mAligns.begin() ; it != mAligns.end(); ++it)
     {
         int x = (*it)->getPair().first;
         int y = (*it)->getPair().second;
@@ -81,3 +94,8 @@ int HeuristicHPair::calculate_h(const Coord &c) const
     }
     return h;
 }
+
+#define DECLARE_TEMPLATE( X ) \
+template int HeuristicHPair::calculate_h< X >(Coord< X > const&) const;
+
+MAX_NUM_SEQ_TEMPLATE_HELPER(DECLARE_TEMPLATE);

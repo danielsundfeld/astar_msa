@@ -11,16 +11,14 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
-
 class TimeCounter
 {
     private:
-        chrono::high_resolution_clock::time_point m_begin;
-        string m_msg;
+        std::chrono::high_resolution_clock::time_point m_begin;
+        std::string m_msg;
 
     public:
-        TimeCounter(const string &msg = "");
+        TimeCounter(const std::string &msg = "");
         ~TimeCounter();
 };
 #endif

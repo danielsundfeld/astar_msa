@@ -14,21 +14,21 @@
 #include "Node.h"
 #include "PAStar.h"
 
-using namespace std;
-
-PAStar::PAStar(const Node &node_zero)
+template < int N >
+PAStar<N>::PAStar(const Node<N> &node_zero)
 : nodes_count { },
-  nodes_reopen { },
-  final_node(0)
+  nodes_reopen { }
 {
     end_cond = false;
     sync_count = 0;
+    final_node.set_max();
 
     // Enqueue first node
     OpenList[0].enqueue(node_zero);
 }
 
-int PAStar::set_affinity(int tid)
+template < int N >
+int PAStar<N>::set_affinity(int tid)
 {
     cpu_set_t mask;
     CPU_ZERO(&mask);
@@ -43,30 +43,32 @@ int PAStar::set_affinity(int tid)
  * Parallel access should never occur on OpenList and ClosedList with
  * same tids.
  */
-void PAStar::enqueue(int tid, std::vector<Node> &nodes)
+template < int N >
+void PAStar<N>::enqueue(int tid, std::vector< Node<N> > &nodes)
 {
-    closed_list_iterator c_search;
+    typename std::map< Coord<N>, Node<N> >::iterator c_search;
 
-    for (vector<Node>::iterator it = nodes.begin() ; it != nodes.end(); ++it)
+    for (typename std::vector< Node<N> >::iterator it = nodes.begin() ; it != nodes.end(); ++it)
     {
         if ((c_search = ClosedList[tid].find(it->pos)) != ClosedList[tid].end())
         {
-            if (it->get_g() >= closed_list_return_g(c_search))
+            if (it->get_g() >= c_search->second.get_g())
                 continue;
             ClosedList[tid].erase(it->pos);
             nodes_reopen[tid] += 1;
         }
-        //cout << Adding:\t" << *it << endl;
+        //std::cout << Adding:\t" << *it << std::endl;
         OpenList[tid].conditional_enqueue(*it);
     }
     return;
 }
 
 //! Consume the queue with id \a tid
-void PAStar::consume_queue(int tid)
+template < int N >
+void PAStar<N>::consume_queue(int tid)
 {
     std::unique_lock<std::mutex> queue_lock(queue_mutex[tid]);
-    std::vector<Node> nodes_to_expand(queue_nodes[tid]);
+    std::vector< Node<N> > nodes_to_expand(queue_nodes[tid]);
     queue_nodes[tid].clear();
     queue_lock.unlock();
 
@@ -75,7 +77,8 @@ void PAStar::consume_queue(int tid)
 }
 
 //! Wait something on the queue
-void PAStar::wait_queue(int tid)
+template < int N >
+void PAStar<N>::wait_queue(int tid)
 {
     std::unique_lock<std::mutex> queue_lock(queue_mutex[tid]);
     if (queue_nodes[tid].size() == 0)
@@ -84,7 +87,8 @@ void PAStar::wait_queue(int tid)
 }
 
 //! Wake up everyone waiting on the queue
-void PAStar::wake_all_queue()
+template < int N >
+void PAStar<N>::wake_all_queue()
 {
     for (int i = 0; i < THREADS_NUM; ++i)
     {
@@ -95,7 +99,8 @@ void PAStar::wake_all_queue()
 }
 
 //! Sync all threads
-void PAStar::sync_threads()
+template < int N >
+void PAStar<N>::sync_threads()
 {
     std::unique_lock<std::mutex> sync_lock(sync_mutex);
     if (++sync_count < THREADS_NUM)
@@ -108,15 +113,16 @@ void PAStar::sync_threads()
 }
 
 //! Execute the pa_star algorithm until all nodes expand the same final node
-void PAStar::worker_inner(int tid, bool(*is_final)(const Coord &c))
+template < int N >
+void PAStar<N>::worker_inner(int tid, bool(*is_final)(const Coord<N> &c))
 {
-    Node current;
-    vector<Node> neigh[THREADS_NUM];
+    Node<N> current;
+    std::vector< Node<N> > neigh[THREADS_NUM];
 
     // Loop ended by process_final_node
     while (end_cond == false)
     {
-        closed_list_iterator c_search;
+        typename std::map< Coord<N>, Node<N> >::iterator c_search;
 
         // Start phase
         // Reduce the queue
@@ -133,12 +139,12 @@ void PAStar::worker_inner(int tid, bool(*is_final)(const Coord &c))
         // Check if better node is already found
         if ((c_search = ClosedList[tid].find(current.pos)) != ClosedList[tid].end())
         {
-            if (current.get_g() >= closed_list_return_g(c_search))
+            if (current.get_g() >= c_search->second.get_g())
                 continue;
             nodes_reopen[tid] += 1;
         }
 
-        //cout << "[" << tid << "] Opening node:\t" << current << endl;
+        //std::cout << "[" << tid << "] Opening node:\t" << current << std::endl;
         ClosedList[tid][current.pos] = current;
 
         if (is_final(current.pos))
@@ -146,7 +152,6 @@ void PAStar::worker_inner(int tid, bool(*is_final)(const Coord &c))
             process_final_node(tid, current);
             continue;
         }
-        OpenList[tid].verifyMemory();
 
         // Expand phase
         for (int i = 0; i < THREADS_NUM; ++i)
@@ -176,7 +181,8 @@ void PAStar::worker_inner(int tid, bool(*is_final)(const Coord &c))
  * openlists, then it must proceed to Check end phase 2.
  * This is functions does not require synchronization between the threads.
  */
-void PAStar::process_final_node(int tid, const Node &n)
+template < int N >
+void PAStar<N>::process_final_node(int tid, const Node<N> &n)
 {
     std::unique_lock<std::mutex> final_node_lock(final_node_mutex);
 
@@ -186,7 +192,7 @@ void PAStar::process_final_node(int tid, const Node &n)
 
     if (n.pos.get_id(THREADS_NUM) == (unsigned int)tid)
     {
-        //cout << "[" << tid << "] Possible answer found: " << n << endl;
+        //std::cout << "[" << tid << "] Possible answer found: " << n << std::endl;
         // Broadcast the node
         final_node = n;
         final_node_count = 1;
@@ -210,8 +216,8 @@ void PAStar::process_final_node(int tid, const Node &n)
         }
         return;
     }
-    //cout << "[" << tid << "] Agreed with possible answer! " << n << "/" << final_node << endl;
-    //if (n != final_node) cout << "BUG HERE!\n";
+    //std::cout << "[" << tid << "] Agreed with possible answer! " << n << "/" << final_node << std::endl;
+    //if (n != final_node) std::cout << "BUG HERE!\n";
     final_node_lock.unlock();
 
     // Process a broadcast node
@@ -233,15 +239,16 @@ void PAStar::process_final_node(int tid, const Node &n)
  * to not have the lowest priority.
  * This is a very costly function, threads syncronization are called twice.
  */
-bool PAStar::check_stop(int tid)
+template < int N >
+bool PAStar<N>::check_stop(int tid)
 {
     wake_all_queue();
     sync_threads();
-    Node n = final_node;
+    Node<N> n = final_node;
     consume_queue(tid);
     if (OpenList[tid].get_highest_priority() < final_node.get_f())
     {
-        //cout << "[" << tid << "] reporting early end!\n";
+        //std::cout << "[" << tid << "] reporting early end!\n";
         end_cond = false;
     }
     sync_threads();
@@ -256,7 +263,8 @@ bool PAStar::check_stop(int tid)
 }
 
 //! Execute a worker thread. This thread have id \a tid
-int PAStar::worker(int tid, bool(*is_final)(const Coord &c))
+template < int N >
+int PAStar<N>::worker(int tid, bool(*is_final)(const Coord<N> &c))
 {
     set_affinity(tid);
     // worker_inner is the main inner loop
@@ -268,37 +276,38 @@ int PAStar::worker(int tid, bool(*is_final)(const Coord &c))
     return 0;
 }
 
-void PAStar::print_nodes_count()
+template < int N >
+void PAStar<N>::print_nodes_count()
 {
     long long int nodes_total = 0;
     long long int open_list_total = 0;
     long long int closed_list_total = 0;
     long long int nodes_reopen_total = 0;
 
-    cout << "Total nodes count:" << endl;
+    std::cout << "Total nodes count:" << std::endl;
     for (int i = 0; i < THREADS_NUM; ++i)
     {
-        cout << "tid " << i
+        std::cout << "tid " << i
              << "\tOpenList:" << OpenList[i].size()
              << "\tClosedList:" << ClosedList[i].size()
              << "\tReopen:" << nodes_reopen[i]
-             << "\tTotal: " << nodes_count[i] << endl;
+             << "\tTotal: " << nodes_count[i] << std::endl;
         open_list_total += OpenList[i].size();
         closed_list_total += ClosedList[i].size();
         nodes_reopen_total += nodes_reopen[i];
         nodes_total += nodes_count[i];
     }
-    cout << "Sum"
+    std::cout << "Sum"
           << "\tOpenList:" << open_list_total
           << "\tClosedList:" << closed_list_total
           << "\tReopen:" << nodes_reopen_total
-          << "\tTotal: " << nodes_total << endl;
+          << "\tTotal: " << nodes_total << std::endl;
 }
 
-void PAStar::print_answer()
+template < int N >
+void PAStar<N>::print_answer()
 {
-    cout << "Final score:\t" << final_node << endl;
-    backtrace(ClosedList, THREADS_NUM);
+    backtrace<N>(ClosedList, THREADS_NUM);
     print_nodes_count();
 }
 
@@ -306,9 +315,10 @@ void PAStar::print_answer()
  * Same a_star() function usage.
  * Starting function to do a pa_star search.
  */
-int PAStar::pa_star(const Node &node_zero, bool(*is_final)(const Coord &c))
+template < int N >
+int PAStar<N>::pa_star(const Node<N> &node_zero, bool(*is_final)(const Coord<N> &c))
 {
-    PAStar pastar_instance(node_zero);
+    PAStar<N> pastar_instance(node_zero);
     std::vector<std::thread> threads;
 
     // Create threads
@@ -322,3 +332,8 @@ int PAStar::pa_star(const Node &node_zero, bool(*is_final)(const Coord &c))
     pastar_instance.print_answer();
     return 0;
 }
+
+#define PASTAR_DECLARE_TEMPLATE( X ) \
+template class PAStar< X >; \
+
+MAX_NUM_SEQ_TEMPLATE_HELPER(PASTAR_DECLARE_TEMPLATE);

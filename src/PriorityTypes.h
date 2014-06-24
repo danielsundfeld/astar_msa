@@ -8,18 +8,12 @@
  * \brief Usefull typedefs for PriorityList
  */
 #include <map>
-#include <queue>
 
 #include "Coord.h"
 #include "Node.h"
 
-using namespace std;
-
-typedef map<Coord, Node> ListType;
-#ifdef NO_LIB_BOOST
-typedef priority_queue<Node, vector<Node>, PriorityNode> PriorityType;
-#endif
-
-//! ClosedList is always a STL map
-typedef ListType::const_iterator closed_list_iterator;
+template <int N>
+struct List {
+      typedef std::map<Coord<N>, Node<N> > type;
+};
 #endif

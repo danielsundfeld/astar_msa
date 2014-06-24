@@ -5,30 +5,28 @@
  *
  * \brief Heuristic using all pairwise scores
  */
-#ifndef _HEURISTC_ALL_P2_H
-#define _HEURISTC_ALL_P2_H
-#include <map>
-
-using namespace std;
+#ifndef _HEURISTICHPAIR_H
+#define _HEURISTICHPAIR_H
 
 #include "Coord.h"
-#include "Heuristic.h"
 #include "PairAlign.h"
 #include "Sequences.h"
 
-class HeuristicHPair : public Heuristic
+class HeuristicHPair
 {
     private:
         static HeuristicHPair *instance;
         HeuristicHPair();
         ~HeuristicHPair();
-        vector<PairAlign*> mAligns;
+        std::vector<PairAlign*> mAligns;
 
     public:
         static HeuristicHPair* getInstance();
         static void destroyInstance();
+        static HeuristicHPair* getHeuristic();
+        static void setHeuristic(HeuristicHPair *p);
 
         void init();
-        int calculate_h(const Coord &c) const;
+        template <int N> int calculate_h(const Coord<N> &c) const;
 };
 #endif

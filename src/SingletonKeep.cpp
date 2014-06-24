@@ -6,8 +6,6 @@
 #include "SingletonKeep.h"
 #include "SingletonKeepVariables.h"
 
-using namespace std;
-
 template <class T>
 SingletonKeep<T>::SingletonKeep()
 {

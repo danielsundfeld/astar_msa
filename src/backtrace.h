@@ -9,5 +9,5 @@
 #include "Coord.h"
 #include "Node.h"
 
-void backtrace(std::map<Coord, Node> ClosedList[], int list_size = 1);
+template <int N> void backtrace(std::map< Coord<N>, Node<N> > *ClosedList, int list_size = 1);
 #endif

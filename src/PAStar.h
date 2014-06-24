@@ -11,6 +11,8 @@
 #include <atomic>
 #include <condition_variable>
 #include <iostream>
+#include <map>
+#include <string>
 #include <thread>
 #include <vector>
 
@@ -20,29 +22,30 @@
 
 #define search_function pa_star
 
-const string initial_message("Performing search with Parallel A-Star.\n");
+const std::string initial_message("Performing search with Parallel A-Star.\n");
 
 #ifndef THREADS_NUM
     #define THREADS_NUM 4
 #endif
 
+template < int N >
 class PAStar {
     private:
         // Members
-        PriorityList OpenList[THREADS_NUM];
-        ListType ClosedList[THREADS_NUM];
+        PriorityList<N> OpenList[THREADS_NUM];
+        std::map< Coord<N>, Node<N> > ClosedList[THREADS_NUM];
 
         long long int nodes_count[THREADS_NUM];
         long long int nodes_reopen[THREADS_NUM];
 
         std::mutex queue_mutex[THREADS_NUM];
         std::condition_variable queue_condition[THREADS_NUM];
-        std::vector<Node> queue_nodes[THREADS_NUM];
+        std::vector< Node<N> > queue_nodes[THREADS_NUM];
 
         std::atomic<bool> end_cond;
 
         std::mutex final_node_mutex;
-        Node final_node;
+        Node<N> final_node;
         std::atomic<int> final_node_count;
 
         std::mutex sync_mutex;
@@ -50,7 +53,7 @@ class PAStar {
         std::condition_variable sync_condition;
 
         // Constructor
-        PAStar(const Node &node_zero);
+        PAStar(const Node<N> &node_zero);
 
         // Misc functions
         int set_affinity(int tid);
@@ -58,23 +61,23 @@ class PAStar {
         void print_nodes_count();
 
         // Queue functions
-        void enqueue(int tid, std::vector<Node> &nodes);
+        void enqueue(int tid, std::vector< Node<N> > &nodes);
         void consume_queue(int tid);
         void wait_queue(int tid);
         void wake_all_queue();
 
         // End functions
-        void process_final_node(int tid, const Node &n);
+        void process_final_node(int tid, const Node<N> &n);
         bool check_stop(int tid);
 
         // Worker Functions
-        void worker_inner(int tid, bool(*is_final)(const Coord &c));
-        int worker(int tid, bool(*is_final)(const Coord &c));
+        void worker_inner(int tid, bool(*is_final)(const Coord<N> &c));
+        int worker(int tid, bool(*is_final)(const Coord<N> &c));
 
         // Backtrack
         void print_answer();
 
     public:
-        static int pa_star(const Node &node_zero, bool(*is_final)(const Coord &c));
+        static int pa_star(const Node<N> &node_zero, bool(*is_final)(const Coord<N> &c));
 };
 #endif

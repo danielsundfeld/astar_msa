@@ -1,11 +1,9 @@
-# msa_a_star bin Makefile
-
-TARGET       = score_test
+TARGET       = node_ops
 
 INCDIR       = ../../src/
 VPATH        = ../../src/
 
-CPPFLAGS   += -Wall -std=c++11
+CPPFLAGS   += -Wall -std=c++11 -DHASHFZORDER
 
 ifdef RELEASE
     CPPFLAGS   += -O2
@@ -16,15 +14,14 @@ endif
 
 CPP_SRCS = \
     backtrace.cpp \
-    Cost.cpp \
     Coord.cpp \
-    score_test.cpp \
-    Heuristic.cpp \
-    HeuristicHPair.cpp \
+    CoordHash.cpp \
+    Cost.cpp \
+	 HeuristicHPair.cpp \
     Node.cpp \
-    PairAlign.cpp \
+    node_ops.cpp \
+	 PairAlign.cpp \
     Sequences.cpp \
-    SingletonKeep.cpp \
 
 INCPATH += \
     -I$(INCDIR) \

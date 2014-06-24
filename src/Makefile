@@ -30,7 +30,6 @@ endif
 
 ifdef NO_LIB_BOOST
     CPPFLAGS += -DNO_LIB_BOOST
-    COMMON_CPP_SRCS += MemoryWatcher.cpp
 endif
 
 ifdef RELEASE
@@ -66,12 +65,10 @@ COMMON_CPP_SRCS += \
     Coord.cpp \
     CoordHash.cpp \
     Cost.cpp \
-    Heuristic.cpp \
     HeuristicHPair.cpp \
     Node.cpp \
     read_fasta.cpp \
     PairAlign.cpp \
-    PriorityList.cpp \
     Sequences.cpp \
     SingletonKeep.cpp \
 
