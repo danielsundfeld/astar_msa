@@ -104,8 +104,8 @@ void PAStar::sync_threads()
         sync_condition.wait(sync_lock);
     else
     {
-        sync_condition.notify_all();
         sync_count = 0;
+        sync_condition.notify_all();
     }
 }
 
