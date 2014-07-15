@@ -17,7 +17,7 @@ Coord::Coord()
 //! Construct a Coord with \a d dimensions initialized as 'init'
 Coord::Coord(const int d, const int init)
 {
-    m_coord = vector<int>(d, init);
+    m_coord = vector<uint16_t>(d, init);
 }
 
 //! Construct a 3-dimensions coord
@@ -68,13 +68,13 @@ ostream& operator<<(ostream &lhs, const Coord &rhs)
 }
 
 //! Return the value on the \a n - dimension
-const int& Coord::operator[](const int n) const
+const uint16_t& Coord::operator[](const uint16_t n) const
 {
     return m_coord[n];
 }
 
 //! Return the value on the \a n - dimension
-int& Coord::operator[](const int n)
+uint16_t& Coord::operator[](const uint16_t n)
 {
     return m_coord[n];
 }

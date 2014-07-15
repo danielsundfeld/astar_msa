@@ -16,7 +16,7 @@ using namespace std;
 
 class Coord {
     private:
-        vector<int> m_coord;
+        vector<uint16_t> m_coord;
 
     public:
         Coord();
@@ -27,8 +27,8 @@ class Coord {
         bool operator==(const Coord &rhs) const;
         bool operator<(const Coord &rhs) const;
         friend ostream &operator<<(ostream &lhs, const Coord &rhs);
-        const int& operator[](const int n) const;
-        int& operator[](const int n);
+        const uint16_t& operator[](const uint16_t n) const;
+        uint16_t& operator[](const uint16_t n);
         void append(const int &n);
         Coord neigh(int n) const;
         Coord parent(int n) const;
