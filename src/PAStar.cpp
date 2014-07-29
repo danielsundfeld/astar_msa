@@ -78,10 +78,8 @@ void PAStar::consume_queue(int tid)
 void PAStar::wait_queue(int tid)
 {
     std::unique_lock<std::mutex> queue_lock(queue_mutex[tid]);
-    if (queue_nodes[tid].size() != 0)
-        return;
-
-    queue_condition[tid].wait(queue_lock);
+    if (queue_nodes[tid].size() == 0)
+        queue_condition[tid].wait(queue_lock);
     return;
 }
 
@@ -113,6 +111,7 @@ void PAStar::sync_threads()
 void PAStar::worker_inner(int tid, bool(*is_final)(const Coord &c))
 {
     Node current;
+    vector<Node> neigh[THREADS_NUM];
 
     // Loop ended by process_final_node
     while (end_cond == false)
@@ -150,7 +149,8 @@ void PAStar::worker_inner(int tid, bool(*is_final)(const Coord &c))
         OpenList[tid].verifyMemory();
 
         // Expand phase
-        vector<Node> neigh[THREADS_NUM] = {} ;
+        for (int i = 0; i < THREADS_NUM; ++i)
+            neigh[i].clear();
         current.getNeigh(neigh, THREADS_NUM);
 
         // Reconciliation phase

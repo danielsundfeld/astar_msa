@@ -42,6 +42,7 @@ int a_star(const Node &node_zero, bool(*is_final)(const Coord &c))
     Node current;
     PriorityList OpenList;
     ListType ClosedList;
+    vector<Node> neigh;
 
     OpenList.enqueue(node_zero);
 
@@ -67,7 +68,7 @@ int a_star(const Node &node_zero, bool(*is_final)(const Coord &c))
 
         OpenList.verifyMemory();
 
-        vector<Node> neigh;
+        neigh.clear();
         current.getNeigh(&neigh);
         for (vector<Node>::iterator it = neigh.begin() ; it != neigh.end(); ++it)
         {
