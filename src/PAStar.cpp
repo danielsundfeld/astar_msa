@@ -341,9 +341,11 @@ void PAStar<N>::print_answer()
 template < int N >
 int PAStar<N>::pa_star(const Node<N> &node_zero, bool(*is_final)(const Coord<N> &c), const PAStarOpt &options)
 {
+    if (options.threads_num <= 0)
+        throw std::invalid_argument("Invalid number of threads");
+
     PAStar<N> pastar_instance(node_zero, options);
     std::vector<std::thread> threads;
-
     // Create threads
     for (int i = 0; i < options.threads_num; ++i)
         threads.push_back(std::thread(&PAStar::worker, &pastar_instance, i, is_final));
