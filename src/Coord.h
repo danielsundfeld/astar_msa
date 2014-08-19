@@ -20,6 +20,7 @@ template < int N >
 class Coord {
     private:
         uint16_t m_coord[N];
+        template <int Shift> unsigned int get_id_shifted(const int size) const;
 
     public:
         Coord(const int init = 0);
@@ -40,11 +41,11 @@ class Coord {
         unsigned int get_z_order_curve() const;
 
         // CoordHash hash functions
-        unsigned int sum_hash(const int size) const;
-        unsigned int part_sum_hash(const int size) const;
-        unsigned int z_order_hash_slow(const int size) const;
-        unsigned int z_order_hash(const int size) const;
-        unsigned int part_z_order_hash(const int size) const;
+        template <int Shift> unsigned int sum_hash(const int size) const;
+        template <int Shift> unsigned int part_sum_hash(const int size) const;
+        template <int Shift> unsigned int z_order_hash_slow(const int size) const;
+        template <int Shift> unsigned int z_order_hash(const int size) const;
+        template <int Shift> unsigned int part_z_order_hash(const int size) const;
 
         // CoordHash main function
         unsigned int get_id(const int size) const;

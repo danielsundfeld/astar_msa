@@ -25,9 +25,10 @@ unsigned int Coord<N>::get_sum() const
 
 //! Return the full-sum-hash
 template < int N >
+template < int Shift >
 unsigned int Coord<N>::sum_hash(const int size) const
 {
-    return (get_sum() >> HASH_SHIFT) % size;
+    return (get_sum() >> Shift) % size;
 }
 
 //! Return the sum of first and second elements
@@ -39,9 +40,10 @@ unsigned int Coord<N>::get_part_sum() const
 
 //! Return the part-sum-hash
 template < int N >
+template < int Shift >
 unsigned int Coord<N>::part_sum_hash(const int size) const
 {
-    return (get_part_sum() >> HASH_SHIFT) % size;
+    return (get_part_sum() >> Shift) % size;
 }
 
 //! z_order_curve on multidimension coordinates
@@ -69,9 +71,10 @@ unsigned int Coord<N>::get_z_order_curve() const
  * \deprecated See Coord<N>::z_order_hash
  */
 template < int N >
+template < int Shift >
 unsigned int Coord<N>::z_order_hash_slow(const int size) const
 {
-    return (get_z_order_curve() >> HASH_SHIFT) % size;
+    return (get_z_order_curve() >> Shift) % size;
 }
 
 /*!
@@ -85,14 +88,15 @@ unsigned int Coord<N>::z_order_hash_slow(const int size) const
  * operations. Wow. Much faster. Such speed. Very intelligent.
  */
 template < int N >
+template < int Shift >
 unsigned int Coord<N>::z_order_hash(const int size) const
 {
     int hash = 0;
     // Shift operation, start reading
-    int bit_to_read = HASH_SHIFT / N;
+    int bit_to_read = Shift / N;
 
     // MOD operation, stop writing after bits
-    unsigned int bits = log2(size) + (HASH_SHIFT % N) + 1;
+    unsigned int bits = log2(size) + (Shift % N) + 1;
     unsigned int total = 1 << bits;
     if (total == 0)
         total = std::numeric_limits<unsigned int>::max();
@@ -107,22 +111,23 @@ unsigned int Coord<N>::z_order_hash(const int size) const
         }
         ++bit_to_read;
     }
-    /* HASH_SHIFT 1 means: discard the first bit from the first sequence, but
+    /* Shift 1 means: discard the first bit from the first sequence, but
     use the first bit of the other sequences. */
     //TODO: optimize this MOD size operation
-    return (hash >> (HASH_SHIFT % N)) % size;
+    return (hash >> (Shift % N)) % size;
 }
 
 //! Same Coord<N>::z_order_hash usage
 template < int N >
+template < int Shift >
 unsigned int Coord<N>::part_z_order_hash(const int size) const
 {
     int hash = 0;
     // Shift operation, start reading
-    int bit_to_read = HASH_SHIFT / 2;
+    int bit_to_read = Shift / 2;
 
     // MOD operation, stop writing after bits
-    unsigned int bits = log2(size) + (HASH_SHIFT % 2) + 1;
+    unsigned int bits = log2(size) + (Shift % 2) + 1;
     unsigned int total = 1 << bits;
     if (total == 0)
         total = std::numeric_limits<unsigned int>::max();
@@ -137,28 +142,36 @@ unsigned int Coord<N>::part_z_order_hash(const int size) const
         }
         ++bit_to_read;
     }
-    /* HASH_SHIFT 1 means: discard the first bit from the first sequence, but
+    /* Shift 1 means: discard the first bit from the first sequence, but
        use the first bit of the other sequences. */
     //TODO: optimize this MOD size operation
-    return (hash >> (HASH_SHIFT % 2)) % size;
+    return (hash >> (Shift % 2)) % size;
+}
+
+//! Main CoordHash internal function to hide the Shift template interface
+template < int N >
+template < int Shift >
+unsigned int Coord<N>::get_id_shifted(const int size) const
+{
+#ifdef HASHFSUM
+    return sum_hash<Shift>(size);
+#elif HASHPSUM
+    return part_sum_hash<Shift>(size);
+#elif HASHPZORDER
+    return part_z_order_hash<Shift>(size);
+#else
+    #ifndef HASHFZORDER
+        #warning HASH NOT DEFINED, USING FULL-ZORDER
+    #endif
+    return z_order_hash<Shift>(size);
+#endif
 }
 
 //! Main CoordHash function: return the hash to the space \a size
 template < int N >
 unsigned int Coord<N>::get_id(const int size) const
 {
-#ifdef HASHFSUM
-    return sum_hash(size);
-#elif HASHPSUM
-    return part_sum_hash(size);
-#elif HASHPZORDER
-    return part_z_order_hash(size);
-#else
-    #ifndef HASHFZORDER
-        #warning HASH NOT DEFINED, USING FULL-ZORDER
-    #endif
-    return z_order_hash(size);
-#endif
+    return get_id_shifted<HASH_SHIFT>(size);
 }
 
 MAX_NUM_SEQ_TEMPLATE_HELPER(COORD_DECLARE_COORD_TEMPLATE);
