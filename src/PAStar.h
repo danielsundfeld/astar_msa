@@ -28,19 +28,32 @@ const std::string initial_message("Performing search with Parallel A-Star.\n");
     #define THREADS_NUM 4
 #endif
 
+/*!
+ * \brief Arguments for PAStar class
+ */
+struct PAStarOpt {
+    int threads_num;
+
+    PAStarOpt(int th = THREADS_NUM)
+    {
+        threads_num = th;
+    }
+};
+
 template < int N >
 class PAStar {
     private:
         // Members
-        PriorityList<N> OpenList[THREADS_NUM];
-        std::map< Coord<N>, Node<N> > ClosedList[THREADS_NUM];
+        const PAStarOpt m_options;
+        PriorityList<N> *OpenList;
+        std::map< Coord<N>, Node<N> > *ClosedList;
 
-        long long int nodes_count[THREADS_NUM];
-        long long int nodes_reopen[THREADS_NUM];
+        long long int *nodes_count;
+        long long int *nodes_reopen;
 
-        std::mutex queue_mutex[THREADS_NUM];
-        std::condition_variable queue_condition[THREADS_NUM];
-        std::vector< Node<N> > queue_nodes[THREADS_NUM];
+        std::mutex *queue_mutex;
+        std::condition_variable *queue_condition;
+        std::vector< Node<N> > *queue_nodes;
 
         std::atomic<bool> end_cond;
 
@@ -53,7 +66,8 @@ class PAStar {
         std::condition_variable sync_condition;
 
         // Constructor
-        PAStar(const Node<N> &node_zero);
+        PAStar(const Node<N> &node_zero, const PAStarOpt &opt);
+        ~PAStar();
 
         // Misc functions
         int set_affinity(int tid);
@@ -78,6 +92,6 @@ class PAStar {
         void print_answer();
 
     public:
-        static int pa_star(const Node<N> &node_zero, bool(*is_final)(const Coord<N> &c));
+        static int pa_star(const Node<N> &node_zero, bool(*is_final)(const Coord<N> &c), const PAStarOpt &options);
 };
 #endif

@@ -15,16 +15,39 @@
 #include "PAStar.h"
 
 template < int N >
-PAStar<N>::PAStar(const Node<N> &node_zero)
-: nodes_count { },
+PAStar<N>::PAStar(const Node<N> &node_zero, const struct PAStarOpt &opt)
+: m_options(opt),
+  nodes_count { },
   nodes_reopen { }
 {
     end_cond = false;
     sync_count = 0;
     final_node.set_max();
 
+    OpenList = new PriorityList<N>[m_options.threads_num]();
+    ClosedList = new std::map< Coord<N>, Node<N> >[m_options.threads_num]();
+
+    nodes_count = new long long int[m_options.threads_num]();
+    nodes_reopen = new long long int[m_options.threads_num]();
+
+    queue_mutex = new std::mutex[m_options.threads_num]();
+    queue_condition = new std::condition_variable[m_options.threads_num]();
+    queue_nodes = new std::vector< Node<N> >[m_options.threads_num]();
+
     // Enqueue first node
     OpenList[0].enqueue(node_zero);
+}
+
+template < int N >
+PAStar<N>::~PAStar()
+{
+    delete[] OpenList;
+    delete[] ClosedList;
+    delete[] nodes_count;
+    delete[] nodes_reopen;
+    delete[] queue_mutex;
+    delete[] queue_condition;
+    delete[] queue_nodes;
 }
 
 template < int N >
@@ -90,7 +113,7 @@ void PAStar<N>::wait_queue(int tid)
 template < int N >
 void PAStar<N>::wake_all_queue()
 {
-    for (int i = 0; i < THREADS_NUM; ++i)
+    for (int i = 0; i < m_options.threads_num; ++i)
     {
         std::unique_lock<std::mutex> queue_lock(queue_mutex[i]);
         queue_condition[i].notify_one();
@@ -103,7 +126,7 @@ template < int N >
 void PAStar<N>::sync_threads()
 {
     std::unique_lock<std::mutex> sync_lock(sync_mutex);
-    if (++sync_count < THREADS_NUM)
+    if (++sync_count < m_options.threads_num)
         sync_condition.wait(sync_lock);
     else
     {
@@ -117,7 +140,7 @@ template < int N >
 void PAStar<N>::worker_inner(int tid, bool(*is_final)(const Coord<N> &c))
 {
     Node<N> current;
-    std::vector< Node<N> > neigh[THREADS_NUM];
+    std::vector< Node<N> > neigh[m_options.threads_num];
 
     // Loop ended by process_final_node
     while (end_cond == false)
@@ -154,12 +177,12 @@ void PAStar<N>::worker_inner(int tid, bool(*is_final)(const Coord<N> &c))
         }
 
         // Expand phase
-        for (int i = 0; i < THREADS_NUM; ++i)
+        for (int i = 0; i < m_options.threads_num; ++i)
             neigh[i].clear();
-        current.getNeigh(neigh, THREADS_NUM);
+        current.getNeigh(neigh, m_options.threads_num);
 
         // Reconciliation phase
-        for (int i = 0; i < THREADS_NUM; i++)
+        for (int i = 0; i < m_options.threads_num; i++)
         {
             if (i == tid)
                 enqueue(tid, neigh[i]);
@@ -190,7 +213,7 @@ void PAStar<N>::process_final_node(int tid, const Node<N> &n)
     if (final_node.get_f() < n.get_f())
         return;
 
-    if (n.pos.get_id(THREADS_NUM) == (unsigned int)tid)
+    if (n.pos.get_id(m_options.threads_num) == (unsigned int)tid)
     {
         //std::cout << "[" << tid << "] Possible answer found: " << n << std::endl;
         // Broadcast the node
@@ -198,7 +221,7 @@ void PAStar<N>::process_final_node(int tid, const Node<N> &n)
         final_node_count = 1;
         final_node_lock.unlock();
 
-        for (int i = 0; i < THREADS_NUM; i++)
+        for (int i = 0; i < m_options.threads_num; i++)
         {
             if (i != tid)
             {
@@ -208,7 +231,7 @@ void PAStar<N>::process_final_node(int tid, const Node<N> &n)
             }
         }
         // Process a broadcast node
-        if (final_node_count == THREADS_NUM)
+        if (final_node_count == m_options.threads_num)
         {
             // This node have the highest priority between all Openlist.
             end_cond = true;
@@ -221,7 +244,7 @@ void PAStar<N>::process_final_node(int tid, const Node<N> &n)
     final_node_lock.unlock();
 
     // Process a broadcast node
-    if (++final_node_count == THREADS_NUM)
+    if (++final_node_count == m_options.threads_num)
     {
         // This node have the highest priority between all Openlist.
         end_cond = true;
@@ -255,7 +278,7 @@ bool PAStar<N>::check_stop(int tid)
     if (end_cond == false)
     {
         ClosedList[tid].erase(n.pos);
-        if (n.pos.get_id(THREADS_NUM) == (unsigned int) tid)
+        if (n.pos.get_id(m_options.threads_num) == (unsigned int) tid)
             OpenList[tid].conditional_enqueue(n);
         return true;
     }
@@ -285,7 +308,7 @@ void PAStar<N>::print_nodes_count()
     long long int nodes_reopen_total = 0;
 
     std::cout << "Total nodes count:" << std::endl;
-    for (int i = 0; i < THREADS_NUM; ++i)
+    for (int i = 0; i < m_options.threads_num; ++i)
     {
         std::cout << "tid " << i
              << "\tOpenList:" << OpenList[i].size()
@@ -307,7 +330,7 @@ void PAStar<N>::print_nodes_count()
 template < int N >
 void PAStar<N>::print_answer()
 {
-    backtrace<N>(ClosedList, THREADS_NUM);
+    backtrace<N>(ClosedList, m_options.threads_num);
     print_nodes_count();
 }
 
@@ -316,13 +339,13 @@ void PAStar<N>::print_answer()
  * Starting function to do a pa_star search.
  */
 template < int N >
-int PAStar<N>::pa_star(const Node<N> &node_zero, bool(*is_final)(const Coord<N> &c))
+int PAStar<N>::pa_star(const Node<N> &node_zero, bool(*is_final)(const Coord<N> &c), const PAStarOpt &options)
 {
-    PAStar<N> pastar_instance(node_zero);
+    PAStar<N> pastar_instance(node_zero, options);
     std::vector<std::thread> threads;
 
     // Create threads
-    for (int i = 0; i < THREADS_NUM; ++i)
+    for (int i = 0; i < options.threads_num; ++i)
         threads.push_back(std::thread(&PAStar::worker, &pastar_instance, i, is_final));
 
     // Wait for the end of all threads
