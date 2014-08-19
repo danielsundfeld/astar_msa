@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
 
     if (msa_astar_options(argc, argv, filename) != 0)
         return 1;
-    if (read_fasta_file(filename.c_str()) != 0)
+    if (read_fasta_file(filename) != 0)
         return 1;
     return a_star_run();
 }

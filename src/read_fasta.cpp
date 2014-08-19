@@ -8,7 +8,7 @@
 
 #include "Sequences.h"
 
-int read_fasta_file_core(const char name[])
+int read_fasta_file_core(const std::string &name)
 {
     std::ifstream file(name);
     Sequences *sequences = Sequences::getInstance();
@@ -39,7 +39,7 @@ int read_fasta_file_core(const char name[])
 /*!
  * Read the \a name fasta file, loading it to the Sequences singleton
  */
-int read_fasta_file(const char name[])
+int read_fasta_file(const std::string &name)
 {
     try
     {
