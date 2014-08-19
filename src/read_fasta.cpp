@@ -8,10 +8,7 @@
 
 #include "Sequences.h"
 
-/*!
- * Read the \a name fasta file, loading it to the Sequences singleton
- */
-int read_fasta_file(const char name[])
+int read_fasta_file_core(const char name[])
 {
     std::ifstream file(name);
     Sequences *sequences = Sequences::getInstance();
@@ -37,4 +34,24 @@ int read_fasta_file(const char name[])
             sequences->set_seq(seq);
     }
     return 0;
+}
+
+/*!
+ * Read the \a name fasta file, loading it to the Sequences singleton
+ */
+int read_fasta_file(const char name[])
+{
+    try
+    {
+        return read_fasta_file_core(name);
+    }
+    catch (std::exception &e)
+    {
+        std::cerr << "Reading file fatal error: " << e.what() << std::endl;
+    }
+    catch (...)
+    {
+        std::cerr << "Unknown fatal error while reading file!\n";
+    }
+    return -1;
 }

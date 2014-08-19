@@ -12,8 +12,11 @@
 #include "Sequences.h"
 #include "read_fasta.h"
 
-int pa_star_run(const PAStarOpt &opt)
+int pa_star_run_core(const PAStarOpt &opt)
 {
+    HeuristicHPair::getInstance()->init();
+
+    std::cout << initial_message;
     switch (Sequences::get_seq_num())
     {
         case 3:
@@ -33,7 +36,24 @@ int pa_star_run(const PAStarOpt &opt)
         case 10:
             return PAStar<10>::pa_star(Sequences::get_initial_node<10>(), Sequences::is_final, opt);
         default:
-            std::cout << "Invalid number of sequences: " << Sequences::get_seq_num() << std::endl;
+            std::cerr << "Fatal error: Invalid number of sequences: " << Sequences::get_seq_num() << std::endl;
+    }
+    return -1;
+}
+
+int pa_star_run(const PAStarOpt &opt)
+{
+    try
+    {
+        return pa_star_run_core(opt);
+    }
+    catch (std::exception &e)
+    {
+        std::cerr << "Running fatal error: " << e.what() << std::endl;
+    }
+    catch (...)
+    {
+        std::cerr << "Unknown fatal error while running!\n";
     }
     return -1;
 }
@@ -47,9 +67,5 @@ int main(int argc, char *argv[])
         return 1;
     if (read_fasta_file(filename.c_str()) != 0)
         return 1;
-
-    HeuristicHPair::getInstance()->init();
-
-    std::cout << initial_message;
     return pa_star_run(opt);
 }

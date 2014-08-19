@@ -11,8 +11,11 @@
 #include "msa_options.h"
 #include "read_fasta.h"
 
-int a_star_run()
+int a_star_run_core()
 {
+    HeuristicHPair::getInstance()->init();
+
+    std::cout << initial_message;
     switch (Sequences::get_seq_num())
     {
         case 3:
@@ -32,7 +35,24 @@ int a_star_run()
         case 10:
             return a_star<10>(Sequences::get_initial_node<10>(), Sequences::is_final);
         default:
-            std::cout << "Invalid number of sequences: " << Sequences::get_seq_num() << std::endl;
+            std::cerr << "Fatal error: Invalid number of sequences: " << Sequences::get_seq_num() << std::endl;
+    }
+    return -1;
+}
+
+int a_star_run()
+{
+    try
+    {
+        return a_star_run_core();
+    }
+    catch (std::exception &e)
+    {
+        std::cerr << "Running fatal error: " << e.what() << std::endl;
+    }
+    catch (...)
+    {
+        std::cerr << "Unknown fatal error while running!\n";
     }
     return -1;
 }
@@ -45,9 +65,5 @@ int main(int argc, char *argv[])
         return 1;
     if (read_fasta_file(filename.c_str()) != 0)
         return 1;
-
-    HeuristicHPair::getInstance()->init();
-
-    std::cout << initial_message;
     return a_star_run();
 }
