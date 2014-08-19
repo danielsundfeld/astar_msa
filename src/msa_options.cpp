@@ -16,10 +16,15 @@ int msa_options(int argc, char *argv[], std::string &filename, int &threads_num)
         const std::string description = "Usage " + std::string(argv[0]) + " [OPTIONS] file.fasta";
 
         // Arguments Options
-        po::options_description args_options("Options");
-        args_options.add_options()
+        po::options_description common_options("Options");
+        common_options.add_options()
             ("version,v", "print version string")
             ("help,h", "produce help message")
+            ;
+
+        // config file
+        po::options_description parallel_options("Parallel Options");
+        parallel_options.add_options()
             ("threads,t", po::value<int>(&threads_num),
              "number of threads")
             ;
@@ -32,11 +37,11 @@ int msa_options(int argc, char *argv[], std::string &filename, int &threads_num)
 
         // Acceptable arguments
         po::options_description all_options;
-        all_options.add(args_options).add(input_fasta_file);
+        all_options.add(common_options).add(parallel_options).add(input_fasta_file);
 
         // The description on how to use
         po::options_description usage(description);
-        usage.add(args_options);
+        usage.add(common_options).add(parallel_options);
 
         // file.fasta is position independet
         po::positional_options_description p;
