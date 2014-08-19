@@ -16,6 +16,13 @@ int msa_pastar_options(int argc, char *argv[], std::string &filename, int &threa
     return msa_options(Msa_Pastar, argc, argv, filename, threads_num);
 }
 
+//! \brief Parse the arguments for msa_pastar
+int msa_astar_options(int argc, char *argv[], std::string &filename)
+{
+    int unused;
+    return msa_options(Msa_Astar, argc, argv, filename, unused);
+}
+
 //! \brief Parse the arguments
 int msa_options(int type, int argc, char *argv[], std::string &filename, int &threads_num)
 {

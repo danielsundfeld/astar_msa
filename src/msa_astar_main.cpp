@@ -8,13 +8,8 @@
 
 #include "AStar.h"
 #include "HeuristicHPair.h"
+#include "msa_options.h"
 #include "read_fasta.h"
-
-int usage(char progname[])
-{
-    std::cout << "Usage:\n" << progname << " <fasta_file>\n";
-    return -1;
-}
 
 int a_star_run()
 {
@@ -44,8 +39,12 @@ int a_star_run()
 
 int main(int argc, char *argv[])
 {
-    if ((argc == 1) || (read_fasta_file(argv[1]) != 0))
-        return usage(argv[0]);
+    std::string filename;
+
+    if (msa_astar_options(argc, argv, filename) != 0)
+        return 1;
+    if (read_fasta_file(filename.c_str()) != 0)
+        return 1;
 
     HeuristicHPair::getInstance()->init();
 
