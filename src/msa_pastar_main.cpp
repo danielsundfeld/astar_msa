@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     PAStarOpt opt;
     std::string filename;
 
-    if (msa_options(argc, argv, filename, opt.threads_num) != 0)
+    if (msa_pastar_options(argc, argv, filename, opt.threads_num) != 0)
         return 1;
     if (read_fasta_file(filename.c_str()) != 0)
         return 1;

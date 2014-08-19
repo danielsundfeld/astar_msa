@@ -6,10 +6,18 @@
  */
 #include <boost/program_options.hpp>
 
+#include "msa_options.h"
+
 namespace po = boost::program_options;
 
-//! \brief Parse the arguments for the msa programs
-int msa_options(int argc, char *argv[], std::string &filename, int &threads_num)
+//! \brief Parse the arguments for msa_pastar
+int msa_pastar_options(int argc, char *argv[], std::string &filename, int &threads_num)
+{
+    return msa_options(Msa_Pastar, argc, argv, filename, threads_num);
+}
+
+//! \brief Parse the arguments
+int msa_options(int type, int argc, char *argv[], std::string &filename, int &threads_num)
 {
     try
     {
@@ -37,11 +45,15 @@ int msa_options(int argc, char *argv[], std::string &filename, int &threads_num)
 
         // Acceptable arguments
         po::options_description all_options;
-        all_options.add(common_options).add(parallel_options).add(input_fasta_file);
+        all_options.add(common_options).add(input_fasta_file);
+        if (type == Msa_Pastar)
+            all_options.add(parallel_options);
 
         // The description on how to use
         po::options_description usage(description);
-        usage.add(common_options).add(parallel_options);
+        usage.add(common_options);
+        if (type == Msa_Pastar)
+            usage.add(parallel_options);
 
         // file.fasta is position independet
         po::positional_options_description p;
