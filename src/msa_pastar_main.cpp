@@ -7,15 +7,10 @@
 #include <iostream>
 
 #include "HeuristicHPair.h"
+#include "msa_options.h"
 #include "PAStar.h"
 #include "Sequences.h"
 #include "read_fasta.h"
-
-int usage(char progname[])
-{
-    std::cout << "Usage:\n" << progname << " <fasta_file>\n";
-    return -1;
-}
 
 int pa_star_run(const PAStarOpt &opt)
 {
@@ -46,8 +41,12 @@ int pa_star_run(const PAStarOpt &opt)
 int main(int argc, char *argv[])
 {
     PAStarOpt opt;
-    if ((argc == 1) || (read_fasta_file(argv[1]) != 0))
-        return usage(argv[0]);
+    std::string filename;
+
+    if (msa_options(argc, argv, filename, opt.threads_num) != 0)
+        return 1;
+    if (read_fasta_file(filename.c_str()) != 0)
+        return 1;
 
     HeuristicHPair::getInstance()->init();
 

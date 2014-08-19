@@ -8,7 +8,7 @@ TARGET      = $(ASTAR_BIN) $(PASTAR_BIN)
 INCDIR       = .
 
 CPPFLAGS   += -W -Wall -std=c++11 -I/usr/include
-LDFLAGS    += -lpthread
+LDFLAGS    += -lpthread -lboost_program_options
 
 ifdef THREADS
     CPPFLAGS += -DTHREADS_NUM=$(THREADS)
@@ -66,6 +66,7 @@ COMMON_CPP_SRCS += \
     CoordHash.cpp \
     Cost.cpp \
     HeuristicHPair.cpp \
+    msa_options.cpp \
     Node.cpp \
     read_fasta.cpp \
     PairAlign.cpp \
