@@ -16,7 +16,7 @@ int pa_star_run_core(const PAStarOpt &opt)
 {
     HeuristicHPair::getInstance()->init();
 
-    std::cout << initial_message;
+    std::cout << "Performing search with Parallel A-Star.\n";
     switch (Sequences::get_seq_num())
     {
         case 3:
@@ -62,13 +62,10 @@ int main(int argc, char *argv[])
 {
     PAStarOpt opt;
     std::string filename;
-    hashType type = HashFZorder;
-    int shift = 0;
 
-    if (msa_pastar_options(argc, argv, filename, opt.threads_num, shift, type) != 0)
+    if (msa_pastar_options(argc, argv, filename, opt) != 0)
         return 1;
     if (read_fasta_file(filename) != 0)
         return 1;
-    Coord_configure_hash(type, shift);
     return pa_star_run(opt);
 }

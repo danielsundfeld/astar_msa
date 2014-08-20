@@ -17,12 +17,9 @@
 #include <vector>
 
 #include "Coord.h"
+#include "CoordHash.h"
 #include "Node.h"
 #include "PriorityList.h"
-
-#define search_function pa_star
-
-const std::string initial_message("Performing search with Parallel A-Star.\n");
 
 #ifndef THREADS_NUM
     #define THREADS_NUM 4
@@ -32,10 +29,20 @@ const std::string initial_message("Performing search with Parallel A-Star.\n");
  * \brief Arguments for PAStar class
  */
 struct PAStarOpt {
+    hashType hash_type;
+    int hash_shift;
     int threads_num;
 
-    PAStarOpt(int th = THREADS_NUM)
+    PAStarOpt()
     {
+        hash_type = HashFZorder;
+        hash_shift = HASH_SHIFT;
+        threads_num = THREADS_NUM;
+    }
+    PAStarOpt(hashType type, int shift, int th)
+    {
+        hash_type = type;
+        hash_shift = shift;
         threads_num = th;
     }
 };

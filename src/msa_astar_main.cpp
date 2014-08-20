@@ -15,7 +15,7 @@ int a_star_run_core()
 {
     HeuristicHPair::getInstance()->init();
 
-    std::cout << initial_message;
+    std::cout << "Performing search with Serial A-Star.\n";
     switch (Sequences::get_seq_num())
     {
         case 3:
