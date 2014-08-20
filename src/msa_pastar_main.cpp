@@ -62,10 +62,13 @@ int main(int argc, char *argv[])
 {
     PAStarOpt opt;
     std::string filename;
+    hashType type = HashFZorder;
+    int shift = 0;
 
-    if (msa_pastar_options(argc, argv, filename, opt.threads_num) != 0)
+    if (msa_pastar_options(argc, argv, filename, opt.threads_num, shift, type) != 0)
         return 1;
     if (read_fasta_file(filename) != 0)
         return 1;
+    Coord_configure_hash(type, shift);
     return pa_star_run(opt);
 }

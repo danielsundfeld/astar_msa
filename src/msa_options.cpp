@@ -6,14 +6,16 @@
  */
 #include <boost/program_options.hpp>
 
+#include "Coord.h"
 #include "msa_options.h"
 
 namespace po = boost::program_options;
 
 //! Arguments parse core functions
-int msa_options_core(int type, int argc, char *argv[], std::string &filename, int &threads_num)
+int msa_options_core(int type, int argc, char *argv[], std::string &filename, int &threads_num, int &hash_shift, hashType &hash_type)
 {
     const std::string description = "Usage " + std::string(argv[0]) + " [OPTIONS] file.fasta";
+    std::string hash_read;
 
     // Arguments Options
     po::options_description common_options("Options");
@@ -27,6 +29,10 @@ int msa_options_core(int type, int argc, char *argv[], std::string &filename, in
     parallel_options.add_options()
         ("threads,t", po::value<int>(&threads_num),
          "number of threads")
+        ("hash_shift,s", po::value<int>(&hash_shift),
+         "Hash shift option value")
+        ("hash_type,y", po::value<std::string>(&hash_read),
+         "Hash type to use [FZORDER|FSUM|PZORDER|PSUM]")
         ;
 
     // Fasta File Name
@@ -58,6 +64,19 @@ int msa_options_core(int type, int argc, char *argv[], std::string &filename, in
     notify(vm);
 
     // And now, verify
+    if (vm.count("hash_type"))
+    {
+        if (hash_read == "FZORDER")
+            hash_type = HashFZorder;
+        else if (hash_read == "FSUM")
+            hash_type = HashFSum;
+        else if (hash_read == "PZORDER")
+            hash_type = HashPZorder;
+        else if (hash_read == "PSUM")
+            hash_type = HashPSum;
+        else
+            throw po::validation_error(po::validation_error::invalid_option_value, "hash_type");
+    }
     if (vm.count("help") || !vm.count("file.fasta"))
     {
         std::cout << usage << std::endl;
@@ -71,24 +90,26 @@ int msa_options_core(int type, int argc, char *argv[], std::string &filename, in
 }
 
 //! Parse the arguments for msa_pastar
-int msa_pastar_options(int argc, char *argv[], std::string &filename, int &threads_num)
+int msa_pastar_options(int argc, char *argv[], std::string &filename, int &threads_num, int &hash_shift, hashType &hash_type)
 {
-    return msa_options(Msa_Pastar, argc, argv, filename, threads_num);
+    return msa_options(Msa_Pastar, argc, argv, filename, threads_num, hash_shift, hash_type);
 }
 
 //! Parse the arguments for msa_astar
 int msa_astar_options(int argc, char *argv[], std::string &filename)
 {
     int unused;
-    return msa_options(Msa_Astar, argc, argv, filename, unused);
+    hashType unused2;
+
+    return msa_options(Msa_Astar, argc, argv, filename, unused, unused, unused2);
 }
 
 //! Parse the arguments
-int msa_options(int type, int argc, char *argv[], std::string &filename, int &threads_num)
+int msa_options(int type, int argc, char *argv[], std::string &filename, int &threads_num, int &hash_shift, hashType &hash_type)
 {
     try
     {
-        return msa_options_core(type, argc, argv, filename, threads_num);
+        return msa_options_core(type, argc, argv, filename, threads_num, hash_shift, hash_type);
     }
     catch (boost::program_options::multiple_occurrences &e)
     {

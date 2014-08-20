@@ -18,16 +18,6 @@ ifdef HASH_SHIFT
     CPPFLAGS += -DHASH_SHIFT=$(HASH_SHIFT)
 endif
 
-ifeq ($(HASH),FZORDER)
-    CPPFLAGS += -DHASHFZORDER
-else ifeq ($(HASH),PZORDER)
-    CPPFLAGS += -DHASHPZORDER
-else ifeq ($(HASH),PSUM)
-    CPPFLAGS += -DHASHPSUM
-else ifeq ($(HASH),FSUM)
-    CPPFLAGS += -DHASHFSUM
-endif
-
 ifdef NO_LIB_BOOST
     CPPFLAGS += -DNO_LIB_BOOST
 endif
