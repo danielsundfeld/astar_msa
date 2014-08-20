@@ -16,6 +16,8 @@
 template < int N > class Coord;
 template < int N > std::ostream& operator<< (std::ostream &lhs, const Coord<N> &rhs);
 
+enum hashType { HashFZorder, HashPZorder, HashFSum, HashPSum };
+
 template < int N >
 class Coord {
     private:
@@ -50,6 +52,8 @@ class Coord {
         // CoordHash main function
         unsigned int get_id(const int size) const;
 };
+
+void Coord_configure_hash(hashType type, int shift);
 
 // Coord implementation files must call this
 #define COORD_DECLARE_COORD_TEMPLATE( X ) \

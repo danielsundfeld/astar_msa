@@ -6,12 +6,18 @@
  * This file implements the Hash Functions to class Coord
  */
 #include <cmath>
+#include <stdexcept>
 #include <limits>
 
 #include "Coord.h"
 
+using namespace std;
+
 #pragma GCC push_options
 #pragma GCC optimize ("unroll-loops")
+
+int hash_shift = HASH_SHIFT;
+hashType hash_type = HashFZorder;
 
 //! Return the sum of elements
 template < int N >
@@ -148,30 +154,87 @@ unsigned int Coord<N>::part_z_order_hash(const int size) const
     return (hash >> (Shift % 2)) % size;
 }
 
-//! Main CoordHash internal function to hide the Shift template interface
+//! Decide with shift call, based on the configured hash_type
 template < int N >
 template < int Shift >
 unsigned int Coord<N>::get_id_shifted(const int size) const
 {
-#ifdef HASHFSUM
-    return sum_hash<Shift>(size);
-#elif HASHPSUM
-    return part_sum_hash<Shift>(size);
-#elif HASHPZORDER
-    return part_z_order_hash<Shift>(size);
-#else
-    #ifndef HASHFZORDER
-        #warning HASH NOT DEFINED, USING FULL-ZORDER
-    #endif
-    return z_order_hash<Shift>(size);
-#endif
+    switch (hash_type)
+    {
+        case HashFSum:
+            return sum_hash<Shift>(size);
+        case HashPSum:
+            return part_sum_hash<Shift>(size);
+        case HashPZorder:
+            return part_z_order_hash<Shift>(size);
+        case HashFZorder:
+        default:
+            return z_order_hash<Shift>(size);
+    }
 }
 
 //! Main CoordHash function: return the hash to the space \a size
 template < int N >
 unsigned int Coord<N>::get_id(const int size) const
 {
-    return get_id_shifted<HASH_SHIFT>(size);
+    switch (hash_shift)
+    {
+        case 0:
+            return get_id_shifted<0>(size);
+        case 1:
+            return get_id_shifted<1>(size);
+        case 2:
+            return get_id_shifted<2>(size);
+        case 3:
+            return get_id_shifted<3>(size);
+        case 4:
+            return get_id_shifted<4>(size);
+        case 5:
+            return get_id_shifted<5>(size);
+        case 6:
+            return get_id_shifted<6>(size);
+        case 7:
+            return get_id_shifted<7>(size);
+        case 8:
+            return get_id_shifted<8>(size);
+        case 9:
+            return get_id_shifted<9>(size);
+        case 10:
+            return get_id_shifted<10>(size);
+        case 11:
+            return get_id_shifted<11>(size);
+        case 12:
+            return get_id_shifted<12>(size);
+        case 13:
+            return get_id_shifted<13>(size);
+        case 14:
+            return get_id_shifted<14>(size);
+        case 15:
+            return get_id_shifted<15>(size);
+        case 16:
+            return get_id_shifted<16>(size);
+        case 17:
+            return get_id_shifted<17>(size);
+        case 18:
+            return get_id_shifted<18>(size);
+        case 19:
+            return get_id_shifted<19>(size);
+        case 20:
+            return get_id_shifted<20>(size);
+        case 21:
+            return get_id_shifted<21>(size);
+        default:
+            throw std::invalid_argument("Invalid Hash Shift");
+            return get_id_shifted<1>(size);
+    }
+    return -1;
+}
+
+//! Configure \a shift and \a type as hash parameter
+void Coord_configure_hash(hashType type, int shift)
+{
+    hash_type = type;
+    hash_shift = shift;
 }
 
 MAX_NUM_SEQ_TEMPLATE_HELPER(COORD_DECLARE_COORD_TEMPLATE);
