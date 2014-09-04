@@ -30,7 +30,7 @@ else
 endif
 
 ifdef OPTIMIZE
-    CPPFLAGS += -O2
+    CPPFLAGS += -O3
 else
     CPPFLAGS += -O0
 endif

@@ -13,9 +13,6 @@
 
 using namespace std;
 
-#pragma GCC push_options
-#pragma GCC optimize ("unroll-loops")
-
 int hash_shift = HASH_SHIFT;
 hashType hash_type = HashFZorder;
 
@@ -238,5 +235,3 @@ void Coord_configure_hash(hashType type, int shift)
 }
 
 MAX_NUM_SEQ_TEMPLATE_HELPER(COORD_DECLARE_COORD_TEMPLATE);
-
-#pragma GCC pop_options

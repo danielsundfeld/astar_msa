@@ -7,9 +7,6 @@
 
 #include "Coord.h"
 
-#pragma GCC push_options
-#pragma GCC optimize ("unroll-loops")
-
 //! Construct a Coord<N> with N dimensions initialized as 'init'
 template < int N >
 Coord<N>::Coord(const int init)
@@ -131,5 +128,3 @@ template std::ostream& operator<< < X >(std::ostream&, Coord< X > const&); \
 
 MAX_NUM_SEQ_TEMPLATE_HELPER(COORD_DECLARE_FRIEND);
 MAX_NUM_SEQ_TEMPLATE_HELPER(COORD_DECLARE_COORD_TEMPLATE);
-
-#pragma GCC pop_options
