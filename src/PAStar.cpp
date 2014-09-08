@@ -21,6 +21,11 @@ PAStar::PAStar(const Node &node_zero)
   nodes_reopen { },
   final_node(0)
 {
+    std::cout << "Running PAStar with: "
+              << THREADS_NUM << " threads, "
+              << hash_name_pretty << " hash, "
+              << HASH_SHIFT << " shift.\n";
+
     end_cond = false;
     sync_count = 0;
 

@@ -8,6 +8,7 @@
 #include <limits>
 
 #include "Coord.h"
+#include "CoordHash.h"
 
 //! Return the sum of elements
 unsigned int Coord::get_sum() const
