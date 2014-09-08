@@ -33,7 +33,7 @@ ifdef NO_LIB_BOOST
     COMMON_CPP_SRCS += MemoryWatcher.cpp
 endif
 
-ifdef RELEASE
+ifndef DEBUG
     OPTIMIZE = yes
     LDFLAGS += -s
 else
