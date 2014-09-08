@@ -22,7 +22,7 @@ ifdef NO_LIB_BOOST
     CPPFLAGS += -DNO_LIB_BOOST
 endif
 
-ifdef RELEASE
+ifndef DEBUG
     OPTIMIZE = yes
     LDFLAGS += -s
 else
