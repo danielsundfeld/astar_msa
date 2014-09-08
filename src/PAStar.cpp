@@ -20,6 +20,11 @@ PAStar<N>::PAStar(const Node<N> &node_zero, const struct PAStarOpt &opt)
   nodes_count { },
   nodes_reopen { }
 {
+    std::cout << "Running PAStar with: "
+              << opt.threads_num << " threads, "
+              << Coord<N>::get_hash_name() << " hash, "
+              << Coord<N>::get_hash_shift() << " shift.\n";
+
     end_cond = false;
     sync_count = 0;
     final_node.set_max();
