@@ -15,6 +15,12 @@ using namespace std;
 
 int hash_shift = HASH_SHIFT;
 hashType hash_type = HashFZorder;
+const char* const hash_name_pretty[] = {
+    "Full-Zorder",
+    "Partial-Zorder",
+    "Full-Sum",
+    "Partial-Sum",
+};
 
 //! Return the sum of elements
 template < int N >
@@ -225,6 +231,18 @@ unsigned int Coord<N>::get_id(const int size) const
             return get_id_shifted<1>(size);
     }
     return -1;
+}
+
+template < int N >
+const char* Coord<N>::get_hash_name()
+{
+    return hash_name_pretty[hash_type];
+}
+
+template < int N >
+int Coord<N>::get_hash_shift()
+{
+    return hash_shift;
 }
 
 //! Configure \a shift and \a type as hash parameter

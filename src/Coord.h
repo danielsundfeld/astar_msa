@@ -16,7 +16,8 @@
 template < int N > class Coord;
 template < int N > std::ostream& operator<< (std::ostream &lhs, const Coord<N> &rhs);
 
-enum hashType { HashFZorder, HashPZorder, HashFSum, HashPSum };
+// Change hash_name_pretty array if add new
+enum hashType { HashFZorder, HashPZorder, HashFSum, HashPSum, HashLast };
 
 template < int N >
 class Coord {
@@ -36,6 +37,10 @@ class Coord {
 
         Coord neigh(int n) const;
         Coord parent(int n) const;
+
+        // CoordHash configuration getters
+        static const char* get_hash_name();
+        static int get_hash_shift();
 
         // CoordHash functions helpers
         unsigned int get_sum() const;
