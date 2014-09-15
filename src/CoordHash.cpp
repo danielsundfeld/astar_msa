@@ -171,8 +171,9 @@ unsigned int Coord<N>::get_id_shifted(const int size) const
         case HashPZorder:
             return part_z_order_hash<Shift>(size);
         case HashFZorder:
-        default:
             return z_order_hash<Shift>(size);
+        default:
+            return z_order_hash_slow<Shift>(size);
     }
 }
 

@@ -169,12 +169,12 @@ void test_all_bit_hash_zorder()
             c[j] = i;
 
             hash_not_zero = c.get_z_order_curve();
-            cout << "Coordinate:" << c << " curve: " << hash_not_zero << " (" << c.z_order_hash_slow(THREADS) << '/' << c.z_order_hash(THREADS) << ')' << endl;
-            if (c.z_order_hash_slow(THREADS) != c.z_order_hash(THREADS))
+            cout << "Coordinate:" << c << " curve: " << hash_not_zero << " (" << c.z_order_hash_slow<HASH_SHIFT>(THREADS) << '/' << c.z_order_hash<HASH_SHIFT>(THREADS) << ')' << endl;
+            if (c.z_order_hash_slow<HASH_SHIFT>(THREADS) != c.z_order_hash<HASH_SHIFT>(THREADS))
             {
                 cout << "Bug at zorder_hash: " << c << endl;
-                cout << "Slow: " << c.z_order_hash_slow(THREADS) << endl;
-                cout << "Fast: " << c.z_order_hash(THREADS) << endl;
+                cout << "Slow: " << c.z_order_hash_slow<HASH_SHIFT>(THREADS) << endl;
+                cout << "Fast: " << c.z_order_hash<HASH_SHIFT>(THREADS) << endl;
                 cout << endl;
             }
         }
