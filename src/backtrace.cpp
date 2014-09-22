@@ -4,8 +4,8 @@
  */
 #include <iostream>
 #include <limits>
+#include <list>
 #include <map>
-#include <stack>
 #include <sys/ioctl.h>
 #include <unistd.h>
 
@@ -35,14 +35,14 @@ int get_print_size()
 /*!
  * Using the last node on \a ClosedList do a backtrace, verifing
  * gaps, matches and mismatches, saving characteres o the
- * \a backstrace_stack.
+ * \a backstrace_alignment.
  * The \a ClosedList is an array with size \a list_size
  *
- * At the end of the process, \a backstrace_stack contains the
+ * At the end of the process, \a alignments contains the
  * answer for every sequence.
  */
 template <int N>
-void backtrace_create_stack(std::stack<char> *backtrace_stack, std::map<Coord<N>, Node<N> > *ClosedList, int list_size)
+void backtrace_create_alignment(std::list<char> *alignments, std::map<Coord<N>, Node<N> > *ClosedList, int list_size)
 {
     Sequences *seq = Sequences::getInstance();
 
@@ -59,7 +59,7 @@ void backtrace_create_stack(std::stack<char> *backtrace_stack, std::map<Coord<N>
                 c = seq->get_seq(i)[current.pos[i] - 1];
             else
                 c = '-';
-            backtrace_stack[i].push(c);
+            alignments[i].push_front(c);
         }
         id = current.get_parent().get_id(list_size);
         current = ClosedList[id][current.get_parent()];
@@ -67,25 +67,25 @@ void backtrace_create_stack(std::stack<char> *backtrace_stack, std::map<Coord<N>
 }
 
 /*!
- * Print the answer in \a backstrace_stack. Use a good lenght to print
+ * Print the answer in \a alignment. Use a good lenght to print
  * considering the current terminal (linux-only).
  */
 template <int N>
-void backtrace_print_stack(std::stack<char> *backtrace_stack)
+void backtrace_print_alignment(std::list<char> *alignments)
 {
     int size = get_print_size();
 
-    while (!backtrace_stack[0].empty())
+    while (!alignments[0].empty())
     {
         std::cout << std::endl;
         for (int j = 0; j < N; j++)
         {
             for (int i = 0; i < size; i++)
             {
-                if (backtrace_stack[j].empty())
+                if (alignments[j].empty())
                     break;
-                std::cout << backtrace_stack[j].top();
-                backtrace_stack[j].pop();
+                std::cout << alignments[j].front();
+                alignments[j].pop_front();
             }
             std::cout << std::endl;
         }
@@ -99,10 +99,10 @@ void backtrace_print_stack(std::stack<char> *backtrace_stack)
 template <int N>
 void backtrace(std::map< Coord<N>, Node<N> > *ClosedList, int list_size)
 {
-    std::stack<char> backtrace_stack[N];
+    std::list<char> alignments[N];
 
-    backtrace_create_stack<N>(backtrace_stack, ClosedList, list_size);
-    backtrace_print_stack<N>(backtrace_stack);
+    backtrace_create_alignment<N>(alignments, ClosedList, list_size);
+    backtrace_print_alignment<N>(alignments);
 }
 
 #define DECLARE_BACKTRACE_TEMPLATE( X ) \
