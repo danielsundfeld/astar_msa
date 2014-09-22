@@ -3,6 +3,7 @@
  * \copyright MIT License
  */
 #include <iostream>
+#include <iomanip>
 #include <limits>
 #include <list>
 #include <map>
@@ -67,6 +68,40 @@ void backtrace_create_alignment(std::list<char> *alignments, std::map<Coord<N>, 
 }
 
 /*!
+ * Print the similarity of the sequences in \a alignemnts
+ */
+template <int N>
+void backtrace_print_similarity(std::list<char> *alignments)
+{
+    // all alignments[i] have same size
+    int total = alignments[0].size() * N;
+    int equal = 0;
+
+    std::list<char>::iterator its[N];
+    for (int i = 0; i < N; ++i)
+        its[i] = alignments[i].begin();
+
+    while (its[0] != alignments[0].end())
+    {
+        for (int i = 0; i < N; ++i)
+        {
+            for (int j = i + 1; j < N; ++j)
+            {
+                if (*its[i] == *its[j])
+                    ++equal;
+            }
+        }
+
+        for (int i = 0; i < N; ++i)
+            ++its[i];
+    }
+    float percent = (equal * 100) / (float) total;
+    std::cout << "Similarity: "
+              << std::fixed << std::setprecision(2)
+              << percent << "\%" << std::endl;
+}
+
+/*!
  * Print the answer in \a alignment. Use a good lenght to print
  * considering the current terminal (linux-only).
  */
@@ -102,6 +137,7 @@ void backtrace(std::map< Coord<N>, Node<N> > *ClosedList, int list_size)
     std::list<char> alignments[N];
 
     backtrace_create_alignment<N>(alignments, ClosedList, list_size);
+    backtrace_print_similarity<N>(alignments);
     backtrace_print_alignment<N>(alignments);
 }
 
