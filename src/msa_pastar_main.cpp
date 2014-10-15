@@ -7,7 +7,7 @@
 #include <iostream>
 
 #include "HeuristicHPair.h"
-#include "max_seq_template_helper.h"
+#include "max_seq_helper.h"
 #include "msa_options.h"
 #include "PAStar.h"
 #include "Sequences.h"
@@ -25,7 +25,7 @@ int pa_star_run_core(const PAStarOpt &opt)
     std::cout << "Performing search with Parallel A-Star.\n";
     switch (Sequences::get_seq_num())
     {
-        MAX_NUM_SEQ_TEMPLATE_HELPER( RUN_PASTAR );
+        MAX_NUM_SEQ_HELPER( RUN_PASTAR );
         default:
             std::cerr << "Fatal error: Invalid number of sequences: " << Sequences::get_seq_num() << std::endl;
     }

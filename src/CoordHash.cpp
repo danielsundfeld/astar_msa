@@ -253,4 +253,4 @@ void Coord_configure_hash(hashType type, int shift)
     hash_shift = shift;
 }
 
-MAX_NUM_SEQ_TEMPLATE_HELPER(COORD_DECLARE_COORD_TEMPLATE);
+MAX_NUM_SEQ_HELPER(COORD_DECLARE_COORD_TEMPLATE);

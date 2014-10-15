@@ -145,4 +145,4 @@ void backtrace(std::map< Coord<N>, Node<N> > *ClosedList, int list_size)
 #define DECLARE_BACKTRACE_TEMPLATE( X ) \
 template void backtrace< X >(std::map< Coord< X >, Node< X > >*ClosedList, int list_size); \
 
-MAX_NUM_SEQ_TEMPLATE_HELPER(DECLARE_BACKTRACE_TEMPLATE);
+MAX_NUM_SEQ_HELPER(DECLARE_BACKTRACE_TEMPLATE);

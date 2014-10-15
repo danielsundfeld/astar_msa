@@ -87,4 +87,4 @@ int a_star(const Node<N> &node_zero, bool(*is_final)(const Coord<N> &c))
 #define A_STAR_DECLARE_TEMPLATE( X ) \
 template int a_star< X >(const Node< X > &node_zero, bool(*is_final)(const Coord< X > &c)); \
 
-MAX_NUM_SEQ_TEMPLATE_HELPER(A_STAR_DECLARE_TEMPLATE);
+MAX_NUM_SEQ_HELPER(A_STAR_DECLARE_TEMPLATE);

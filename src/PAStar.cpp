@@ -367,4 +367,4 @@ int PAStar<N>::pa_star(const Node<N> &node_zero, bool(*is_final)(const Coord<N> 
 #define PASTAR_DECLARE_TEMPLATE( X ) \
 template class PAStar< X >; \
 
-MAX_NUM_SEQ_TEMPLATE_HELPER(PASTAR_DECLARE_TEMPLATE);
+MAX_NUM_SEQ_HELPER(PASTAR_DECLARE_TEMPLATE);

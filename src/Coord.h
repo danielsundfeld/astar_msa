@@ -11,7 +11,7 @@
 #include <vector>
 
 #include "CoordHash.h"
-#include "max_seq_template_helper.h"
+#include "max_seq_helper.h"
 
 template < int N > class Coord;
 template < int N > std::ostream& operator<< (std::ostream &lhs, const Coord<N> &rhs);

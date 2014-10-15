@@ -98,4 +98,4 @@ int HeuristicHPair::calculate_h(const Coord<N> &c) const
 #define DECLARE_TEMPLATE( X ) \
 template int HeuristicHPair::calculate_h< X >(Coord< X > const&) const;
 
-MAX_NUM_SEQ_TEMPLATE_HELPER(DECLARE_TEMPLATE);
+MAX_NUM_SEQ_HELPER(DECLARE_TEMPLATE);

@@ -8,7 +8,7 @@
 
 #include "AStar.h"
 #include "HeuristicHPair.h"
-#include "max_seq_template_helper.h"
+#include "max_seq_helper.h"
 #include "msa_options.h"
 #include "Sequences.h"
 #include "read_fasta.h"
@@ -25,7 +25,7 @@ int a_star_run_core()
     std::cout << "Performing search with Serial A-Star.\n";
     switch (Sequences::get_seq_num())
     {
-        MAX_NUM_SEQ_TEMPLATE_HELPER( RUN_ASTAR );
+        MAX_NUM_SEQ_HELPER( RUN_ASTAR );
         default:
             std::cerr << "Fatal error: Invalid number of sequences: " << Sequences::get_seq_num() << std::endl;
     }
