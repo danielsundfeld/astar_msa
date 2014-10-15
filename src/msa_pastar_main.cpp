@@ -7,6 +7,7 @@
 #include <iostream>
 
 #include "HeuristicHPair.h"
+#include "max_seq_template_helper.h"
 #include "msa_options.h"
 #include "PAStar.h"
 #include "Sequences.h"
@@ -16,25 +17,15 @@ int pa_star_run_core(const PAStarOpt &opt)
 {
     HeuristicHPair::getInstance()->init();
 
+    // This macro is expanded to every supported number of sequences
+    #define RUN_PASTAR(X) \
+        case X : \
+            return PAStar< X >::pa_star(Sequences::get_initial_node< X >(), Sequences::is_final, opt);
+
     std::cout << "Performing search with Parallel A-Star.\n";
     switch (Sequences::get_seq_num())
     {
-        case 3:
-            return PAStar<3>::pa_star(Sequences::get_initial_node<3>(), Sequences::is_final, opt);
-        case 4:
-            return PAStar<4>::pa_star(Sequences::get_initial_node<4>(), Sequences::is_final, opt);
-        case 5:
-            return PAStar<5>::pa_star(Sequences::get_initial_node<5>(), Sequences::is_final, opt);
-        case 6:
-            return PAStar<6>::pa_star(Sequences::get_initial_node<6>(), Sequences::is_final, opt);
-        case 7:
-            return PAStar<7>::pa_star(Sequences::get_initial_node<7>(), Sequences::is_final, opt);
-        case 8:
-            return PAStar<8>::pa_star(Sequences::get_initial_node<8>(), Sequences::is_final, opt);
-        case 9:
-            return PAStar<9>::pa_star(Sequences::get_initial_node<9>(), Sequences::is_final, opt);
-        case 10:
-            return PAStar<10>::pa_star(Sequences::get_initial_node<10>(), Sequences::is_final, opt);
+        MAX_NUM_SEQ_TEMPLATE_HELPER( RUN_PASTAR );
         default:
             std::cerr << "Fatal error: Invalid number of sequences: " << Sequences::get_seq_num() << std::endl;
     }

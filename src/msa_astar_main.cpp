@@ -8,32 +8,24 @@
 
 #include "AStar.h"
 #include "HeuristicHPair.h"
+#include "max_seq_template_helper.h"
 #include "msa_options.h"
+#include "Sequences.h"
 #include "read_fasta.h"
 
 int a_star_run_core()
 {
     HeuristicHPair::getInstance()->init();
 
+    // This macro is expanded to every supported number of sequences
+    #define RUN_ASTAR(X) \
+        case X : \
+            return a_star< X >(Sequences::get_initial_node< X >(), Sequences::is_final);
+
     std::cout << "Performing search with Serial A-Star.\n";
     switch (Sequences::get_seq_num())
     {
-        case 3:
-            return a_star<3>(Sequences::get_initial_node<3>(), Sequences::is_final);
-        case 4:
-            return a_star<4>(Sequences::get_initial_node<4>(), Sequences::is_final);
-        case 5:
-            return a_star<5>(Sequences::get_initial_node<5>(), Sequences::is_final);
-        case 6:
-            return a_star<6>(Sequences::get_initial_node<6>(), Sequences::is_final);
-        case 7:
-            return a_star<7>(Sequences::get_initial_node<7>(), Sequences::is_final);
-        case 8:
-            return a_star<8>(Sequences::get_initial_node<8>(), Sequences::is_final);
-        case 9:
-            return a_star<9>(Sequences::get_initial_node<9>(), Sequences::is_final);
-        case 10:
-            return a_star<10>(Sequences::get_initial_node<10>(), Sequences::is_final);
+        MAX_NUM_SEQ_TEMPLATE_HELPER( RUN_ASTAR );
         default:
             std::cerr << "Fatal error: Invalid number of sequences: " << Sequences::get_seq_num() << std::endl;
     }
