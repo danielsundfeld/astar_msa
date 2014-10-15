@@ -74,7 +74,7 @@ template <int N>
 void backtrace_print_similarity(std::list<char> *alignments)
 {
     // all alignments[i] have same size
-    int total = alignments[0].size() * N;
+    int total = 0;
     int equal = 0;
 
     std::list<char>::iterator its[N];
@@ -89,6 +89,7 @@ void backtrace_print_similarity(std::list<char> *alignments)
             {
                 if (*its[i] == *its[j])
                     ++equal;
+                ++total;
             }
         }
 
