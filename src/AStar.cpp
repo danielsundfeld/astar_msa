@@ -13,6 +13,7 @@
 #include "Coord.h"
 #include "Node.h"
 #include "PriorityList.h"
+#include "TimeCounter.h"
 
 /*!
  * A classic A-Star implentation resume:
@@ -42,6 +43,7 @@ int a_star(const Node<N> &node_zero, bool(*is_final)(const Coord<N> &c))
     PriorityList<N> OpenList;
     std::map< Coord<N>, Node<N> > ClosedList;
     std::vector< Node<N> > neigh;
+    TimeCounter t("\nA-Star running time: ");
 
     OpenList.enqueue(node_zero);
 

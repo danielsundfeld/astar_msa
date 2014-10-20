@@ -62,6 +62,7 @@ COMMON_CPP_SRCS += \
     PairAlign.cpp \
     Sequences.cpp \
     SingletonKeep.cpp \
+    TimeCounter.cpp \
 
 ASTAR_SRCS = \
     AStar.cpp \

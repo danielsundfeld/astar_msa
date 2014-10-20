@@ -13,6 +13,7 @@
 #include "Coord.h"
 #include "Node.h"
 #include "PAStar.h"
+#include "TimeCounter.h"
 
 template < int N >
 PAStar<N>::PAStar(const Node<N> &node_zero, const struct PAStarOpt &opt)
@@ -352,6 +353,8 @@ int PAStar<N>::pa_star(const Node<N> &node_zero, bool(*is_final)(const Coord<N> 
 
     PAStar<N> pastar_instance(node_zero, options);
     std::vector<std::thread> threads;
+    TimeCounter t("\nPA-Star running time: "); //The order of creating this object is very important
+
     // Create threads
     for (int i = 0; i < options.threads_num; ++i)
         threads.push_back(std::thread(&PAStar::worker, &pastar_instance, i, is_final));
