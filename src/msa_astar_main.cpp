@@ -20,7 +20,7 @@ int a_star_run_core()
     // This macro is expanded to every supported number of sequences
     #define RUN_ASTAR(X) \
         case X : \
-            return a_star< X >(Sequences::get_initial_node< X >(), Sequences::is_final);
+            return a_star< X >(Sequences::get_initial_node< X >(), Sequences::get_final_coord< X >());
 
     std::cout << "Performing search with Serial A-Star.\n";
     switch (Sequences::get_seq_num())

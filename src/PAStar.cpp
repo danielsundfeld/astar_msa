@@ -143,7 +143,7 @@ void PAStar<N>::sync_threads()
 
 //! Execute the pa_star algorithm until all nodes expand the same final node
 template < int N >
-void PAStar<N>::worker_inner(int tid, bool(*is_final)(const Coord<N> &c))
+void PAStar<N>::worker_inner(int tid, const Coord<N> &coord_final)
 {
     Node<N> current;
     std::vector< Node<N> > neigh[m_options.threads_num];
@@ -176,7 +176,7 @@ void PAStar<N>::worker_inner(int tid, bool(*is_final)(const Coord<N> &c))
         //std::cout << "[" << tid << "] Opening node:\t" << current << std::endl;
         ClosedList[tid][current.pos] = current;
 
-        if (is_final(current.pos))
+        if (current.pos == coord_final)
         {
             process_final_node(tid, current);
             continue;
@@ -287,13 +287,13 @@ bool PAStar<N>::check_stop(int tid)
 
 //! Execute a worker thread. This thread have id \a tid
 template < int N >
-int PAStar<N>::worker(int tid, bool(*is_final)(const Coord<N> &c))
+int PAStar<N>::worker(int tid, const Coord<N> &coord_final)
 {
     set_affinity(tid);
     // worker_inner is the main inner loop
     // check_stop syncs and check if is the optimal answer
     do {
-        worker_inner(tid, is_final);
+        worker_inner(tid, coord_final);
     } while (check_stop(tid));
 
     return 0;
@@ -339,7 +339,7 @@ void PAStar<N>::print_answer()
  * Starting function to do a pa_star search.
  */
 template < int N >
-int PAStar<N>::pa_star(const Node<N> &node_zero, bool(*is_final)(const Coord<N> &c), const PAStarOpt &options)
+int PAStar<N>::pa_star(const Node<N> &node_zero, const Coord<N> &coord_final, const PAStarOpt &options)
 {
     if (options.threads_num <= 0)
         throw std::invalid_argument("Invalid number of threads");
@@ -351,7 +351,7 @@ int PAStar<N>::pa_star(const Node<N> &node_zero, bool(*is_final)(const Coord<N> 
 
     // Create threads
     for (int i = 0; i < options.threads_num; ++i)
-        threads.push_back(std::thread(&PAStar::worker, &pastar_instance, i, is_final));
+        threads.push_back(std::thread(&PAStar::worker, &pastar_instance, i, coord_final));
 
     // Wait for the end of all threads
     for (auto& th : threads)

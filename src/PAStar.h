@@ -92,13 +92,13 @@ class PAStar {
         bool check_stop(int tid);
 
         // Worker Functions
-        void worker_inner(int tid, bool(*is_final)(const Coord<N> &c));
-        int worker(int tid, bool(*is_final)(const Coord<N> &c));
+        void worker_inner(int tid, const Coord<N> &coord_final);
+        int worker(int tid, const Coord<N> &coord_final);
 
         // Backtrack
         void print_answer();
 
     public:
-        static int pa_star(const Node<N> &node_zero, bool(*is_final)(const Coord<N> &c), const PAStarOpt &options);
+        static int pa_star(const Node<N> &node_zero, const Coord<N> &coord_final, const PAStarOpt &options);
 };
 #endif

@@ -37,7 +37,7 @@
  *     set neighbor's parent to current
  */
 template <int N>
-int a_star(const Node<N> &node_zero, bool(*is_final)(const Coord<N> &c))
+int a_star(const Node<N> &node_zero, const Coord<N> &coord_final)
 {
     Node<N> current;
     PriorityList<N> OpenList;
@@ -64,7 +64,7 @@ int a_star(const Node<N> &node_zero, bool(*is_final)(const Coord<N> &c))
         //std::cout << "Opening node:\t" << current << std::endl;
         ClosedList[current.pos] = current;
 
-        if (is_final(current.pos))
+        if (current.pos == coord_final)
             break;
 
         current.getNeigh(&neigh);
@@ -87,6 +87,6 @@ int a_star(const Node<N> &node_zero, bool(*is_final)(const Coord<N> &c))
 }
 
 #define A_STAR_DECLARE_TEMPLATE( X ) \
-template int a_star< X >(const Node< X > &node_zero, bool(*is_final)(const Coord< X > &c)); \
+template int a_star< X >(const Node< X > &node_zero, const Coord< X > &coord_final); \
 
 MAX_NUM_SEQ_HELPER(A_STAR_DECLARE_TEMPLATE);

@@ -9,5 +9,5 @@
 #include "Coord.h"
 #include "Node.h"
 
-template <int N> int a_star(const Node<N> &node_zero, bool(*is_final)(const Coord<N> &c));
+template <int N> int a_star(const Node<N> &node_zero, const Coord<N> &coord_final);
 #endif
