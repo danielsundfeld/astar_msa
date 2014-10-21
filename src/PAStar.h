@@ -22,7 +22,7 @@
 #include "PriorityList.h"
 
 #ifndef THREADS_NUM
-    #define THREADS_NUM 4
+    #define THREADS_NUM std::thread::hardware_concurrency()
 #endif
 
 /*!
@@ -31,7 +31,7 @@
 struct PAStarOpt {
     hashType hash_type;
     int hash_shift;
-    int threads_num;
+    unsigned int threads_num;
 
     PAStarOpt()
     {
