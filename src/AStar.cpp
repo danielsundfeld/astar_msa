@@ -67,7 +67,6 @@ int a_star(const Node<N> &node_zero, bool(*is_final)(const Coord<N> &c))
         if (is_final(current.pos))
             break;
 
-        neigh.clear();
         current.getNeigh(&neigh);
         for (typename std::vector< Node<N> >::iterator it = neigh.begin() ; it != neigh.end(); ++it)
         {
@@ -81,6 +80,7 @@ int a_star(const Node<N> &node_zero, bool(*is_final)(const Coord<N> &c))
             OpenList.conditional_enqueue(*it);
             //std::cout << "Adding:\t" << *it << "from\t" << current << std::endl;
         }
+        neigh.clear();
     }
     backtrace<N>(&ClosedList, 1);
     return 0;

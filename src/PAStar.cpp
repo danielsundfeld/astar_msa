@@ -183,8 +183,6 @@ void PAStar<N>::worker_inner(int tid, bool(*is_final)(const Coord<N> &c))
         }
 
         // Expand phase
-        for (int i = 0; i < m_options.threads_num; ++i)
-            neigh[i].clear();
         current.getNeigh(neigh, m_options.threads_num);
 
         // Reconciliation phase
@@ -198,6 +196,7 @@ void PAStar<N>::worker_inner(int tid, bool(*is_final)(const Coord<N> &c))
                 queue_nodes[i].insert(queue_nodes[i].end(), neigh[i].begin(), neigh[i].end());
                 queue_condition[i].notify_one();
             }
+            neigh[i].clear();
         }
     }
     return;
