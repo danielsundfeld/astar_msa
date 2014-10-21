@@ -223,7 +223,7 @@ void PAStar<N>::process_final_node(int tid, const Node<N> &n)
         //std::cout << "[" << tid << "] Possible answer found: " << n << std::endl;
         // Broadcast the node
         final_node = n;
-        final_node_count = 1;
+        final_node_count = 0;
         final_node_lock.unlock();
 
         for (int i = 0; i < m_options.threads_num; i++)
@@ -235,18 +235,13 @@ void PAStar<N>::process_final_node(int tid, const Node<N> &n)
                 queue_condition[i].notify_one();
             }
         }
-        // Process a broadcast node
-        if (final_node_count == m_options.threads_num)
-        {
-            // This node have the highest priority between all Openlist.
-            end_cond = true;
-            return;
-        }
-        return;
     }
-    //std::cout << "[" << tid << "] Agreed with possible answer! " << n << "/" << final_node << std::endl;
-    //if (n != final_node) std::cout << "BUG HERE!\n";
-    final_node_lock.unlock();
+    else
+    {
+       //std::cout << "[" << tid << "] Agreed with possible answer! " << n << "/" << final_node << std::endl;
+       //if (n != final_node) std::cout << "BUG HERE!\n";
+       final_node_lock.unlock();
+    }
 
     // Process a broadcast node
     if (++final_node_count == m_options.threads_num)
