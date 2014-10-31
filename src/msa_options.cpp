@@ -4,6 +4,8 @@
  *
  * \brief Parse the arguments options for the msa programs
  */
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/path.hpp>
 #include <boost/program_options.hpp>
 
 #include "Coord.h"
@@ -87,6 +89,14 @@ int msa_options_core(msa_option_type type, int argc, char *argv[], std::string &
         std::cout << "msa_pastar, version 0.0\n";
         return 1;
     }
+
+    boost::filesystem::path fpath(filename);
+    if (!boost::filesystem::is_regular_file(fpath))
+    {
+        std::cout << "File: " << filename << " is not a regular file.\n";
+        return 1;
+    }
+
     return 0;
 }
 

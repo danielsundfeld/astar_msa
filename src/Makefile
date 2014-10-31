@@ -8,7 +8,7 @@ TARGET      = $(ASTAR_BIN) $(PASTAR_BIN)
 INCDIR       = .
 
 CPPFLAGS   += -W -Wall -std=c++11 -I/usr/include
-LDFLAGS    += -lpthread -lboost_program_options
+LDFLAGS    += -lpthread -lboost_program_options -lboost_system -lboost_filesystem
 
 ifdef THREADS
     CPPFLAGS += -DTHREADS_NUM=$(THREADS)
