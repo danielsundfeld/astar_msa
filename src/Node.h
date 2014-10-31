@@ -18,12 +18,6 @@ template < int N > struct change_node;
 template < int N >
 class Node {
     friend class change_node< N >;
-    private:
-        int m_g; //!< exact cost of the path from the start
-        int parenti; //!< Integer representing the parent
-        bool borderCheck(const Coord<N> &c) const;
-        inline int pairCost(const int &neigh_num, const int &mm_cost, const int &s1, const int &s2) const;
-
     public: 
         Coord<N> pos; //!< Multidimensional coordinate of the node
         int m_f; //!< priority
@@ -38,6 +32,12 @@ class Node {
         int get_h() const { return m_f - m_g; }; //!< heuristc estimated cost to the goal
         int get_parenti() const { return parenti; };
         inline Coord<N> get_parent() const { return pos.parent(parenti); };
+
+    private:
+        int m_g; //!< exact cost of the path from the start
+        int parenti; //!< Integer representing the parent
+        bool borderCheck(const Coord<N> &c) const;
+        inline int pairCost(const int &neigh_num, const int &mm_cost, const int &s1, const int &s2) const;
 };
 
 /*!

@@ -15,15 +15,6 @@
 
 class Sequences
 {
-    private:
-        enum seq { MaxSequences = 64 };
-        static unsigned int n_seq;
-        static Sequences *instance;
-        std::vector<std::string> seqs;
-        static int final_coord[MaxSequences];
-
-        Sequences();
-
     public:
         static Sequences *getInstance();
         static void destroyInstance();
@@ -34,5 +25,14 @@ class Sequences
         template <int N> static Coord<N> get_initial_coord();
         template <int N> static Node<N> get_initial_node();
         template <int N> static bool is_final(const Coord<N> &c);
+
+    private:
+        enum seq { MaxSequences = 64 };
+        static unsigned int n_seq;
+        static Sequences *instance;
+        std::vector<std::string> seqs;
+        static int final_coord[MaxSequences];
+
+        Sequences();
 };
 #endif

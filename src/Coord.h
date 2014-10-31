@@ -21,10 +21,6 @@ enum hashType { HashFZorder, HashPZorder, HashFSum, HashPSum, HashLast };
 
 template < int N >
 class Coord {
-    private:
-        uint16_t m_coord[N];
-        template <int Shift> unsigned int get_id_shifted(const int size) const;
-
     public:
         Coord(const int init = 0);
         Coord<N>& operator=(const Coord<N> &rhs);
@@ -56,6 +52,10 @@ class Coord {
 
         // CoordHash main function
         unsigned int get_id(const int size) const;
+
+    private:
+        uint16_t m_coord[N];
+        template <int Shift> unsigned int get_id_shifted(const int size) const;
 };
 
 void Coord_configure_hash(hashType type, int shift);

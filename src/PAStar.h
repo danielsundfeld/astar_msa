@@ -49,6 +49,9 @@ struct PAStarOpt {
 
 template < int N >
 class PAStar {
+    public:
+        static int pa_star(const Node<N> &node_zero, const Coord<N> &coord_final, const PAStarOpt &options);
+
     private:
         // Members
         const PAStarOpt m_options;
@@ -97,8 +100,5 @@ class PAStar {
 
         // Backtrack
         void print_answer();
-
-    public:
-        static int pa_star(const Node<N> &node_zero, const Coord<N> &coord_final, const PAStarOpt &options);
 };
 #endif

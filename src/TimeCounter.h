@@ -13,12 +13,12 @@
 
 class TimeCounter
 {
-    private:
-        std::chrono::high_resolution_clock::time_point m_begin;
-        std::string m_msg;
-
     public:
         TimeCounter(const std::string &msg = "");
         ~TimeCounter();
+
+    private:
+        std::chrono::high_resolution_clock::time_point m_begin;
+        std::string m_msg;
 };
 #endif

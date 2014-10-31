@@ -39,9 +39,6 @@ struct openlist_multiindex {
 
 template <int N>
 class PriorityList {
-    private:
-        typename openlist_multiindex<N>::type m_openlist;
-
     public: 
         bool dequeue(Node<N> &n);
         bool enqueue(const Node<N> &n);
@@ -56,6 +53,9 @@ class PriorityList {
         bool empty() { return m_openlist.empty(); };
 
         void merge(const PriorityList& other);
+
+    private:
+        typename openlist_multiindex<N>::type m_openlist;
 };
 
 template <int N>

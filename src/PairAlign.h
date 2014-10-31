@@ -12,6 +12,14 @@
 typedef std::pair<int,int> Pair;
 
 class PairAlign {
+    public:
+        PairAlign(Pair p, const std::string &s1, const std::string &s2);
+        ~PairAlign();
+        friend std::ostream& operator<<(std::ostream &lhs, const PairAlign &rhs);
+
+        const Pair& getPair() const { return m_par; };
+        int getScore(const int i, const int j) const;
+
     private:
         enum { NoGap, GapX, GapY }; //!< m_affine_matrix values
         int **m_matrix;
@@ -27,13 +35,5 @@ class PairAlign {
         void initAffineMatrix();
         int gapCost(int i, int j, int destination);
         void pairCost(int i, int j, const std::string &s1, const std::string &s2);
-
-    public:
-        PairAlign(Pair p, const std::string &s1, const std::string &s2);
-        ~PairAlign();
-        friend std::ostream& operator<<(std::ostream &lhs, const PairAlign &rhs);
-
-        const Pair& getPair() const { return m_par; };
-        int getScore(const int i, const int j) const;
 };
 #endif

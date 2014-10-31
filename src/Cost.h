@@ -8,13 +8,13 @@
 #ifndef _COST_H
 #define _COST_H
 class Cost {
-    private:
-        static int pam250['Z']['Z'];
-
     public:
         Cost();
         enum { GapExtension = 30, GapOpen = 30, GapGap = GapOpen };
 
         static int cost(const char r, const char l);
+
+    private:
+        static int pam250['Z']['Z'];
 };
 #endif

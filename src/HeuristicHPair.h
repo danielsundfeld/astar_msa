@@ -14,12 +14,6 @@
 
 class HeuristicHPair
 {
-    private:
-        static HeuristicHPair *instance;
-        HeuristicHPair();
-        ~HeuristicHPair();
-        std::vector<PairAlign*> mAligns;
-
     public:
         static HeuristicHPair* getInstance();
         static void destroyInstance();
@@ -28,5 +22,11 @@ class HeuristicHPair
 
         void init();
         template <int N> int calculate_h(const Coord<N> &c) const;
+
+    private:
+        static HeuristicHPair *instance;
+        HeuristicHPair();
+        ~HeuristicHPair();
+        std::vector<PairAlign*> mAligns;
 };
 #endif
