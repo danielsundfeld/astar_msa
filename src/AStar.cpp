@@ -49,7 +49,6 @@ int a_star(const Node<N> &node_zero, const Coord<N> &coord_final)
 
     while (!OpenList.empty())
     {
-        typename openlist_multiindex<N>::type::iterator o_search;
         typename std::map< Coord<N>, Node<N> >::iterator c_search;
 
         OpenList.dequeue(current);
