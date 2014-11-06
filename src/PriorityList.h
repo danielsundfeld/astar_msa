@@ -3,7 +3,7 @@
  * \author Daniel Sundfeld
  * \copyright MIT License
  *
- * \brief Class that implements an Heuristic Search OpenList
+ * \brief Class that implements a Best-First Search OpenList
  */
 #ifndef _PRIORITY_LIST
 #define _PRIORITY_LIST
