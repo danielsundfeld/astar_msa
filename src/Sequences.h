@@ -20,7 +20,7 @@ class Sequences
         static void destroyInstance();
         int set_seq(const std::string &x);
         const std::string& get_seq(int x) const { return seqs.at(x); };
-        static unsigned int& get_seq_num() { return n_seq; };
+        static int& get_seq_num() { return n_seq; };
         template <int N> static Coord<N> get_final_coord();
         template <int N> static Coord<N> get_initial_coord();
         template <int N> static Node<N> get_initial_node();
@@ -28,7 +28,7 @@ class Sequences
 
     private:
         enum seq { MaxSequences = 64 };
-        static unsigned int n_seq;
+        static int n_seq;
         static Sequences *instance;
         std::vector<std::string> seqs;
         static int final_coord[MaxSequences];

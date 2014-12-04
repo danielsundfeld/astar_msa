@@ -30,7 +30,7 @@ int msa_options_core(msa_option_type type, int argc, char *argv[], std::string &
     // Parallel Options
     po::options_description parallel_options("Parallel Options");
     parallel_options.add_options()
-        ("threads,t", po::value<unsigned int>(&opt.threads_num)->default_value(opt.threads_num),
+        ("threads,t", po::value<int>(&opt.threads_num)->default_value(opt.threads_num),
          "number of threads")
         ("hash_shift,s", po::value<int>(&opt.hash_shift)->default_value(opt.hash_shift),
          "Hash shift option value")

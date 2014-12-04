@@ -16,7 +16,7 @@ Sequences::Sequences()
 }
 
 //! Number of sequences
-unsigned int Sequences::n_seq = 0;
+int Sequences::n_seq = 0;
 //! Singleton instance
 Sequences* Sequences::instance = NULL;
 //! Destination coord

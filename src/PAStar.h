@@ -31,7 +31,7 @@
 struct PAStarOpt {
     hashType hash_type;
     int hash_shift;
-    unsigned int threads_num;
+    int threads_num;
 
     PAStarOpt()
     {

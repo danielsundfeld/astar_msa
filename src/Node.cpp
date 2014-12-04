@@ -69,7 +69,7 @@ template < int N >
 bool Node<N>::borderCheck(const Coord<N> &c) const
 {
     Coord<N> final_coord = Sequences::get_final_coord<N>();
-    for (unsigned int i = 0; i < N; i++)
+    for (int i = 0; i < N; i++)
         if (c[i] > final_coord[i])
             return false;
     return true;
@@ -166,9 +166,9 @@ int Node<N>::getNeigh(std::vector<Node> a[], int vec_size)
        contains first MATCH, second 0, third 2. */
     std::vector< std::tuple<int, int, int> > pairwise_costs;
 
-    for (unsigned int i = 0; i < N - 1; i++)
+    for (int i = 0; i < N - 1; i++)
     {
-        for (unsigned int j = i + 1; j < N; j++)
+        for (int j = i + 1; j < N; j++)
         {
             int cost = Cost::cost(seq->get_seq(i)[pos[i]], seq->get_seq(j)[pos[j]]);
             pairwise_costs.push_back(std::make_tuple(cost, i, j));
