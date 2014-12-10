@@ -218,7 +218,7 @@ void PAStar<N>::process_final_node(int tid, const Node<N> &n)
     if (final_node.get_f() < n.get_f())
         return;
 
-    if (n.pos.get_id(m_options.threads_num) == tid)
+    if (n.pos.get_id(m_options.threads_num) == (unsigned int)tid)
     {
         //std::cout << "[" << tid << "] Possible answer found: " << n << std::endl;
         // Broadcast the node
@@ -278,7 +278,7 @@ bool PAStar<N>::check_stop(int tid)
     if (end_cond == false)
     {
         ClosedList[tid].erase(n.pos);
-        if (n.pos.get_id(m_options.threads_num) == tid)
+        if (n.pos.get_id(m_options.threads_num) == (unsigned int)tid)
             OpenList[tid].conditional_enqueue(n);
         return true;
     }
