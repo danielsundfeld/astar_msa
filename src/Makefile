@@ -84,8 +84,8 @@ PASTAR_OBJS= $(PASTAR_SRCS:.cpp=.o)
 
 all:		$(TARGET)
 $(ASTAR_BIN):	$(COMMON_OBJS) $(ASTAR_OBJS)
-		$(CXX) $(LDFLAGS) $^ -o $@
+		$(CXX) $^ -o $@ $(LDFLAGS)
 $(PASTAR_BIN):	$(COMMON_OBJS) $(PASTAR_OBJS)
-		$(CXX) $(LDFLAGS) $^ -o $@
+		$(CXX) $^ -o $@ $(LDFLAGS)
 clean:
 		rm -f $(TARGET) $(COMMON_OBJS) $(ASTAR_OBJS) $(PASTAR_OBJS)
