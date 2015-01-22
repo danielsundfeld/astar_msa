@@ -9,6 +9,7 @@
 #include "HeuristicHPair.h"
 #include "PairAlign.h"
 #include "Sequences.h"
+#include "TimeCounter.h"
 
 //! Singleton instance
 HeuristicHPair* HeuristicHPair::instance = NULL;
@@ -59,6 +60,7 @@ void HeuristicHPair::setHeuristic(HeuristicHPair *p)
  */
 void HeuristicHPair::init()
 {
+    TimeCounter tp("Phase 1 - init heuristic: ");
     Sequences *seq = Sequences::getInstance();
     int seq_num = Sequences::get_seq_num();
     setHeuristic(instance);

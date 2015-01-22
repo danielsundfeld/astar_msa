@@ -347,7 +347,7 @@ int PAStar<N>::pa_star(const Node<N> &node_zero, const Coord<N> &coord_final, co
 
     PAStar<N> pastar_instance(node_zero, options);
     std::vector<std::thread> threads;
-    TimeCounter t("\nPA-Star running time: "); //The order of creating this object is very important
+    TimeCounter *t = new TimeCounter("Phase 2: PA-Star running time: ");
 
     // Create threads
     for (int i = 0; i < options.threads_num; ++i)
@@ -356,7 +356,7 @@ int PAStar<N>::pa_star(const Node<N> &node_zero, const Coord<N> &coord_final, co
     // Wait for the end of all threads
     for (auto& th : threads)
         th.join();
-
+    delete t;
     pastar_instance.print_answer();
     return 0;
 }

@@ -14,6 +14,7 @@
 #include "Coord.h"
 #include "Node.h"
 #include "Sequences.h"
+#include "TimeCounter.h"
 
 // Decide the best lenght size to print
 int get_print_size()
@@ -135,6 +136,7 @@ void backtrace_print_alignment(std::list<char> *alignments)
 template <int N>
 void backtrace(std::map< Coord<N>, Node<N> > *ClosedList, int list_size)
 {
+    TimeCounter t("Phase 3 - backtrace: ");
     std::list<char> alignments[N];
 
     backtrace_create_alignment<N>(alignments, ClosedList, list_size);
