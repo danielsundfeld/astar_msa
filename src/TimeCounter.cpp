@@ -25,7 +25,7 @@ TimeCounter::~TimeCounter()
     auto m = std::chrono::duration_cast<std::chrono::minutes>(dur).count();
 
     std::cout << m_msg
-         << (m) << "m" << std::fixed
-         << std::setfill('0') << std::setw(2) << s << '.'
+         << std::setfill('0') << std::setw(2) << m << ":"
+         << std::setfill('0') << std::setw(2) << s << "."
          << std::setfill('0') << std::setw(3) << ms << " s" << std::endl;
 }
