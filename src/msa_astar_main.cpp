@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
     AStarOpt opt;
     std::string filename;
 
-    if (msa_astar_options(argc, argv, filename) != 0)
+    if (msa_astar_options(argc, argv, filename, opt) != 0)
         return 1;
     if (read_fasta_file(filename) != 0)
         return 1;

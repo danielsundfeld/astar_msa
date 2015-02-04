@@ -13,6 +13,6 @@ enum msa_option_type {
 };
 
 int msa_pastar_options(int argc, char *argv[], std::string &filename, PAStarOpt &opt);
-int msa_astar_options(int argc, char *argv[], std::string &filename);
+int msa_astar_options(int argc, char *argv[], std::string &filename, AStarOpt &opt);
 int msa_options(msa_option_type type, int argc, char *argv[], std::string &filename, PAStarOpt &opt);
 #endif

@@ -107,10 +107,14 @@ int msa_pastar_options(int argc, char *argv[], std::string &filename, PAStarOpt 
 }
 
 //! Parse the arguments for msa_astar
-int msa_astar_options(int argc, char *argv[], std::string &filename)
+int msa_astar_options(int argc, char *argv[], std::string &filename, AStarOpt &opt)
 {
-    PAStarOpt unused;
-    return msa_options(Msa_Astar, argc, argv, filename, unused);
+    PAStarOpt pastar_opt;
+    int ret;
+
+    ret  = msa_options(Msa_Astar, argc, argv, filename, pastar_opt);
+    opt = pastar_opt.common_options;
+    return ret;
 }
 
 //! Parse the arguments
