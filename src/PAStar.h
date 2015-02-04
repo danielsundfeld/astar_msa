@@ -16,6 +16,7 @@
 #include <thread>
 #include <vector>
 
+#include "AStar.h"
 #include "Coord.h"
 #include "CoordHash.h"
 #include "Node.h"
@@ -29,6 +30,7 @@
  * \brief Arguments for PAStar class
  */
 struct PAStarOpt {
+    AStarOpt common_options;
     hashType hash_type;
     int hash_shift;
     int threads_num;
@@ -39,8 +41,9 @@ struct PAStarOpt {
         hash_shift = HASH_SHIFT;
         threads_num = THREADS_NUM;
     }
-    PAStarOpt(hashType type, int shift, int th)
+    PAStarOpt(AStarOpt &common, hashType type, int shift, int th)
     {
+        common_options = common;
         hash_type = type;
         hash_shift = shift;
         threads_num = th;

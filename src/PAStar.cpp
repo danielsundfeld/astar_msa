@@ -358,6 +358,9 @@ int PAStar<N>::pa_star(const Node<N> &node_zero, const Coord<N> &coord_final, co
         th.join();
     delete t;
     pastar_instance.print_answer();
+
+    if (options.common_options.force_quit)
+        exit(0);
     return 0;
 }
 
