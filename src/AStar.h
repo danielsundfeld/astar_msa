@@ -27,5 +27,5 @@ struct AStarOpt {
     }
 };
 
-template <int N> int a_star(const Node<N> &node_zero, const Coord<N> &coord_final);
+template <int N> int a_star(const Node<N> &node_zero, const Coord<N> &coord_final, const AStarOpt &options);
 #endif

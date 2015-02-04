@@ -37,7 +37,7 @@
  *     set neighbor's parent to current
  */
 template <int N>
-int a_star(const Node<N> &node_zero, const Coord<N> &coord_final)
+int a_star(const Node<N> &node_zero, const Coord<N> &coord_final, const AStarOpt &options)
 {
     Node<N> current;
     PriorityList<N> OpenList;
@@ -82,10 +82,13 @@ int a_star(const Node<N> &node_zero, const Coord<N> &coord_final)
         neigh.clear();
     }
     backtrace<N>(&ClosedList, 1);
+
+    if (options.force_quit)
+        exit(0);
     return 0;
 }
 
 #define A_STAR_DECLARE_TEMPLATE( X ) \
-template int a_star< X >(const Node< X > &node_zero, const Coord< X > &coord_final); \
+template int a_star< X >(const Node< X > &node_zero, const Coord< X > &coord_final, const AStarOpt &options); \
 
 MAX_NUM_SEQ_HELPER(A_STAR_DECLARE_TEMPLATE);
