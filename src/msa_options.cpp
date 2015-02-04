@@ -25,6 +25,8 @@ int msa_options_core(msa_option_type type, int argc, char *argv[], std::string &
     common_options.add_options()
         ("version,v", "print version string")
         ("help,h", "produce help message")
+        ("memory_debug", "memory debug option") /* Force quit should be used only for debug purposes. Check the struct for
+                                   full explanation, it is good to not explain to the users what it does. */
         ;
 
     // Parallel Options
@@ -97,6 +99,10 @@ int msa_options_core(msa_option_type type, int argc, char *argv[], std::string &
         return 1;
     }
 
+    if (!vm.count("memory_debug"))
+        opt.common_options.force_quit = true;
+    else
+        opt.common_options.force_quit = false;
     return 0;
 }
 
