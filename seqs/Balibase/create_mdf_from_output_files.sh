@@ -20,6 +20,7 @@ for i in $FILE; do
         printf '%s        1  %s\n' ${seqs_name[$i]} ${seqs[$i]}
         let i=i+1
     done >> $saida_file
+    echo >> $saida_file
     cat $saida_file
     #echo $seqs_name
     #echo $seqs
