@@ -1,4 +1,5 @@
 #!/bin/bash
+#script that read all outputs after run a test with Balibase sequences
 
 #Change this to where you compile the Balibase bali_score program
 BALIBASE_COMMAND="../../../Downloads/BAliBASE_R9/src/bali_score"

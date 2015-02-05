@@ -1,4 +1,5 @@
 #!/bin/bash
+#Script that helps to download a file from balibase to a fasta format
 
 seqs=$(cat $1 | grep -e "  *1  " | awk '{print $1}')
 

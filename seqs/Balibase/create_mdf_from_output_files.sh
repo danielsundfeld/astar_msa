@@ -1,5 +1,5 @@
 #!/bin/bash
-
+#After running a test with Balibase, parse the results to mdf files so you can compare the baliscore
 FILE=$(find -name *fasta.output)
 
 for i in $FILE; do
