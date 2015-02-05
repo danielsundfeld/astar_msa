@@ -4,7 +4,7 @@
 #SBATCH -n 1              # total number of mpi tasks requested
 #SBATCH -N 1             # total number of mpi tasks requested
 #SBATCH -p largemem     # queue (partition) -- normal, development, etc.
-#SBATCH -t 01:00:00        # run time (hh:mm:ss) - 1.5 hours
+#SBATCH -t 04:00:00        # run time (hh:mm:ss) - 1.5 hours
 #SBATCH --mail-type=begin  # email me when the job starts
 #SBATCH --mail-type=end    # email me when the job finishes
 #SBATCH -A TG-ASC130023
