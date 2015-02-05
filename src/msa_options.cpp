@@ -82,13 +82,19 @@ int msa_options_core(msa_option_type type, int argc, char *argv[], std::string &
         else
             throw po::validation_error(po::validation_error::invalid_option_value, "hash_type");
     }
+    if (vm.count("version")) {
+        if (type == Msa_Pastar)
+            std::cout << "msa_pastar";
+        else if (type == Msa_Astar)
+            std::cout << "msa_astar";
+
+        std::cout << ", version 0.9\n";
+        std::exit(0);
+        return 0;
+    }
     if (vm.count("help") || !vm.count("file.fasta"))
     {
         std::cout << usage << std::endl;
-        return 1;
-    }
-    if (vm.count("version")) {
-        std::cout << "msa_pastar, version 0.0\n";
         return 1;
     }
 
