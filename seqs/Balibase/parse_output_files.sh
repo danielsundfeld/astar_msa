@@ -14,6 +14,7 @@ for i in $(find -name *output | sort -V); do
     p2=$(cat $i | grep "Phase 2" | awk '{print $6}')
     p3=$(cat $i | grep "Phase 3" | awk '{print $5}')
     total=$(cat $i | grep "Elapsed" | awk '{print $8}')
+    memory=$(expr `cat $i | grep "Maximum resident set size" | awk '{print $6}'` / 1024 2>/dev/null)
 
     #created by create_mdf_from_output_files.sh
     msf_file=$(echo $i | sed "s/fasta.output/output.msf/")
@@ -23,5 +24,5 @@ for i in $(find -name *output | sort -V); do
         tc_score=$(${BALIBASE_COMMAND} $ref_msf_file $msf_file | grep auto | awk '{print $4}')
     fi
 
-    echo $name $num_seq $size_smallest $size_biggest $p1 $p2 $p3 $total $sp_score $tc_score
+    echo $name $num_seq $size_smallest $size_biggest $p1 $p2 $p3 $total $memory $sp_score $tc_score
 done
