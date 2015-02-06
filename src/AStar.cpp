@@ -43,7 +43,7 @@ int a_star(const Node<N> &node_zero, const Coord<N> &coord_final, const AStarOpt
     PriorityList<N> OpenList;
     std::map< Coord<N>, Node<N> > ClosedList;
     std::vector< Node<N> > neigh;
-    TimeCounter t("\nA-Star running time: ");
+    TimeCounter t("\nPhase 2: A-Star running time: ");
 
     OpenList.enqueue(node_zero);
 
