@@ -88,7 +88,7 @@ int msa_options_core(msa_option_type type, int argc, char *argv[], std::string &
         else if (type == Msa_Astar)
             std::cout << "msa_astar";
 
-        std::cout << ", version 0.9\n";
+        std::cout << ", version 1.0\n";
         std::exit(0);
         return 0;
     }
