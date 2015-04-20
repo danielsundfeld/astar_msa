@@ -2,13 +2,13 @@
  * \author Daniel Sundfeld
  * \copyright MIT License
  */
+#include <sys/ioctl.h>
+#include <unistd.h>
 #include <iostream>
 #include <iomanip>
 #include <limits>
 #include <list>
 #include <map>
-#include <sys/ioctl.h>
-#include <unistd.h>
 
 #include "backtrace.h"
 #include "Coord.h"

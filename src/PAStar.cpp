@@ -2,10 +2,10 @@
  * \author Daniel Sundfeld
  * \copyright MIT License
  */
+#include <sched.h>
 #include <atomic>
 #include <condition_variable>
 #include <iostream>
-#include <sched.h>
 #include <thread>
 #include <vector>
 
