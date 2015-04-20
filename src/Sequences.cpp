@@ -18,23 +18,13 @@ Sequences::Sequences()
 //! Number of sequences
 int Sequences::n_seq = 0;
 //! Singleton instance
-Sequences* Sequences::instance = NULL;
+Sequences Sequences::instance;
 //! Destination coord
 int Sequences::final_coord[MaxSequences] = {};
-
-//! Return the instance, creates if it doesn't exist
-Sequences* Sequences::getInstance()
-{
-    if (!instance)
-        instance = new Sequences();
-    return instance;
-}
 
 //! Destroy the instance
 void Sequences::destroyInstance()
 {
-    delete instance;
-    instance = NULL;
     n_seq = 0;
 
     for (int i = 0; i < MaxSequences; ++i)

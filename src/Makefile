@@ -61,7 +61,6 @@ COMMON_CPP_SRCS += \
     read_fasta.cpp \
     PairAlign.cpp \
     Sequences.cpp \
-    SingletonKeep.cpp \
     TimeCounter.cpp \
 
 ASTAR_SRCS = \

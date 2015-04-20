@@ -16,8 +16,8 @@
 class Sequences
 {
     public:
-        static Sequences *getInstance();
-        static void destroyInstance();
+        static Sequences* getInstance() { return &instance; };
+        void destroyInstance();
         int set_seq(const std::string &x);
         const std::string& get_seq(int x) const { return seqs.at(x); };
         static int& get_seq_num() { return n_seq; };
@@ -29,7 +29,7 @@ class Sequences
     private:
         enum seq { MaxSequences = 64 };
         static int n_seq;
-        static Sequences *instance;
+        static Sequences instance;
         std::vector<std::string> seqs;
         static int final_coord[MaxSequences];
 

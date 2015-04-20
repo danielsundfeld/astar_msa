@@ -12,7 +12,7 @@
 #include "TimeCounter.h"
 
 //! Singleton instance
-HeuristicHPair* HeuristicHPair::instance = NULL;
+HeuristicHPair HeuristicHPair::instance;
 
 HeuristicHPair::HeuristicHPair()
 {
@@ -22,35 +22,15 @@ HeuristicHPair::HeuristicHPair()
 //! Free all pairwise alignments
 HeuristicHPair::~HeuristicHPair()
 {
-    for (std::vector<PairAlign*>::iterator it = mAligns.begin() ; it != mAligns.end(); ++it)
-        delete *it;
-}
-
-//! Return the current instance. Creates, if needed
-HeuristicHPair* HeuristicHPair::getInstance()
-{
-    if (!instance)
-        instance = new HeuristicHPair();
-    return instance;
+    destroyInstance();
 }
 
 //! Free's the memory, destroying the instance
 void HeuristicHPair::destroyInstance()
 {
-    delete instance;
-    instance = NULL;
-}
-
-//! Return the current heuristic
-HeuristicHPair* HeuristicHPair::getHeuristic()
-{
-    return instance;
-}
-
-//! Set the current heuristic as \a p
-void HeuristicHPair::setHeuristic(HeuristicHPair *p)
-{
-    instance = p;
+    for (std::vector<PairAlign*>::iterator it = mAligns.begin() ; it != mAligns.end(); ++it)
+        delete *it;
+    mAligns.clear();
 }
 
 /*!
@@ -63,7 +43,6 @@ void HeuristicHPair::init()
     TimeCounter tp("Phase 1 - init heuristic: ");
     Sequences *seq = Sequences::getInstance();
     int seq_num = Sequences::get_seq_num();
-    setHeuristic(instance);
 
     std::cout << "Starting pairwise alignments... " << std::flush;
     for (int i = 0; i < seq_num - 1; i++)

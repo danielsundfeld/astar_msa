@@ -15,16 +15,14 @@
 class HeuristicHPair
 {
     public:
-        static HeuristicHPair* getInstance();
-        static void destroyInstance();
-        static HeuristicHPair* getHeuristic();
-        static void setHeuristic(HeuristicHPair *p);
-
+        static HeuristicHPair* getInstance() { return &instance; };
+        void destroyInstance();
+        static HeuristicHPair* getHeuristic() { return &instance; };
         void init();
         template <int N> int calculate_h(const Coord<N> &c) const;
 
     private:
-        static HeuristicHPair *instance;
+        static HeuristicHPair instance;
         HeuristicHPair();
         ~HeuristicHPair();
         std::vector<PairAlign*> mAligns;
