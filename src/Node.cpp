@@ -163,7 +163,7 @@ int Node<N>::getNeigh(std::vector<Node> a[], int vec_size)
     /* Vector of tuple. First field cost, Second field, sequence1.
        third field, sequence2.
        Example, if sequence 0 and 2 matches, one of the vector fields
-       contains first MATCH, second 0, third 2. */
+       contains first MATCH score, second 0, third 2. */
     std::vector< std::tuple<int, int, int> > pairwise_costs;
 
     for (int i = 0; i < N - 1; i++)
