@@ -17,7 +17,6 @@ class HeuristicHPair
     public:
         static HeuristicHPair* getInstance() { return &instance; };
         void destroyInstance();
-        static HeuristicHPair* getHeuristic() { return &instance; };
         void init();
         template <int N> int calculate_h(const Coord<N> &c) const;
 

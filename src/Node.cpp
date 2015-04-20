@@ -34,7 +34,7 @@ Node<N>::Node(const int g, const Coord<N>& pos, const int &parenti)
   parenti(parenti)
 {
     m_g = g;
-    m_f = m_g + HeuristicHPair::getHeuristic()->calculate_h(pos);
+    m_f = m_g + HeuristicHPair::getInstance()->calculate_h(pos);
 }
 
 template < int N >
