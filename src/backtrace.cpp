@@ -100,7 +100,7 @@ void backtrace_print_similarity(std::list<char> *alignments)
     float percent = (equal * 100) / (float) total;
     std::cout << "Similarity: "
               << std::fixed << std::setprecision(2)
-              << percent << "\%" << std::endl;
+              << percent << "%" << std::endl;
 }
 
 /*!
