@@ -247,7 +247,8 @@ int Coord<N>::get_hash_shift()
 }
 
 //! Configure \a shift and \a type as hash parameter
-void Coord_configure_hash(hashType type, int shift)
+template < int N >
+void Coord<N>::configure_hash(hashType type, int shift)
 {
     hash_type = type;
     hash_shift = shift;

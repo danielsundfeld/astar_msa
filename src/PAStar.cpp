@@ -344,7 +344,7 @@ int PAStar<N>::pa_star(const Node<N> &node_zero, const Coord<N> &coord_final, co
 {
     if (options.threads_num <= 0)
         throw std::invalid_argument("Invalid number of threads");
-    Coord_configure_hash(options.hash_type, options.hash_shift);
+    Coord<N>::configure_hash(options.hash_type, options.hash_shift);
 
     PAStar<N> pastar_instance(node_zero, options);
     std::vector<std::thread> threads;

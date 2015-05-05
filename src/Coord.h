@@ -34,9 +34,10 @@ class Coord {
         Coord neigh(int n) const;
         Coord parent(int n) const;
 
-        // CoordHash configuration getters
+        // CoordHash configuration function
         static const char* get_hash_name();
         static int get_hash_shift();
+        static void configure_hash(hashType type, int shift);
 
         // CoordHash functions helpers
         unsigned int get_sum() const;
@@ -57,8 +58,6 @@ class Coord {
         uint16_t m_coord[N];
         template <int Shift> unsigned int get_id_shifted(const int size) const;
 };
-
-void Coord_configure_hash(hashType type, int shift);
 
 // Coord implementation files must call this
 #define COORD_DECLARE_COORD_TEMPLATE( X ) \
