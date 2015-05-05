@@ -17,7 +17,7 @@ template < int N > struct change_node;
 
 template < int N >
 class Node {
-    friend class change_node< N >;
+    friend struct change_node< N >;
     public: 
         Coord<N> pos; //!< Multidimensional coordinate of the node
         int m_f; //!< priority
