@@ -65,7 +65,7 @@ bool PriorityList<N>::dequeue(Node<N> &n)
     if (it == get<priority>(m_openlist).end())
         return false;
     n = *it;
-    m_openlist.get<priority>().erase(it);
+    get<priority>(m_openlist).erase(it);
     return true;
 }
 
