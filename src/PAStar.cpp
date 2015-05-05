@@ -146,7 +146,7 @@ template < int N >
 void PAStar<N>::worker_inner(int tid, const Coord<N> &coord_final)
 {
     Node<N> current;
-    std::vector< Node<N> > neigh[m_options.threads_num];
+    std::vector< Node<N> > *neigh = new std::vector< Node<N> >[m_options.threads_num];
 
     // Loop ended by process_final_node
     while (end_cond == false)
@@ -199,6 +199,7 @@ void PAStar<N>::worker_inner(int tid, const Coord<N> &coord_final)
             neigh[i].clear();
         }
     }
+    delete[] neigh;
     return;
 }
 
