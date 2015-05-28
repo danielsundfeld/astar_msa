@@ -3,12 +3,12 @@
  * \author Daniel Sundfeld
  * \copyright MIT License
  */
+#include "TimeCounter.h"
+
 #include <chrono>
 #include <iostream>
 #include <iomanip>
 #include <string>
-
-#include "TimeCounter.h"
 
 TimeCounter::TimeCounter(const std::string &msg)
 : m_msg(msg)

@@ -3,13 +3,14 @@
  * \author Daniel Sundfeld
  * \copyright MIT License
  */
+#include "Node.h"
+
 #include <algorithm>
 #include <iostream>
 #include <vector>
 
 #include "Cost.h"
 #include "HeuristicHPair.h"
-#include "Node.h"
 #include "Sequences.h"
 
 //! Build a node with zero on all atributes

@@ -2,6 +2,8 @@
  * \author Daniel Sundfeld
  * \copyright MIT License
  */
+#include "PAStar.h"
+
 #include <sched.h>
 #include <atomic>
 #include <condition_variable>
@@ -12,7 +14,6 @@
 #include "backtrace.h"
 #include "Coord.h"
 #include "Node.h"
-#include "PAStar.h"
 #include "TimeCounter.h"
 
 template < int N >

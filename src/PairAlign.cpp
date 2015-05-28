@@ -3,13 +3,14 @@
  * \author Daniel Sundfeld
  * \copyright MIT License
  */
+#include "PairAlign.h"
+
 #include <algorithm>
 #include <iomanip>
 #include <iostream>
 #include <string>
 
 #include "Cost.h"
-#include "PairAlign.h"
 
 /*!
  * Creates a pair align of the sequences \a s1 and \a s2.

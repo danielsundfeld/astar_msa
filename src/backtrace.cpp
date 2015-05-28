@@ -2,6 +2,8 @@
  * \author Daniel Sundfeld
  * \copyright MIT License
  */
+#include "backtrace.h"
+
 #include <sys/ioctl.h>
 #include <unistd.h>
 #include <iostream>
@@ -10,7 +12,6 @@
 #include <list>
 #include <map>
 
-#include "backtrace.h"
 #include "Coord.h"
 #include "Node.h"
 #include "Sequences.h"

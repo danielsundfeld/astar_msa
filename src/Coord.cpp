@@ -3,9 +3,9 @@
  * \author Daniel Sundfeld
  * \copyright MIT License
  */
-#include <iostream>
-
 #include "Coord.h"
+
+#include <iostream>
 
 //! Construct a Coord<N> with N dimensions initialized as 'init'
 template < int N >

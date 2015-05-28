@@ -5,7 +5,7 @@
  *
  * This file implements the Hash Functions to class Coord
  */
-#include <cmath>
+#include <math.h>
 #include <stdexcept>
 #include <limits>
 

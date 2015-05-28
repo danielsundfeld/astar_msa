@@ -3,12 +3,13 @@
  * \author Daniel Sundfeld
  * \copyright MIT License
  */
+#include "Sequences.h"
+
 #include <iostream>
 #include <string>
 
 #include "Coord.h"
 #include "Node.h"
-#include "Sequences.h"
 
 Sequences::Sequences()
 {

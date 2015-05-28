@@ -4,12 +4,13 @@
  *
  * \brief Parse the arguments options for the msa programs
  */
+#include "msa_options.h"
+
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/program_options.hpp>
 
 #include "Coord.h"
-#include "msa_options.h"
 #include "PAStar.h"
 
 namespace po = boost::program_options;

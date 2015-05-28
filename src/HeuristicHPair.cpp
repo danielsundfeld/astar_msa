@@ -3,10 +3,11 @@
  * \author Daniel Sundfeld
  * \copyright MIT License
  */
+#include "HeuristicHPair.h"
+
 #include <iostream>
 
 #include "Coord.h"
-#include "HeuristicHPair.h"
 #include "PairAlign.h"
 #include "Sequences.h"
 #include "TimeCounter.h"

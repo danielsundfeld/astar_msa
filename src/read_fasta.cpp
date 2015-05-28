@@ -2,6 +2,8 @@
  * \author Daniel Sundfeld
  * \copyright MIT License
  */
+#include "read_fasta.h"
+
 #include <fstream>
 #include <iostream>
 #include <string>
