@@ -1,5 +1,17 @@
 # msa_astar and msa_pastar Makefile
 
+# Choose -std=c++11 or -std=c++0x
+CXXVERSION = $(shell $(CXX) -dumpversion | cut -b 1-3)
+ifneq "$(filter g++,$(CXX))" ""
+ifeq "$(CXXVERSION)" "4.6"
+CPPSTD = -std=c++0x
+endif
+endif
+
+ifeq "$(CPPSTD)" ""
+CPPSTD = -std=c++11
+endif
+
 BIN_DIR     = ./bin
 ASTAR_BIN   = $(BIN_DIR)/msa_astar
 PASTAR_BIN  = $(BIN_DIR)/msa_pastar
@@ -9,7 +21,7 @@ TARGET      = $(PASTAR_BIN) $(ASTAR_BIN)
 SRC_DIR     = ./src
 INC_DIR     = ./src
 OBJ_DIR     = ./obj
-CPPFLAGS   += -W -Wall -std=c++11
+CPPFLAGS   += -W -Wall $(CPPSTD)
 LDFLAGS    += -pthread -lstdc++ -lm -lboost_program_options -lboost_system -lboost_filesystem
 
 ifdef THREADS
