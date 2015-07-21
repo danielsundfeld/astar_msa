@@ -14,6 +14,10 @@
 #include "Coord.h"
 #include "PAStar.h"
 
+#if BOOST_VERSION<103200
+#error "This file requires libboost 1_32 or greater"
+#endif
+
 namespace po = boost::program_options;
 
 //! Arguments parse core functions
