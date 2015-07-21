@@ -9,6 +9,7 @@
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/program_options.hpp>
+#include <boost/version.hpp>
 
 #include "Coord.h"
 #include "PAStar.h"
@@ -81,7 +82,7 @@ int msa_options_core(msa_option_type type, int argc, char *argv[], std::string &
         else if (hash_read == "PSUM")
             opt.hash_type = HashPSum;
         else
-            throw po::validation_error(po::validation_error::invalid_option_value, "hash_type");
+            throw msa_options_invalid_value("hash_type");
     }
     if (vm.count("version")) {
         if (type == Msa_Pastar)
@@ -137,10 +138,12 @@ int msa_options(msa_option_type type, int argc, char *argv[], std::string &filen
     {
         return msa_options_core(type, argc, argv, filename, opt);
     }
+#if BOOST_VERSION>104100
     catch (boost::program_options::multiple_occurrences &e)
     {
         std::cerr << "Invalid argument: " << e.what() << " from option: " << e.get_option_name() << std::endl;
     }
+#endif
     catch (std::exception &e)
     {
         std::cerr << "Invalid argument: " << e.what() << std::endl;
