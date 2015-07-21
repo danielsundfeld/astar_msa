@@ -6,6 +6,9 @@ ifneq "$(filter g++,$(CXX))" ""
 ifeq "$(CXXVERSION)" "4.6"
 CPPSTD = -std=c++0x
 endif
+ifeq "$(CXXVERSION)" "4.4"
+$(error Bad $(CXX) version $(CXXVERSION). Atomic operations are required)
+endif
 endif
 
 ifeq "$(CPPSTD)" ""
