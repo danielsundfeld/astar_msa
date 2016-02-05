@@ -39,8 +39,8 @@ the Doxygen documentation by running 'make' command in the
 6) Does it works in other problems?
 Yes, the A* algorithm is usefull for any pathfinding
 problem! If you need to use it in other problem, the
-function is specific for the MSA problem, but the
-PriorityList class can be reused for any kind of graph.
+function 'msa_astar' is specific for the MSA problem, but
+the PriorityList class can be reused for any kind of graph.
 
 You can also implement any 'best-first search' algorithm
 using the PriorityList class, by changing the rules on
