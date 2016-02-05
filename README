@@ -1,0 +1,50 @@
+A-Star MSA Project:
+A really quick introduction! No one reads big READMEs :)
+
+1) How to compile:
+cd astar_msa/
+'make'
+
+This works in all major Linux distributions and the
+'msa_astar' and 'msa_pastar' binaries will be available in
+the 'astar_msa/bin' folder.
+
+2) How to execute:
+- Easy test:
+./bin/msa_astar seqs/3/synthetic_easy.fasta
+
+- Medium test:
+./bin/msa_astar seqs/4/3pmg_ref1.fasta
+
+- Harder test:
+./bin/msa_astar ./seqs/5/EASY_instances/synthetic_easy.fasta
+
+- Running the parallel version in 2 processors:
+./bin/msa_pastar -t 2 ./seqs/4/3pmg_ref1.fasta
+
+3) More options:
+Check ./bin/msa_astar -h or ./bin/msa_pastar -h
+
+4) How to cite us:
+Daniel Sundfeld, George Teodoro, Alba Cristina Magalhaes
+Alves de Melo: Parallel A-Star Multiple Sequence Alignment
+with Locality-Sensitive Hash Functions. CISIS 2015: 342-347
+
+5) Documentation:
+This is a small scientific project, but we have professional
+standards in our code and documentation. You can generate
+the Doxygen documentation by running 'make' command in the
+'astar_msa/doc' folder.
+
+6) Does it works in other problems?
+Yes, the A* algorithm is usefull for any pathfinding
+problem! If you need to use it in other problem, the
+function is specific for the MSA problem, but the
+PriorityList class can be reused for any kind of graph.
+
+You can also implement any 'best-first search' algorithm
+using the PriorityList class, by changing the rules on
+how you insert the nodes in the list.
+
+7) How to contribute with this project:
+Pull requests are highly welcome!
