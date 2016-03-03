@@ -7,6 +7,7 @@
 
 #include <algorithm>
 #include <iostream>
+#include <tuple>
 #include <vector>
 
 #include "Cost.h"
@@ -172,7 +173,8 @@ int Node<N>::getNeigh(std::vector<Node> a[], int vec_size)
         for (int j = i + 1; j < N; j++)
         {
             int cost = Cost::cost(seq->get_seq(i)[pos[i]], seq->get_seq(j)[pos[j]]);
-            pairwise_costs.push_back(std::make_tuple(cost, i, j));
+            std::tuple<int, int, int> total_cost(cost, i, j);
+            pairwise_costs.push_back(total_cost);
         }
     }
 
