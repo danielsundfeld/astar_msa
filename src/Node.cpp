@@ -5,6 +5,7 @@
  */
 #include <algorithm>
 #include <iostream>
+#include <tuple>
 #include <vector>
 
 #include "Cost.h"
@@ -165,7 +166,8 @@ int Node::getNeigh(vector<Node> a[], int vec_size)
         for (unsigned int j = i + 1; j < Sequences::get_seq_num(); j++)
         {
             int cost = Cost::cost(seq->get_seq(i)[pos[i]], seq->get_seq(j)[pos[j]]);
-            pairwise_costs.push_back(make_tuple(cost, i, j));
+            std::tuple<int, int, int> total_cost(cost, i, j);
+            pairwise_costs.push_back(total_cost);
         }
     }
 
