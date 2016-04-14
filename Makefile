@@ -89,11 +89,10 @@ PASTAR_SRCS = \
     $(SRC_DIR)/PAStar.cpp \
 
 INC_PATH += \
-    -I$(INC_DIR) \
-    -I/usr/include \
+    -I$(INC_DIR)\
+    -I/usr/include
 
-CPPFLAGS += \
-    $(INC_PATH) \
+CPPFLAGS += $(INC_PATH)
 
 COMMON_OBJS = $(COMMON_CPP_SRCS:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 ASTAR_OBJS  = $(ASTAR_SRCS:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
