@@ -11,7 +11,7 @@
 #SBATCH -A TG-ASC130023
 module swap intel gcc/4.7.1
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-SEQ="../../seqs/Balibase/Ref1/7_long_medium_id/2ack.fasta"
+SEQ="../../seqs/Benchmark/2ack_cutted.fasta"
 CMD="../../bin/msa_pastar"
 
 THREADS="-t 6"
