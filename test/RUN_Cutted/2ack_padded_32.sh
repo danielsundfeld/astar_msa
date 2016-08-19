@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -J astar           # job name
+#SBATCH -J pastar_2ack_padded_32           # job name
 #SBATCH -o Pipeline.o%j       # output and error file name (%j expands to jobID)
 #SBATCH -n 1              # total number of mpi tasks requested
 #SBATCH -N 1             # total number of mpi tasks requested
@@ -9,13 +9,14 @@
 #SBATCH --mail-type=end    # email me when the job finishes
 #SBATCH -A TG-ASC130023
 module swap intel gcc/4.7.1
-DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-SEQ="../../seqs/Benchmark/2ack_cutted.fasta"
+
+SEQ="../../seqs/Benchmark/2ack_padded.fasta"
 CMD="../../bin/msa_pastar"
 
-THREADS="-t 6"
-OPT="$THREADS"
+THREADS="-t 32"
+HASH="-y FZORDER"
+HASH_SHIFT="-s 12"
+OPT="$THREADS $HASH $HASH_SHIFT"
 
-cd $DIR"/../../seqs/Benchmark"
 
-strace -ve wait4 /usr/bin/time -v $CMD $OPT $SEQ > $SEQ.output 2>&1
+strace -ve wait4 /usr/bin/time -v $CMD $OPT $SEQ >> 2ack_padded_pastar_32.output 2>&1
