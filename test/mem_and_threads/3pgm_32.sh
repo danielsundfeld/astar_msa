@@ -10,14 +10,11 @@
 #SBATCH -A TG-ASC130023
 module swap intel gcc/4.9.1
 
-DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 SEQ="../../seqs/4/3pmg_ref1.fasta"
 CMD="../../bin/msa_pastar"
 
 TH="32"
 THREADS="-t $TH"
 OPT="$THREADS"
-
-#cd "../../seqs/4"
 
 strace -ve wait4 /usr/bin/time -v $CMD $OPT $SEQ >> $SEQ.$TH.output 2>&1

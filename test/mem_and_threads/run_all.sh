@@ -14,6 +14,7 @@ module swap intel gcc/4.9.1
 ./3pgm_02.sh
 ./3pgm_04.sh
 ./3pgm_08.sh
+./3pgm_16.sh
 ./3pgm_32.sh
 ./synth2_01.sh
 ./synth2_02.sh

@@ -10,10 +10,10 @@
 #SBATCH -A TG-ASC130023
 module swap intel gcc/4.9.1
 
-SEQ="../../seqs/5/EASY_instances/synthetic_easy.fasta"
+SEQ="../../seqs/4/3pmg_ref1.fasta"
 CMD="../../bin/msa_pastar"
 
-TH="08"
+TH="16"
 THREADS="-t $TH"
 OPT="$THREADS"
 
