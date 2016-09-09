@@ -61,7 +61,6 @@ class PAStar {
         PriorityList<N> *OpenList;
         std::map< Coord<N>, Node<N> > *ClosedList;
 
-        long long int *nodes_count;
         long long int *nodes_reopen;
         long long int *nodes_open_rewrite;
 

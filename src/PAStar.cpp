@@ -19,7 +19,6 @@
 template < int N >
 PAStar<N>::PAStar(const Node<N> &node_zero, const struct PAStarOpt &opt)
 : m_options(opt),
-  nodes_count { },
   nodes_reopen { }
 {
     std::cout << "Running PAStar with: "
@@ -34,7 +33,6 @@ PAStar<N>::PAStar(const Node<N> &node_zero, const struct PAStarOpt &opt)
     OpenList = new PriorityList<N>[m_options.threads_num]();
     ClosedList = new std::map< Coord<N>, Node<N> >[m_options.threads_num]();
 
-    nodes_count = new long long int[m_options.threads_num]();
     nodes_reopen = new long long int[m_options.threads_num]();
     nodes_open_rewrite = new long long int[m_options.threads_num]();
 
@@ -51,7 +49,6 @@ PAStar<N>::~PAStar()
 {
     delete[] OpenList;
     delete[] ClosedList;
-    delete[] nodes_count;
     delete[] nodes_reopen;
     delete[] nodes_open_rewrite;
     delete[] queue_mutex;
@@ -166,7 +163,6 @@ void PAStar<N>::worker_inner(int tid, const Coord<N> &coord_final)
             wait_queue(tid);
             continue;
         }
-        nodes_count[tid] += 1;
 
         // Check if better node is already found
         if ((c_search = ClosedList[tid].find(current.pos)) != ClosedList[tid].end())
@@ -315,17 +311,18 @@ void PAStar<N>::print_nodes_count()
     std::cout << "Total nodes count:" << std::endl;
     for (int i = 0; i < m_options.threads_num; ++i)
     {
+        long long int total_local = OpenList[i].size() + ClosedList[i].size() + nodes_reopen[i];
         std::cout << "tid " << i
              << "\tOpenList: " << OpenList[i].size()
              << "\tClosedList: " << ClosedList[i].size()
              << "\tReopen: " << nodes_reopen[i]
-             << "\tTotal: " << nodes_count[i]
+             << "\tTotal: " << total_local
              << "\t(Open Rewrite: " << nodes_open_rewrite[i] << ")\n";
         open_list_total += OpenList[i].size();
         closed_list_total += ClosedList[i].size();
         nodes_reopen_total += nodes_reopen[i];
         nodes_open_rewrite_total += nodes_open_rewrite[i];
-        nodes_total += nodes_count[i];
+        nodes_total += total_local;
     }
     std::cout << "Sum"
           << "\tOpenList: " << open_list_total
