@@ -70,23 +70,23 @@ bool PriorityList<N>::dequeue(Node<N> &n)
 }
 
 template <int N>
-bool PriorityList<N>::enqueue(const Node<N> &c)
+bool PriorityList<N>::enqueue(const Node<N> &n)
 {
-    auto it = m_openlist.find(c.pos);
+    auto it = m_openlist.find(n.pos);
     if (it == m_openlist.end())
-        return m_openlist.insert(c).second;
-    return m_openlist.modify(it, change_node<N>(c.get_f(), c.get_g(), c.get_parenti()));
+        return m_openlist.insert(n).second;
+    return m_openlist.modify(it, change_node<N>(n.get_f(), n.get_g(), n.get_parenti()));
 }
 
 template <int N>
-bool PriorityList<N>::conditional_enqueue(const Node<N> &c)
+bool PriorityList<N>::conditional_enqueue(const Node<N> &n)
 {
-    auto it = m_openlist.find(c.pos);
+    auto it = m_openlist.find(n.pos);
     if (it == m_openlist.end())
-        return m_openlist.insert(c).second;
-    if (c.get_f() >= it->get_f())
+        return m_openlist.insert(n).second;
+    if (n.get_f() >= it->get_f())
         return true;
-    return m_openlist.modify(it, change_node<N>(c.get_f(), c.get_g(), c.get_parenti()));
+    return m_openlist.modify(it, change_node<N>(n.get_f(), n.get_g(), n.get_parenti()));
 }
 
 template <int N>
