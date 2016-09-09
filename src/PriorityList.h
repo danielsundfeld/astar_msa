@@ -42,7 +42,7 @@ class PriorityList {
     public: 
         bool dequeue(Node<N> &n);
         bool enqueue(const Node<N> &n);
-        bool conditional_enqueue(const Node<N> &n);
+        bool conditional_enqueue(const Node<N> &n, long long int *count = NULL);
         int get_highest_priority() const;
 
         typename openlist_multiindex<N>::type::iterator find(const Coord<N> &c) const { return m_openlist.find(c); };
@@ -79,13 +79,15 @@ bool PriorityList<N>::enqueue(const Node<N> &n)
 }
 
 template <int N>
-bool PriorityList<N>::conditional_enqueue(const Node<N> &n)
+bool PriorityList<N>::conditional_enqueue(const Node<N> &n, long long int *count)
 {
     auto it = m_openlist.find(n.pos);
     if (it == m_openlist.end())
         return m_openlist.insert(n).second;
     if (n.get_f() >= it->get_f())
         return true;
+    if (count)
+        *count += 1;
     return m_openlist.modify(it, change_node<N>(n.get_f(), n.get_g(), n.get_parenti()));
 }
 

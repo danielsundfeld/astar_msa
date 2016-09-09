@@ -36,6 +36,7 @@ PAStar<N>::PAStar(const Node<N> &node_zero, const struct PAStarOpt &opt)
 
     nodes_count = new long long int[m_options.threads_num]();
     nodes_reopen = new long long int[m_options.threads_num]();
+    nodes_open_rewrite = new long long int[m_options.threads_num]();
 
     queue_mutex = new std::mutex[m_options.threads_num]();
     queue_condition = new std::condition_variable[m_options.threads_num]();
@@ -52,6 +53,7 @@ PAStar<N>::~PAStar()
     delete[] ClosedList;
     delete[] nodes_count;
     delete[] nodes_reopen;
+    delete[] nodes_open_rewrite;
     delete[] queue_mutex;
     delete[] queue_condition;
     delete[] queue_nodes;
@@ -88,7 +90,7 @@ void PAStar<N>::enqueue(int tid, std::vector< Node<N> > &nodes)
             nodes_reopen[tid] += 1;
         }
         //std::cout << Adding:\t" << *it << std::endl;
-        OpenList[tid].conditional_enqueue(*it);
+        OpenList[tid].conditional_enqueue(*it, &(nodes_open_rewrite[tid]));
     }
     return;
 }
@@ -281,7 +283,7 @@ bool PAStar<N>::check_stop(int tid)
     {
         ClosedList[tid].erase(n.pos);
         if (n.pos.get_id(m_options.threads_num) == (unsigned int)tid)
-            OpenList[tid].conditional_enqueue(n);
+            OpenList[tid].conditional_enqueue(n, &(nodes_open_rewrite[tid]));
         return true;
     }
     return false;
@@ -307,26 +309,30 @@ void PAStar<N>::print_nodes_count()
     long long int nodes_total = 0;
     long long int open_list_total = 0;
     long long int closed_list_total = 0;
+    long long int nodes_open_rewrite_total = 0;
     long long int nodes_reopen_total = 0;
 
     std::cout << "Total nodes count:" << std::endl;
     for (int i = 0; i < m_options.threads_num; ++i)
     {
         std::cout << "tid " << i
-             << "\tOpenList:" << OpenList[i].size()
-             << "\tClosedList:" << ClosedList[i].size()
-             << "\tReopen:" << nodes_reopen[i]
-             << "\tTotal: " << nodes_count[i] << std::endl;
+             << "\tOpenList: " << OpenList[i].size()
+             << "\tClosedList: " << ClosedList[i].size()
+             << "\tReopen: " << nodes_reopen[i]
+             << "\tTotal: " << nodes_count[i]
+             << "\t(Open Rewrite: " << nodes_open_rewrite[i] << ")\n";
         open_list_total += OpenList[i].size();
         closed_list_total += ClosedList[i].size();
         nodes_reopen_total += nodes_reopen[i];
+        nodes_open_rewrite_total += nodes_open_rewrite[i];
         nodes_total += nodes_count[i];
     }
     std::cout << "Sum"
-          << "\tOpenList:" << open_list_total
-          << "\tClosedList:" << closed_list_total
-          << "\tReopen:" << nodes_reopen_total
-          << "\tTotal: " << nodes_total << std::endl;
+          << "\tOpenList: " << open_list_total
+          << "\tClosedList: " << closed_list_total
+          << "\tReopen: " << nodes_reopen_total
+          << "\tTotal: " << nodes_total
+          << "\t(Open Rewrite: " << nodes_open_rewrite_total << ")\n";
 }
 
 template < int N >
