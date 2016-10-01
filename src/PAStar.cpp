@@ -18,8 +18,7 @@
 
 template < int N >
 PAStar<N>::PAStar(const Node<N> &node_zero, const struct PAStarOpt &opt)
-: m_options(opt),
-  nodes_reopen { }
+: m_options(opt)
 {
     std::cout << "Running PAStar with: "
               << opt.threads_num << " threads, "
