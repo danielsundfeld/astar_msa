@@ -3,9 +3,14 @@
 #include "read_fasta.h"
 #include "Sequences.h"
 
-int main(void)
+int main(int argc, char *argv[])
 {
-    if (read_fasta_file("arq.fasta"))
+    if (argc < 2)
+    {
+        std::cerr << "Usage: " << argv[0] << " [fasta_file]\n";
+        return -1;
+    }
+    if (read_fasta_file(argv[1]))
     {
         std::cerr << "Error loading fasta arq.fasta\n";
         return -1;

@@ -1,4 +1,4 @@
-TARGET       = node_ops
+TARGET       = fast_test
 
 INCDIR       = ../../src/
 VPATH        = ../../src/
