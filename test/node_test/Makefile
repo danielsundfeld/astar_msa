@@ -1,9 +1,10 @@
 TARGET       = node_ops
 
+BASEDIR      = ../..
 INCDIR       = ../../src/
 VPATH        = ../../src/
 
-CPPFLAGS   += -Wall -std=c++11 -DHASHFZORDER
+CPPFLAGS   += -Wall -std=c++11
 
 ifdef RELEASE
     CPPFLAGS   += -O2
@@ -18,11 +19,12 @@ CPP_SRCS = \
     CoordHash.cpp \
     Cost.cpp \
     fasta_ops.cpp \
-	 HeuristicHPair.cpp \
+    HeuristicHPair.cpp \
     Node.cpp \
-	 PairAlign.cpp \
-    Sequences.cpp \
+    PairAlign.cpp \
     read_fasta.cpp \
+    Sequences.cpp \
+    TimeCounter.cpp \
 
 INCPATH += \
     -I$(INCDIR) \

@@ -1,9 +1,10 @@
 TARGET       = node_ops
 
+BASEDIR      = ../..
 INCDIR       = ../../src/
 VPATH        = ../../src/
 
-CPPFLAGS   += -Wall -std=c++11 -DHASHFZORDER
+CPPFLAGS   += -Wall -std=c++11
 
 ifdef RELEASE
     CPPFLAGS   += -O2
@@ -17,11 +18,12 @@ CPP_SRCS = \
     Coord.cpp \
     CoordHash.cpp \
     Cost.cpp \
-	 HeuristicHPair.cpp \
+    HeuristicHPair.cpp \
     Node.cpp \
     node_ops.cpp \
-	 PairAlign.cpp \
+    PairAlign.cpp \
     Sequences.cpp \
+    TimeCounter.cpp \
 
 INCPATH += \
     -I$(INCDIR) \
@@ -36,4 +38,4 @@ $(TARGET):	$(CPP_OBJS)
 		$(CXX) $(LDFLAGS) $^ -o $@
 clean:
 		rm -f $(TARGET) $(CPP_OBJS)
-		+make -C $(VPATH) $@
+		+make -C $(BASEDIR) $@

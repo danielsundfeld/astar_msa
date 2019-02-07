@@ -2,6 +2,7 @@
 
 TARGET       = sizeof
 
+BASEDIR      = ../..
 INCDIR       = ../../src/
 VPATH        = ../../src/
 
@@ -38,4 +39,4 @@ $(TARGET):	$(CPP_OBJS)
 		$(CXX) $(LDFLAGS) $^ -o $@
 clean:
 		rm -f $(TARGET) $(CPP_OBJS)
-		+make -C $(VPATH) $@
+		+make -C $(BASEDIR) $@

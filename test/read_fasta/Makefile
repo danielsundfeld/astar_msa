@@ -1,5 +1,6 @@
 TARGET       = fast_test
 
+BASEDIR      = ../..
 INCDIR       = ../../src/
 VPATH        = ../../src/
 
@@ -37,4 +38,4 @@ $(TARGET):	$(CPP_OBJS)
 		$(CXX) $(LDFLAGS) $^ -o $@
 clean:
 		rm -f $(TARGET) $(CPP_OBJS)
-		+make -C ../.. $@
+		+make -C $(BASEDIR) $@

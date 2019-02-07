@@ -2,10 +2,11 @@
 
 TARGET       = coord_ops
 
+BASEDIR      = ../..
 INCDIR       = ../../src/
 VPATH        = ../../src/
 
-CPPFLAGS   += -Wall -std=c++11 -DHASHFZORDER
+CPPFLAGS   += -Wall -std=c++11
 
 ifdef RELEASE
     CPPFLAGS   += -O2
@@ -32,4 +33,4 @@ $(TARGET):	$(CPP_OBJS)
 		$(CXX) $(LDFLAGS) $^ -o $@
 clean:
 		rm -f $(TARGET) $(CPP_OBJS)
-		+make -C $(VPATH) $@
+		+make -C $(BASEDIR) $@
