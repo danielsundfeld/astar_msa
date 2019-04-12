@@ -26,9 +26,11 @@ the 'astar_msa/bin' folder.
 Check ./bin/msa_astar -h or ./bin/msa_pastar -h
 
 4) How to cite us:
-Daniel Sundfeld, George Teodoro, Alba Cristina Magalhaes
-Alves de Melo: Parallel A-Star Multiple Sequence Alignment
-with Locality-Sensitive Hash Functions. CISIS 2015: 342-347
+Daniel Sundfeld, Caina Razzolini, George Teodoro, Azzedine
+Boukerche, Alba Cristina Magalhaes Alves de Melo:
+PA-Star: A disk-assisted parallel A-Star strategy with 
+locality-sensitive hash for multiple sequence alignment. 
+J. Parallel Distrib. Comput. 112: 154-165 (2018)
 
 5) Documentation:
 This is a small scientific project, but we have professional
