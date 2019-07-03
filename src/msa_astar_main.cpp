@@ -12,6 +12,7 @@
 #include "msa_options.h"
 #include "Sequences.h"
 #include "read_fasta.h"
+#include "version.h"
 
 int a_star_run_core(const AStarOpt &opt)
 {
@@ -22,7 +23,7 @@ int a_star_run_core(const AStarOpt &opt)
         case X : \
             return a_star< X >(Sequences::get_initial_node< X >(), Sequences::get_final_coord< X >(), opt);
 
-    std::cout << "Performing search with Serial A-Star.\n";
+    std::cout << "Performing search with Serial A-Star (" << astar_version << ")\n";
     switch (Sequences::get_seq_num())
     {
         MAX_NUM_SEQ_HELPER( RUN_ASTAR );

@@ -12,6 +12,7 @@
 #include "PAStar.h"
 #include "Sequences.h"
 #include "read_fasta.h"
+#include "version.h"
 
 int pa_star_run_core(const PAStarOpt &opt)
 {
@@ -22,7 +23,7 @@ int pa_star_run_core(const PAStarOpt &opt)
         case X : \
             return PAStar< X >::pa_star(Sequences::get_initial_node< X >(), Sequences::get_final_coord< X >(), opt);
 
-    std::cout << "Performing search with Parallel A-Star.\n";
+    std::cout << "Performing search with Parallel A-Star (" << astar_version << ")\n";
     switch (Sequences::get_seq_num())
     {
         MAX_NUM_SEQ_HELPER( RUN_PASTAR );
