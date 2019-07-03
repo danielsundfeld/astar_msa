@@ -67,6 +67,8 @@ ifdef PROFILE_INFORMATION
     LDFLAGS += -pg
 endif
 
+VERSION_FILE = src/version.h
+
 COMMON_CPP_SRCS += \
     $(SRC_DIR)/backtrace.cpp \
     $(SRC_DIR)/Coord.cpp \
@@ -98,7 +100,7 @@ COMMON_OBJS = $(COMMON_CPP_SRCS:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 ASTAR_OBJS  = $(ASTAR_SRCS:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 PASTAR_OBJS = $(PASTAR_SRCS:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 
-all:	$(TARGET)
+all:	$(VERSION_FILE) $(TARGET)
 
 $(BIN_DIR):
 	mkdir -p $(BIN_DIR)
@@ -111,6 +113,9 @@ $(COMMON_OBJS):	| $(OBJ_DIR)
 $(ASTAR_OBJS):	| $(OBJ_DIR)
 $(PASTAR_OBJS):	| $(OBJ_DIR)
 
+$(INC_DIR)/version.h:
+	@utils/version.sh
+
 $(ASTAR_BIN):	$(COMMON_OBJS) $(ASTAR_OBJS) | $(BIN_DIR)
 	$(CXX) $^ -o $@ $(LDFLAGS)
 $(PASTAR_BIN):	$(COMMON_OBJS) $(PASTAR_OBJS) | $(BIN_DIR)
@@ -118,4 +123,4 @@ $(PASTAR_BIN):	$(COMMON_OBJS) $(PASTAR_OBJS) | $(BIN_DIR)
 
 .PHONY: clean
 clean:
-	rm -f $(TARGET) $(COMMON_OBJS) $(PASTAR_OBJS) $(ASTAR_OBJS)
+	rm -f $(TARGET) $(COMMON_OBJS) $(PASTAR_OBJS) $(ASTAR_OBJS) $(VERSION_FILE)
