@@ -1,4 +1,4 @@
-# Project Title
+# PA-Star
 
 PA-Star is a software that performs a parallel A-Star search to solve the Multiple Sequence Alignment (MSA) problem. We also developed a serial version (msa\_astar).
 
@@ -30,16 +30,16 @@ In the project we included many examples. By default, you can run msa\_astar for
 
 Few examples:
 ```
-- Easy test:
+#Easy test:
 ./bin/msa_astar seqs/3/synthetic_easy.fasta
 
-- Medium test:
+#Medium test:
 ./bin/msa_astar seqs/4/3pmg_ref1.fasta
 
-- Harder test:
+#Harder test:
 ./bin/msa_pastar ./seqs/5/EASY_instances/synthetic_easy.fasta
 
-- Running the parallel version in 2 processors:
+#Running the parallel version in 2 processors:
 ./bin/msa_pastar -t 2 ./seqs/4/3pmg_ref1.fasta
 ```
 
