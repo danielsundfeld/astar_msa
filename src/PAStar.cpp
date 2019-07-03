@@ -20,7 +20,7 @@ template < int N >
 PAStar<N>::PAStar(const Node<N> &node_zero, const struct PAStarOpt &opt)
 : m_options(opt)
 {
-    std::cout << "Running PAStar with: "
+    std::cout << "Running PA-Star with: "
               << opt.threads_num << " threads, "
               << Coord<N>::get_hash_name() << " hash, "
               << Coord<N>::get_hash_shift() << " shift.\n";
