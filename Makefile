@@ -113,7 +113,7 @@ $(COMMON_OBJS):	| $(OBJ_DIR)
 $(ASTAR_OBJS):	| $(OBJ_DIR)
 $(PASTAR_OBJS):	| $(OBJ_DIR)
 
-$(INC_DIR)/version.h:
+$(VERSION_FILE):
 	@utils/version.sh
 
 $(ASTAR_BIN):	$(COMMON_OBJS) $(ASTAR_OBJS) | $(BIN_DIR)
@@ -123,4 +123,4 @@ $(PASTAR_BIN):	$(COMMON_OBJS) $(PASTAR_OBJS) | $(BIN_DIR)
 
 .PHONY: clean
 clean:
-	rm -f $(TARGET) $(COMMON_OBJS) $(PASTAR_OBJS) $(ASTAR_OBJS) $(VERSION_FILE)
+	rm -f $(TARGET) $(COMMON_OBJS) $(PASTAR_OBJS) $(ASTAR_OBJS)

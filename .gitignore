@@ -1,3 +1,2 @@
 *.o
 *tags
-src/version.h
