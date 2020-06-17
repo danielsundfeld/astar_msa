@@ -10,6 +10,7 @@
 class Cost {
     public:
         Cost();
+        //TODO nucl gap
         enum { GapExtension = 30, GapOpen = 30, GapGap = GapOpen };
 
         //! Do not use char as array subscripts, this enum 'cast' them to integer
@@ -42,9 +43,10 @@ class Cost {
             Z = 'Z'
         };
 
+        static void set_cost_pam250();
+        static void set_cost_nuc();
         static int cost(const char r, const char l);
-
     private:
-        static int pam250['Z']['Z'];
+        static int cost_matrix['Z']['Z'];
 };
 #endif
