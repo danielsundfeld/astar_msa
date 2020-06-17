@@ -12,6 +12,7 @@
 #include <boost/version.hpp>
 
 #include "Coord.h"
+#include "Cost.h"
 #include "PAStar.h"
 
 #if BOOST_VERSION<103200
@@ -24,6 +25,7 @@ namespace po = boost::program_options;
 int msa_options_core(msa_option_type type, int argc, char *argv[], std::string &filename, PAStarOpt &opt)
 {
     const std::string description = "Usage " + std::string(argv[0]) + " [OPTIONS] file.fasta";
+    std::string cost_read;
     std::string hash_read;
 
     // Arguments Options
@@ -31,6 +33,8 @@ int msa_options_core(msa_option_type type, int argc, char *argv[], std::string &
     common_options.add_options()
         ("version,v", "print version string")
         ("help,h", "produce help message")
+        ("cost_type,c", po::value<std::string>(&cost_read)->default_value("PAM250"),
+         "Match and mismatches costs (NUC for nucleotides, PAM250 for proteins) [NUC|PAM250]")
         ("memory_debug", "memory debug option") /* Force quit should be used only for debug purposes. Check the struct for
                                    full explanation, it is good to not explain to the users what it does. */
         ;
@@ -87,6 +91,13 @@ int msa_options_core(msa_option_type type, int argc, char *argv[], std::string &
             opt.hash_type = HashPSum;
         else
             throw msa_options_invalid_value("hash_type");
+    }
+    if (vm.count("cost_type"))
+    {
+        if (cost_read == "PAM250")
+            Cost::set_cost_pam250();
+        else if (cost_read == "NUC")
+            Cost::set_cost_nuc();
     }
     if (vm.count("version")) {
         if (type == Msa_Pastar)
