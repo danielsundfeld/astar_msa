@@ -11,7 +11,7 @@ class Cost {
     public:
         Cost();
         //TODO nucl gap
-        enum { GapExtension = 30, GapOpen = 30, GapGap = GapOpen };
+        enum { GapCost = 30 , GapGap = 30 };
 
         //! Do not use char as array subscripts, this enum 'cast' them to integer
         enum {
