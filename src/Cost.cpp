@@ -247,6 +247,9 @@ void Cost::set_cost_pam250()
     cost_matrix[Y][W] = cost_matrix[W][Y] = 17;
 
     cost_matrix[W][W] = 0;
+
+    GapCost = 30;
+    GapGap = 30;
 }
 
 void Cost::set_cost_nuc()
@@ -280,6 +283,9 @@ void Cost::set_cost_nuc()
     cost_matrix[U][G] = 1;
     cost_matrix[U][T] = 0; //really, nonsense
     cost_matrix[U][U] = 0;
+
+    GapCost = 2;
+    GapGap = 2;
 }
 
 //! Compare \a r and \a l and return the cost.
