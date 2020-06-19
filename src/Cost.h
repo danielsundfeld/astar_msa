@@ -10,8 +10,8 @@
 class Cost {
     public:
         Cost();
-        //TODO nucl gap
-        enum { GapCost = 30 , GapGap = 30 };
+        static int GapCost;
+        static int GapGap;
 
         //! Do not use char as array subscripts, this enum 'cast' them to integer
         enum {

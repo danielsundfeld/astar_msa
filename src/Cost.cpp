@@ -8,6 +8,8 @@
 static Cost c;
 
 int Cost::cost_matrix[Z][Z] = { };
+int Cost::GapCost = 30;
+int Cost::GapGap = 30;
 
 Cost::Cost()
 {
