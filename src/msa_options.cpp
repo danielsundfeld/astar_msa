@@ -13,6 +13,7 @@
 
 #include "Coord.h"
 #include "PAStar.h"
+#include "version.h"
 
 #if BOOST_VERSION<103200
 #error "This file requires libboost 1_32 or greater"
@@ -94,7 +95,7 @@ int msa_options_core(msa_option_type type, int argc, char *argv[], std::string &
         else if (type == Msa_Astar)
             std::cout << "msa_astar";
 
-        std::cout << ", version 1.0\n";
+        std::cout << ", version " << astar_version << std::endl;
         std::exit(0);
         return 0;
     }
