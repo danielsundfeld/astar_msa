@@ -10,4 +10,12 @@ if [ -e .git ]; then
 const std::string astar_version = "$(git describe --always || head -c 32)";
 #endif
 EOT
+else
+    cat <<EOT > $VERSION_FILE
+#ifndef _VERSION_H
+#define _VERSION_H
+
+const std::string astar_version = "v1.1-downloaded";
+#endif
+EOT
 fi
