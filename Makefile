@@ -67,6 +67,10 @@ ifdef PROFILE_INFORMATION
     LDFLAGS += -pg
 endif
 
+ifdef PAIRALIGN
+    CPPFLAGS += -D PAIRALIGN_SCORE
+endif
+
 VERSION_FILE = src/version.h
 
 COMMON_CPP_SRCS += \

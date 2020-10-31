@@ -127,6 +127,9 @@ void PairAlign::Align(const std::string &s1, const std::string &s2)
             pairCost(i, j, s1, s2);
         }
     }
+#ifdef PAIRALIGN_SCORE
+    std::cout << m_matrix[0][0] << std::endl;
+#endif
     //cout << std::endl << *this;
 }
 

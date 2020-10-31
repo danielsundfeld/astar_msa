@@ -46,6 +46,9 @@ void HeuristicHPair::init()
     int seq_num = Sequences::get_seq_num();
 
     std::cout << "Starting pairwise alignments... " << std::flush;
+#ifdef PAIRALIGN_SCORE
+    std::cout << std::endl;
+#endif
     for (int i = 0; i < seq_num - 1; i++)
     {
         for (int j = i + 1; j < seq_num; j++)
