@@ -24,6 +24,7 @@ template < int N >
 class Coord {
     public:
         Coord(const int init = 0);
+        Coord(const Coord &c) { for (int i = 0; i < N; ++i) m_coord[i] = c.m_coord[i]; };
         Coord<N>& operator=(const Coord<N> &rhs);
         friend std::ostream &operator<< <>(std::ostream &lhs, const Coord<N> &rhs);
         bool operator!=(const Coord &rhs) const;
