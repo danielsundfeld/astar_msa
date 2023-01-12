@@ -7,6 +7,7 @@
  */
 #ifndef _COORD_H
 #define _COORD_H
+#include <boost/multi_index/hashed_index.hpp>
 #include <iostream>
 #include <vector>
 
@@ -59,6 +60,14 @@ class Coord {
     private:
         uint16_t m_coord[N];
         template <int Shift> unsigned int get_id_shifted(const int size) const;
+
+        friend inline std::size_t hash_value(const Coord<N> &c)
+        {
+            std::size_t seed = 0;
+            for (int i = 0; i < N; ++i)
+                boost::hash_combine(seed, c.m_coord[i]);
+            return seed;
+        }
 };
 
 // Coord implementation files must call this
