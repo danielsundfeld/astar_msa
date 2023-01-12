@@ -189,16 +189,51 @@ void PAStar<N>::worker_inner(int tid, const Coord<N> &coord_final)
         current.getNeigh(neigh, m_options.threads_num);
 
         // Reconciliation phase
+        // Try 1
+        std::vector<int> missing_threads;
         for (int i = 0; i < m_options.threads_num; i++)
         {
             if (i == tid)
                 enqueue(tid, neigh[i]);
             else if (neigh[i].size() != 0)
             {
-                std::unique_lock<std::mutex> queue_lock(queue_mutex[i]);
+                std::unique_lock<std::mutex> queue_lock(queue_mutex[i], std::defer_lock);
+                if (queue_lock.try_lock())
+                {
+                    queue_nodes[i].insert(queue_nodes[i].end(), neigh[i].begin(), neigh[i].end());
+                    queue_condition[i].notify_one();
+                }
+                else
+                {
+                    missing_threads.push_back(i);
+                    continue;
+                }
+            }
+            neigh[i].clear();
+        }
+        // Try 2
+        std::vector<int> missing_threads2;
+        for (auto &i : missing_threads)
+        {
+            std::unique_lock<std::mutex> queue_lock(queue_mutex[i], std::defer_lock);
+            if (queue_lock.try_lock())
+            {
                 queue_nodes[i].insert(queue_nodes[i].end(), neigh[i].begin(), neigh[i].end());
                 queue_condition[i].notify_one();
             }
+            else
+            {
+                missing_threads2.push_back(i);
+                continue;
+            }
+            neigh[i].clear();
+        }
+        // Try 3
+        for (auto &i : missing_threads2)
+        {
+            std::unique_lock<std::mutex> queue_lock(queue_mutex[i]);
+            queue_nodes[i].insert(queue_nodes[i].end(), neigh[i].begin(), neigh[i].end());
+            queue_condition[i].notify_one();
             neigh[i].clear();
         }
     }
