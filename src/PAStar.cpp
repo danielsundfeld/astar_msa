@@ -6,6 +6,7 @@
 
 #include <sched.h>
 #include <atomic>
+#include <boost/unordered_map.hpp>
 #include <condition_variable>
 #include <iostream>
 #include <thread>
@@ -30,7 +31,7 @@ PAStar<N>::PAStar(const Node<N> &node_zero, const struct PAStarOpt &opt)
     final_node.set_max();
 
     OpenList = new PriorityList<N>[m_options.threads_num]();
-    ClosedList = new std::map< Coord<N>, Node<N> >[m_options.threads_num]();
+    ClosedList = new boost::unordered_map< Coord<N>, Node<N> >[m_options.threads_num]();
 
     nodes_reopen = new long long int[m_options.threads_num]();
     nodes_processed = new long long int[m_options.threads_num]();
@@ -78,7 +79,7 @@ int PAStar<N>::set_affinity(int tid)
 template < int N >
 void PAStar<N>::enqueue(int tid, std::vector< Node<N> > &nodes)
 {
-    typename std::map< Coord<N>, Node<N> >::iterator c_search;
+    typename boost::unordered_map< Coord<N>, Node<N> >::iterator c_search;
 
     for (typename std::vector< Node<N> >::iterator it = nodes.begin() ; it != nodes.end(); ++it)
     {
@@ -155,7 +156,7 @@ void PAStar<N>::worker_inner(int tid, const Coord<N> &coord_final)
     // Loop ended by process_final_node
     while (end_cond == false)
     {
-        typename std::map< Coord<N>, Node<N> >::iterator c_search;
+        typename boost::unordered_map< Coord<N>, Node<N> >::iterator c_search;
 
         // Start phase
         // Reduce the queue

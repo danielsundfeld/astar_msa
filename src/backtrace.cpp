@@ -45,7 +45,7 @@ int get_print_size()
  * answer for every sequence.
  */
 template <int N>
-void backtrace_create_alignment(std::list<char> *alignments, std::map<Coord<N>, Node<N> > *ClosedList, int list_size)
+void backtrace_create_alignment(std::list<char> *alignments, boost::unordered_map<Coord<N>, Node<N> > *ClosedList, int list_size)
 {
     Sequences *seq = Sequences::getInstance();
 
@@ -135,7 +135,7 @@ void backtrace_print_alignment(std::list<char> *alignments)
  * \a ClosedList it backtrace every node until the origin is reached
  */
 template <int N>
-void backtrace(std::map< Coord<N>, Node<N> > *ClosedList, int list_size)
+void backtrace(boost::unordered_map< Coord<N>, Node<N> > *ClosedList, int list_size)
 {
     TimeCounter t("Phase 3 - backtrace: ");
     std::list<char> alignments[N];
@@ -146,6 +146,6 @@ void backtrace(std::map< Coord<N>, Node<N> > *ClosedList, int list_size)
 }
 
 #define DECLARE_BACKTRACE_TEMPLATE( X ) \
-template void backtrace< X >(std::map< Coord< X >, Node< X > >*ClosedList, int list_size); \
+template void backtrace< X >(boost::unordered_map< Coord< X >, Node< X > >*ClosedList, int list_size); \
 
 MAX_NUM_SEQ_HELPER(DECLARE_BACKTRACE_TEMPLATE);

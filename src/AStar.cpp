@@ -7,6 +7,7 @@
  */
 #include "AStar.h"
 
+#include <boost/unordered_map.hpp>
 #include <iostream>
 #include <vector>
 
@@ -42,7 +43,7 @@ int a_star(const Node<N> &node_zero, const Coord<N> &coord_final, const AStarOpt
 {
     Node<N> current;
     PriorityList<N> OpenList;
-    std::map< Coord<N>, Node<N> > ClosedList;
+    boost::unordered_map< Coord<N>, Node<N> > ClosedList;
     std::vector< Node<N> > neigh;
     TimeCounter *t = new TimeCounter("\nPhase 2: A-Star running time: ");
 
@@ -50,7 +51,7 @@ int a_star(const Node<N> &node_zero, const Coord<N> &coord_final, const AStarOpt
 
     while (!OpenList.empty())
     {
-        typename std::map< Coord<N>, Node<N> >::iterator c_search;
+        typename boost::unordered_map< Coord<N>, Node<N> >::iterator c_search;
 
         OpenList.dequeue(current);
 

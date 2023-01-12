@@ -10,7 +10,7 @@ module load gcc/11.1
 module load openmpi/gnu/2.0.4.2
 module switch boost/1.80_gnu boost/1.59_gnu
 
-PROG_HOME="/petrobr/parceirosbr/home/george.teodoro/test/astar_msa_v2_3tries"
+PROG_HOME="/petrobr/parceirosbr/home/george.teodoro/test/astar_msa_v3_hash"
 SEQ="${PROG_HOME}/seqs/Balibase/Ref1/0_short_low_id/1aboA.fasta"
 CMD="${PROG_HOME}/bin/msa_pastar"
 

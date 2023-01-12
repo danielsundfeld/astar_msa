@@ -9,6 +9,7 @@
  * with parallel a-star algorithm
  */
 #include <atomic>
+#include <boost/unordered_map.hpp>
 #include <condition_variable>
 #include <iostream>
 #include <map>
@@ -63,7 +64,7 @@ class PAStar {
         // Members
         const PAStarOpt m_options;
         PriorityList<N> *OpenList;
-        std::map< Coord<N>, Node<N> > *ClosedList;
+        boost::unordered_map< Coord<N>, Node<N> > *ClosedList;
 
         long long int *nodes_reopen;
         long long int *nodes_processed;
