@@ -8,7 +8,6 @@
 #ifndef _PRIORITY_LIST
 #define _PRIORITY_LIST
 #include <boost/multi_index_container.hpp>
-#include <boost/multi_index/hashed_index.hpp>
 #include <boost/multi_index/member.hpp>
 #include <boost/multi_index/ordered_index.hpp>
 #include <limits>
@@ -31,7 +30,7 @@ struct openlist_multiindex {
     typedef boost::multi_index_container<
         Node<N>,
         indexed_by<
-            hashed_unique<
+            ordered_unique<
                   tag<pos>,  BOOST_MULTI_INDEX_MEMBER(Node<N>,Coord<N>,pos)>,
             ordered_non_unique<
                   tag<priority>, BOOST_MULTI_INDEX_MEMBER(Node<N>,int,m_f)> >
