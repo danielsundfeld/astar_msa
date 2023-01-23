@@ -62,7 +62,7 @@ class PAStar {
         std::map< Coord<N>, Node<N> > *ClosedList;
 
         long long int *nodes_reopen;
-        long long int *nodes_open_rewrite;
+        long long int *nodes_processed;
 
         std::mutex *queue_mutex;
         std::condition_variable *queue_condition;

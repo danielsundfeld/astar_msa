@@ -33,7 +33,7 @@ PAStar<N>::PAStar(const Node<N> &node_zero, const struct PAStarOpt &opt)
     ClosedList = new std::map< Coord<N>, Node<N> >[m_options.threads_num]();
 
     nodes_reopen = new long long int[m_options.threads_num]();
-    nodes_open_rewrite = new long long int[m_options.threads_num]();
+    nodes_processed = new long long int[m_options.threads_num]();
 
     queue_mutex = new std::mutex[m_options.threads_num]();
     queue_condition = new std::condition_variable[m_options.threads_num]();
@@ -49,7 +49,7 @@ PAStar<N>::~PAStar()
     delete[] OpenList;
     delete[] ClosedList;
     delete[] nodes_reopen;
-    delete[] nodes_open_rewrite;
+    delete[] nodes_processed;
     delete[] queue_mutex;
     delete[] queue_condition;
     delete[] queue_nodes;
@@ -78,6 +78,7 @@ void PAStar<N>::enqueue(int tid, std::vector< Node<N> > &nodes)
 
     for (typename std::vector< Node<N> >::iterator it = nodes.begin() ; it != nodes.end(); ++it)
     {
+        nodes_processed[tid] += 1;
         if ((c_search = ClosedList[tid].find(it->pos)) != ClosedList[tid].end())
         {
             if (it->get_g() >= c_search->second.get_g())
@@ -304,7 +305,7 @@ void PAStar<N>::print_nodes_count()
     long long int nodes_total = 0;
     long long int open_list_total = 0;
     long long int closed_list_total = 0;
-    long long int nodes_open_rewrite_total = 0;
+    long long int nodes_processed_total = 0;
     long long int nodes_reopen_total = 0;
 
     std::cout << "Total nodes count:" << std::endl;
@@ -316,11 +317,11 @@ void PAStar<N>::print_nodes_count()
              << "\tClosedList: " << ClosedList[i].size()
              << "\tReopen: " << nodes_reopen[i]
              << "\tTotal: " << total_local
-             << "\t(Open Rewrite: " << nodes_open_rewrite[i] << ")\n";
+             << "\t(Total Processed: " << nodes_processed[i] << ")\n";
         open_list_total += OpenList[i].size();
         closed_list_total += ClosedList[i].size();
         nodes_reopen_total += nodes_reopen[i];
-        nodes_open_rewrite_total += nodes_open_rewrite[i];
+        nodes_processed_total += nodes_processed[i];
         nodes_total += total_local;
     }
     std::cout << "Sum"
@@ -328,7 +329,7 @@ void PAStar<N>::print_nodes_count()
           << "\tClosedList: " << closed_list_total
           << "\tReopen: " << nodes_reopen_total
           << "\tTotal: " << nodes_total
-          << "\t(Open Rewrite: " << nodes_open_rewrite_total << ")\n";
+          << "\t(Total Processed: " << nodes_processed_total << ")\n";
 }
 
 template < int N >
