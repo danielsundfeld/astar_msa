@@ -86,7 +86,7 @@ void PAStar<N>::enqueue(int tid, std::vector< Node<N> > &nodes)
             nodes_reopen[tid] += 1;
         }
         //std::cout << Adding:\t" << *it << std::endl;
-        OpenList[tid].conditional_enqueue(*it, &(nodes_open_rewrite[tid]));
+        OpenList[tid].conditional_enqueue(*it);
     }
     return;
 }
@@ -278,7 +278,7 @@ bool PAStar<N>::check_stop(int tid)
     {
         ClosedList[tid].erase(n.pos);
         if (n.pos.get_id(m_options.threads_num) == (unsigned int)tid)
-            OpenList[tid].conditional_enqueue(n, &(nodes_open_rewrite[tid]));
+            OpenList[tid].conditional_enqueue(n);
         return true;
     }
     return false;
