@@ -54,7 +54,7 @@ class Coord {
         template <int Shift> unsigned int part_z_order_hash(const int size) const;
 
         // CoordHash main function
-        unsigned int get_id(const int size) const;
+        unsigned int get_id(const int size, int thread_map[]) const;
         unsigned int get_shift(const int size) const;
 
     private:

@@ -68,6 +68,8 @@ class PAStar {
 
         long long int *nodes_reopen;
         long long int *nodes_processed;
+        int *thread_map;
+        int map_size;
 
         std::mutex *queue_mutex;
         std::condition_variable *queue_condition;

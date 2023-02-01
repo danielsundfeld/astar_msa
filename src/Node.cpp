@@ -145,7 +145,7 @@ inline int Node<N>::pairCost(const int &neigh_num, const int &mm_cost, const int
  * 2pow(n-1) nodes are added.
  */
 template < int N >
-int Node<N>::getNeigh(std::vector<Node> a[], int vec_size)
+int Node<N>::getNeigh(std::vector<Node> a[], int map_size, int thread_map[])
 {
     int i;
     Sequences *seq = Sequences::getInstance();
@@ -177,7 +177,7 @@ int Node<N>::getNeigh(std::vector<Node> a[], int vec_size)
 
             for (auto it = pairwise_costs.begin() ; it != pairwise_costs.end(); ++it)
                 costs += pairCost(i, std::get<0>(*it), std::get<1>(*it), std::get<2>(*it));
-            a[c.get_id(vec_size)].push_back(Node(m_g + costs, c, i));
+            a[c.get_id(map_size, thread_map)].push_back(Node(m_g + costs, c, i));
         }
     }
     return 0;

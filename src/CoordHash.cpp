@@ -179,7 +179,7 @@ unsigned int Coord<N>::get_id_shifted(const int size) const
 
 //! Main CoordHash function: return the hash to the space \a size
 template < int N >
-unsigned int Coord<N>::get_id(const int size) const
+unsigned int Coord<N>::get_id(const int size, int thread_map[]) const
 {
     int ret = get_shift(size);
     /* DEBUG hash distribution *
@@ -191,6 +191,8 @@ unsigned int Coord<N>::get_id(const int size) const
     str << "/ id: " << ret << "\n";
     std::cout << str.str();
     */
+    if (thread_map)
+        return thread_map[ret];
     return ret;
 }
 

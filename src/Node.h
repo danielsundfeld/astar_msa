@@ -26,7 +26,7 @@ class Node {
         friend std::ostream &operator<< <>(std::ostream &lhs, const Node &rhs);
         bool operator!=(const Node &rhs) const;
         void set_max();
-        int getNeigh(std::vector<Node> a[], int vec_size = 1);
+        int getNeigh(std::vector<Node> a[], int map_size = 1, int thread_map[] = NULL);
         int get_g() const { return m_g; };
         int get_f() const { return m_f; };
         int get_h() const { return m_f - m_g; }; //!< heuristc estimated cost to the goal

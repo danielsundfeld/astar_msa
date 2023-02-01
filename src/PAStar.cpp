@@ -33,6 +33,10 @@ PAStar<N>::PAStar(const Node<N> &node_zero, const struct PAStarOpt &opt)
     OpenList = new PriorityList<N>[m_options.threads_num]();
     ClosedList = new boost::unordered_map< Coord<N>, Node<N> >[m_options.threads_num]();
 
+    map_size = m_options.threads_num;
+    thread_map = new int[map_size]();
+    for (int i = 0; i < map_size; i++)
+        thread_map[i] = i;
     nodes_reopen = new long long int[m_options.threads_num]();
     nodes_processed = new long long int[m_options.threads_num]();
 
@@ -49,6 +53,7 @@ PAStar<N>::~PAStar()
 {
     delete[] OpenList;
     delete[] ClosedList;
+    delete[] thread_map;
     delete[] nodes_reopen;
     delete[] nodes_processed;
     delete[] queue_mutex;
@@ -187,7 +192,7 @@ void PAStar<N>::worker_inner(int tid, const Coord<N> &coord_final)
         }
 
         // Expand phase
-        current.getNeigh(neigh, m_options.threads_num);
+        current.getNeigh(neigh, map_size, thread_map);
 
         // Reconciliation phase
         // Try 1
@@ -258,7 +263,7 @@ void PAStar<N>::process_final_node(int tid, const Node<N> &n)
     if (final_node.get_f() < n.get_f())
         return;
 
-    if (n.pos.get_id(m_options.threads_num) == (unsigned int)tid)
+    if (n.pos.get_id(map_size, thread_map) == (unsigned int)tid)
     {
         //std::cout << "[" << tid << "] Possible answer found: " << n << std::endl;
         // Broadcast the node
@@ -318,7 +323,7 @@ bool PAStar<N>::check_stop(int tid)
     if (end_cond == false)
     {
         ClosedList[tid].erase(n.pos);
-        if (n.pos.get_id(m_options.threads_num) == (unsigned int)tid)
+        if (n.pos.get_id(map_size, thread_map) == (unsigned int)tid)
             OpenList[tid].conditional_enqueue(n);
         return true;
     }

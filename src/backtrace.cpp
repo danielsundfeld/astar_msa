@@ -39,17 +39,17 @@ int get_print_size()
  * Using the last node on \a ClosedList do a backtrace, verifing
  * gaps, matches and mismatches, saving characteres o the
  * \a backstrace_alignment.
- * The \a ClosedList is an array with size \a list_size
+ * The \a ClosedList is an array with size \a map_size
  *
  * At the end of the process, \a alignments contains the
  * answer for every sequence.
  */
 template <int N>
-void backtrace_create_alignment(std::list<char> *alignments, boost::unordered_map<Coord<N>, Node<N> > *ClosedList, int list_size)
+void backtrace_create_alignment(std::list<char> *alignments, boost::unordered_map<Coord<N>, Node<N> > *ClosedList, int map_size, int thread_map[])
 {
     Sequences *seq = Sequences::getInstance();
 
-    int id = seq->get_final_coord<N>().get_id(list_size);
+    int id = seq->get_final_coord<N>().get_id(map_size, thread_map);
     Node<N> current = ClosedList[id][seq->get_final_coord<N>()];
     std::cout << "Final Score: " << current << std::endl;
     do 
@@ -64,7 +64,7 @@ void backtrace_create_alignment(std::list<char> *alignments, boost::unordered_ma
                 c = '-';
             alignments[i].push_front(c);
         }
-        id = current.get_parent().get_id(list_size);
+        id = current.get_parent().get_id(map_size, thread_map);
         current = ClosedList[id][current.get_parent()];
     } while (current.pos != Sequences::get_initial_coord<N>());
 }
@@ -135,17 +135,17 @@ void backtrace_print_alignment(std::list<char> *alignments)
  * \a ClosedList it backtrace every node until the origin is reached
  */
 template <int N>
-void backtrace(boost::unordered_map< Coord<N>, Node<N> > *ClosedList, int list_size)
+void backtrace(boost::unordered_map< Coord<N>, Node<N> > *ClosedList, int map_size, int thread_map[])
 {
     TimeCounter t("Phase 3 - backtrace: ");
     std::list<char> alignments[N];
 
-    backtrace_create_alignment<N>(alignments, ClosedList, list_size);
+    backtrace_create_alignment<N>(alignments, ClosedList, map_size, thread_map);
     backtrace_print_similarity<N>(alignments);
     backtrace_print_alignment<N>(alignments);
 }
 
 #define DECLARE_BACKTRACE_TEMPLATE( X ) \
-template void backtrace< X >(boost::unordered_map< Coord< X >, Node< X > >*ClosedList, int list_size); \
+template void backtrace< X >(boost::unordered_map< Coord< X >, Node< X > >*ClosedList, int list_size, int thread_map[] = NULL); \
 
 MAX_NUM_SEQ_HELPER(DECLARE_BACKTRACE_TEMPLATE);
