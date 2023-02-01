@@ -55,6 +55,7 @@ class Coord {
 
         // CoordHash main function
         unsigned int get_id(const int size) const;
+        unsigned int get_shift(const int size) const;
 
     private:
         uint16_t m_coord[N];

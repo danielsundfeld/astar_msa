@@ -181,6 +181,22 @@ unsigned int Coord<N>::get_id_shifted(const int size) const
 template < int N >
 unsigned int Coord<N>::get_id(const int size) const
 {
+    int ret = get_shift(size);
+    /* DEBUG hash distribution *
+    std::stringstream str;
+    for (int i = 0; i < N; i++)
+    {
+        str << m_coord[i] << " ";
+    }
+    str << "/ id: " << ret << "\n";
+    std::cout << str.str();
+    */
+    return ret;
+}
+
+template < int N >
+unsigned int Coord<N>::get_shift(const int size) const
+{
     switch (hash_shift)
     {
         case 0:
