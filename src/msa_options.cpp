@@ -28,6 +28,7 @@ int msa_options_core(msa_option_type type, int argc, char *argv[], std::string &
     const std::string description = "Usage " + std::string(argv[0]) + " [OPTIONS] file.fasta";
     std::string cost_read;
     std::string hash_read;
+    std::string affinity_read;
 
     // Arguments Options
     po::options_description common_options("Options");
@@ -43,9 +44,11 @@ int msa_options_core(msa_option_type type, int argc, char *argv[], std::string &
     // Parallel Options
     po::options_description parallel_options("Parallel Options");
     parallel_options.add_options()
-        ("no-affinity", "Do not set thread affinity")
         ("threads,t", po::value<int>(&opt.threads_num)->default_value(opt.threads_num),
          "number of threads")
+        ("affinity,a", po::value<std::string>(&affinity_read),
+         "Comma-separated values to set the affinity of each thread, e.g. 0,1,2,3")
+        ("no-affinity", "Do not set thread affinity (force to ignore the affinity argument)")
         ("hash_shift,s", po::value<int>(&opt.hash_shift)->default_value(opt.hash_shift),
          "Hash shift option value")
         ("hash_type,y", po::value<std::string>(&hash_read)->default_value("FZORDER"),
@@ -128,6 +131,25 @@ int msa_options_core(msa_option_type type, int argc, char *argv[], std::string &
         opt.no_affinity = true;
     else
         opt.no_affinity = false;
+
+    if (vm.count("affinity"))
+    {
+        std::istringstream sstream(affinity_read);
+        std::string tmp;
+        while (std::getline(sstream, tmp, ','))
+            opt.thread_affinity.push_back(std::stoi(tmp));
+
+        size_t t_num = opt.threads_num;
+        if (opt.thread_affinity.size() < t_num)
+            std::cerr << "Warning: thread affinity set smaller than the number of threads. Setting default values." << std::endl;
+        for (size_t i = opt.thread_affinity.size(); i < t_num; ++i)
+            opt.thread_affinity.push_back(i);
+    }
+    else
+    {
+        for (int i = 0; i < opt.threads_num; ++i)
+            opt.thread_affinity.push_back(i);
+    }
 
     if (!vm.count("memory_debug"))
         opt.common_options.force_quit = true;

@@ -35,6 +35,7 @@ struct PAStarOpt {
     int hash_shift;
     int threads_num;
     bool no_affinity;
+    std::vector<int> thread_affinity;
 
     PAStarOpt()
     {

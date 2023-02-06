@@ -61,10 +61,10 @@ int PAStar<N>::set_affinity(int tid)
     //std::cout << "No Affinity: " << m_options.no_affinity << std::endl;
     if (m_options.no_affinity)
         return 0;
-
+    //std::cout << "Tid: " << tid << " Affinity: " << m_options.thread_affinity.at(tid) << std::endl;
     cpu_set_t mask;
     CPU_ZERO(&mask);
-    CPU_SET(tid, &mask);
+    CPU_SET(m_options.thread_affinity.at(tid), &mask);
     return sched_setaffinity(0, sizeof(mask), &mask);
 }
 
