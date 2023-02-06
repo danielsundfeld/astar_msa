@@ -359,8 +359,9 @@ int PAStar<N>::pa_star(const Node<N> &node_zero, const Coord<N> &coord_final, co
     TimeCounter *t = new TimeCounter("Phase 2: PA-Star running time: ");
 
     // Create threads
-    for (int i = 0; i < options.threads_num; ++i)
+    for (int i = 1; i < options.threads_num; ++i)
         threads.push_back(std::thread(&PAStar::worker, &pastar_instance, i, coord_final));
+    pastar_instance.worker(0, coord_final);
 
     // Wait for the end of all threads
     for (auto& th : threads)
