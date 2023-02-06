@@ -58,9 +58,13 @@ PAStar<N>::~PAStar()
 template < int N >
 int PAStar<N>::set_affinity(int tid)
 {
+    //std::cout << "No Affinity: " << m_options.no_affinity << std::endl;
+    if (m_options.no_affinity)
+        return 0;
+
     cpu_set_t mask;
     CPU_ZERO(&mask);
-    CPU_SET(1 << tid, &mask);
+    CPU_SET(tid, &mask);
     return sched_setaffinity(0, sizeof(mask), &mask);
 }
 

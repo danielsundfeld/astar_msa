@@ -34,19 +34,22 @@ struct PAStarOpt {
     hashType hash_type;
     int hash_shift;
     int threads_num;
+    bool no_affinity;
 
     PAStarOpt()
     {
         hash_type = HashFZorder;
         hash_shift = HASH_SHIFT;
         threads_num = THREADS_NUM;
+        no_affinity = false;
     }
-    PAStarOpt(AStarOpt &common, hashType type, int shift, int th)
+    PAStarOpt(AStarOpt &common, hashType type, int shift, int th, bool noaf)
     {
         common_options = common;
         hash_type = type;
         hash_shift = shift;
         threads_num = th;
+        no_affinity = noaf;
     }
 };
 

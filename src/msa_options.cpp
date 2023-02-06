@@ -43,6 +43,7 @@ int msa_options_core(msa_option_type type, int argc, char *argv[], std::string &
     // Parallel Options
     po::options_description parallel_options("Parallel Options");
     parallel_options.add_options()
+        ("no-affinity", "Do not set thread affinity")
         ("threads,t", po::value<int>(&opt.threads_num)->default_value(opt.threads_num),
          "number of threads")
         ("hash_shift,s", po::value<int>(&opt.hash_shift)->default_value(opt.hash_shift),
@@ -122,6 +123,11 @@ int msa_options_core(msa_option_type type, int argc, char *argv[], std::string &
         std::cout << "File: " << filename << " is not a regular file.\n";
         return 1;
     }
+
+    if (vm.count("no-affinity"))
+        opt.no_affinity = true;
+    else
+        opt.no_affinity = false;
 
     if (!vm.count("memory_debug"))
         opt.common_options.force_quit = true;
