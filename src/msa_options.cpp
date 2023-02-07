@@ -29,6 +29,7 @@ int msa_options_core(msa_option_type type, int argc, char *argv[], std::string &
     std::string cost_read;
     std::string hash_read;
     std::string affinity_read;
+    std::string hybrid_read;
 
     // Arguments Options
     po::options_description common_options("Options");
@@ -48,6 +49,8 @@ int msa_options_core(msa_option_type type, int argc, char *argv[], std::string &
          "number of threads")
         ("affinity,a", po::value<std::string>(&affinity_read),
          "Comma-separated values to set the affinity of each thread, e.g. 0,1,2,3")
+        ("hybrid-conf", po::value<std::string>(&hybrid_read),
+         "4 Comma-separated values containing: Power Cores Number, Power Cores thread_map size, Energy Cores Numbers, Energy Cores thread_map size, e.g. 8,9,8,7")
         ("no-affinity", "Do not set thread affinity (force to ignore the affinity argument)")
         ("hash_shift,s", po::value<int>(&opt.hash_shift)->default_value(opt.hash_shift),
          "Hash shift option value")
@@ -149,6 +152,34 @@ int msa_options_core(msa_option_type type, int argc, char *argv[], std::string &
     {
         for (int i = 0; i < opt.threads_num; ++i)
             opt.thread_affinity.push_back(i);
+    }
+
+    if (vm.count("hybrid-conf"))
+    {
+        std::istringstream sstream(hybrid_read);
+        std::string tmp;
+
+        std::getline(sstream, tmp, ',');
+        opt.hybrid_conf.p_cores_num = std::stoi(tmp);
+        std::getline(sstream, tmp, ',');
+        opt.hybrid_conf.p_cores_size = std::stoi(tmp);
+        std::getline(sstream, tmp, ',');
+        opt.hybrid_conf.e_cores_num = std::stoi(tmp);
+        std::getline(sstream, tmp, ',');
+        opt.hybrid_conf.e_cores_size = std::stoi(tmp);
+        if (opt.threads_num != opt.hybrid_conf.p_cores_num + opt.hybrid_conf.e_cores_num)
+        {
+            std::cerr << "Invalid Hybrid conf: P_cores_num + E_cores_num must be equal to threads_num" << std::endl;
+            exit(1);
+        }
+    }
+    else
+    {
+        std::cout << "DEFAULT\n";
+        opt.hybrid_conf.p_cores_num = opt.threads_num;
+        opt.hybrid_conf.p_cores_size = 1;
+        opt.hybrid_conf.e_cores_num = 0;
+        opt.hybrid_conf.e_cores_size = 0;
     }
 
     if (!vm.count("memory_debug"))

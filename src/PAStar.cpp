@@ -33,10 +33,7 @@ PAStar<N>::PAStar(const Node<N> &node_zero, const struct PAStarOpt &opt)
     OpenList = new PriorityList<N>[m_options.threads_num]();
     ClosedList = new boost::unordered_map< Coord<N>, Node<N> >[m_options.threads_num]();
 
-    map_size = m_options.threads_num;
-    thread_map = new int[map_size]();
-    for (int i = 0; i < map_size; i++)
-        thread_map[i] = i;
+    configure_thread_map();
     nodes_reopen = new long long int[m_options.threads_num]();
     nodes_processed = new long long int[m_options.threads_num]();
 
@@ -59,6 +56,37 @@ PAStar<N>::~PAStar()
     delete[] queue_mutex;
     delete[] queue_condition;
     delete[] queue_nodes;
+}
+
+template < int N >
+void PAStar<N>::configure_thread_map()
+{
+    map_size = m_options.hybrid_conf.p_cores_num * m_options.hybrid_conf.p_cores_size +
+               m_options.hybrid_conf.e_cores_num * m_options.hybrid_conf.e_cores_size;
+    thread_map = new int[map_size]();
+    int cont = 0;
+    for (int i = 0; i < m_options.hybrid_conf.p_cores_num; i++)
+    {
+        for (int j = 0; j < m_options.hybrid_conf.p_cores_size; j++)
+        {
+            //std::cout << cont << ": " << i << std::endl;
+            thread_map[cont++] = i;
+        }
+    }
+    for (int i = 0; i < m_options.hybrid_conf.e_cores_num; i++)
+    {
+        for (int j = 0; j < m_options.hybrid_conf.e_cores_size; j++)
+        {
+            //std::cout << cont << ": " << i + m_options.hybrid_conf.p_cores_num << std::endl;
+            thread_map[cont++] = i + m_options.hybrid_conf.p_cores_num;
+        }
+    }
+    if (map_size != cont)
+    {
+        std::cerr << "BUG on Hybrid conf: " << map_size << " not equal to " << cont << std::endl;
+        exit(1);
+    }
+    return;
 }
 
 template < int N >
@@ -380,7 +408,7 @@ void PAStar<N>::print_nodes_count()
 template < int N >
 void PAStar<N>::print_answer()
 {
-    backtrace<N>(ClosedList, m_options.threads_num);
+    backtrace<N>(ClosedList, map_size, thread_map);
     print_nodes_count();
 }
 

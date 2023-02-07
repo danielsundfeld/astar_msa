@@ -28,6 +28,16 @@
 #endif
 
 /*!
+ * \brief Configuration for Hybrid CPUs
+ */
+struct HybridCpu {
+    int p_cores_num = 0;
+    int p_cores_size = 0;
+    int e_cores_num = 0;
+    int e_cores_size = 0;
+};
+
+/*!
  * \brief Arguments for PAStar class
  */
 struct PAStarOpt {
@@ -37,6 +47,7 @@ struct PAStarOpt {
     int threads_num;
     bool no_affinity;
     std::vector<int> thread_affinity;
+    HybridCpu hybrid_conf;
 
     PAStarOpt()
     {
@@ -90,6 +101,7 @@ class PAStar {
         ~PAStar();
 
         // Misc functions
+        void configure_thread_map();
         int set_affinity(int tid);
         void sync_threads();
         void print_nodes_count();
