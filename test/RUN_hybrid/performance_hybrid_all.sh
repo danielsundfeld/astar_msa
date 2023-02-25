@@ -1,5 +1,5 @@
 #!/bin/bash
-for try in 1 2 3 4; do
+for try in 1 2; do
     echo ----------------------------------------------------------------------
     echo TRY $try:
     ./test/RUN_hybrid/performance_hybrid_1aboA.sh
