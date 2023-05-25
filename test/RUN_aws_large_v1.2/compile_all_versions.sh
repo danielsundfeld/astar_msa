@@ -1,7 +1,7 @@
 #!/bin/bash
-LOGNVER="a1a64b13"
-THREETRIESVER="0d97d597"
-HASHVER="d96dccb0"
+LOGNVER="64c6ed5b7ea"
+THREETRIESVER="12ab8d550e"
+HASHVER="5b62293e6bd"
 MAKEOPTS="-j 8 -B"
 
 if [ ! -e Makefile ]; then
