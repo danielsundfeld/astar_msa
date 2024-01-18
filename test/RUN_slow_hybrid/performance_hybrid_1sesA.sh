@@ -30,3 +30,8 @@ ecore="13"
 HYBRID="8,$pcore,8,$ecore"
 echo $HYBRID
 /usr/bin/time -v ./bin/msa_pastar ${THREADS} ${AFFINITY} --hybrid=${HYBRID} $SEQ >> ${SEQ}.map.${HYBRID}.out 2>&1
+
+git checkout 5b62293e6bdcf8c51c55ccd81e413140cc4d882e
+make -B -j 16
+/usr/bin/time -v ./bin/msa_pastar ${THREADS} ${AFFINITY} $SEQ >> ${SEQ}.map.nomap.out 2>&1
+git checkout master
