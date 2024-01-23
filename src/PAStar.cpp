@@ -41,6 +41,10 @@ PAStar<N>::PAStar(const Node<N> &node_zero, const struct PAStarOpt &opt)
     queue_condition = new std::condition_variable[m_options.threads_num]();
     queue_nodes = new std::vector< Node<N> >[m_options.threads_num]();
 
+    priority_over_time = new std::vector< int >[m_options.threads_num]();
+    last_nodes_update = new int[m_options.threads_num]();
+    priority_counter = 1;
+
     // Enqueue first node
     OpenList[0].enqueue(node_zero);
 }
@@ -56,6 +60,8 @@ PAStar<N>::~PAStar()
     delete[] queue_mutex;
     delete[] queue_condition;
     delete[] queue_nodes;
+    delete[] priority_over_time;
+    delete[] last_nodes_update;
 }
 
 template < int N >
@@ -200,6 +206,11 @@ void PAStar<N>::worker_inner(int tid, const Coord<N> &coord_final)
         {
             wait_queue(tid);
             continue;
+        }
+        if (priority_counter > last_nodes_update[tid])
+        {
+            last_nodes_update[tid] += 1;
+            priority_over_time[tid].push_back(current.get_f());
         }
 
         // Check if better node is already found
@@ -372,6 +383,18 @@ int PAStar<N>::worker(int tid, const Coord<N> &coord_final)
     return 0;
 }
 
+//! Execute a worker thread. This thread have id \a tid
+template < int N >
+void PAStar<N>::counter()
+{
+    do {
+        sleep(30);
+        priority_counter++;
+    } while (end_cond == false);
+
+    return ;
+}
+
 template < int N >
 void PAStar<N>::print_nodes_count()
 {
@@ -403,6 +426,17 @@ void PAStar<N>::print_nodes_count()
           << "\tReopen: " << nodes_reopen_total
           << "\tTotal: " << nodes_total
           << "\t(Total Processed: " << nodes_processed_total << ")\n";
+
+    std::cout << "Priority:\n";
+    for (int i = 0; i < m_options.threads_num; ++i)
+    {
+        std::cout << i << ":";
+        for (std::vector<int>::iterator it = priority_over_time[i].begin(); it != priority_over_time[i].end(); ++it)
+        {
+            std::cout << "\t" << *it;
+        }
+        std::cout << "\n";
+    }
 }
 
 template < int N >
@@ -427,6 +461,8 @@ int PAStar<N>::pa_star(const Node<N> &node_zero, const Coord<N> &coord_final, co
     std::vector<std::thread> threads;
     TimeCounter *t = new TimeCounter("Phase 2: PA-Star running time: ");
 
+    std::vector<std::thread> counter_threads;
+    counter_threads.push_back(std::thread(&PAStar::counter, &pastar_instance));
     // Create threads
     for (int i = 1; i < options.threads_num; ++i)
         threads.push_back(std::thread(&PAStar::worker, &pastar_instance, i, coord_final));

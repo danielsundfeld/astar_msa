@@ -82,6 +82,10 @@ class PAStar {
         int *thread_map;
         int map_size;
 
+        std::vector<int> *priority_over_time;
+        int *last_nodes_update;
+        int priority_counter;
+
         std::mutex *queue_mutex;
         std::condition_variable *queue_condition;
         std::vector< Node<N> > *queue_nodes;
@@ -122,5 +126,8 @@ class PAStar {
 
         // Backtrack
         void print_answer();
+
+        // Backtrack
+        void counter();
 };
 #endif
