@@ -1,5 +1,5 @@
 #!/bin/bash
-SEQ="./seqs/Balibase/Ref1/4_medium_med_id/2cba.fasta"
+SEQ="./seqs/Balibase/Ref1/7_long_medium_id/2ack.fasta"
 THREADS="-t 8"
 
 #Affinity for Intel 13700kf
