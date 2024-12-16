@@ -19,8 +19,10 @@ class Sequences
         static Sequences* getInstance() { return &instance; };
         void destroyInstance();
         int set_seq(const std::string &x);
-        const std::string& get_seq(int x) const { return seqs.at(x); };
+        int set_name(const std::string &x);
         static int& get_seq_num() { return n_seq; };
+        const std::string& get_seq(int x) const { return seqs.at(x); };
+        const std::string& get_seq_name(int x) const { return seqs_name.at(x); };
         template <int N> static Coord<N> get_final_coord();
         template <int N> static Coord<N> get_initial_coord();
         template <int N> static Node<N> get_initial_node();
@@ -31,6 +33,7 @@ class Sequences
         static int n_seq;
         static Sequences instance;
         std::vector<std::string> seqs;
+        std::vector<std::string> seqs_name;
         static int final_coord[MaxSequences];
 
         Sequences();

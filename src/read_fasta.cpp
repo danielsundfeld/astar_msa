@@ -28,8 +28,13 @@ int read_fasta_file_core(const std::string &name)
         {
             std::string buf;
             getline(file, buf);
-            if ((buf.length() <= 0) || (buf.at(0) == '>'))
+            if (buf.length() <= 0)
                 break;
+            if (buf.at(0) == '>')
+            {
+                sequences->set_name(buf);
+                break;
+            }
             seq.append(buf);
         }
         if (!seq.empty())

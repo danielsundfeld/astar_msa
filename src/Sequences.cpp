@@ -41,6 +41,13 @@ int Sequences::set_seq(const std::string &x)
     return n_seq;
 }
 
+//! Save the name \a x for the sequences
+int Sequences::set_name(const std::string &x)
+{
+    seqs_name.push_back(x);
+    return 0;
+}
+
 template <int N>
 Coord<N> Sequences::get_final_coord()
 {
