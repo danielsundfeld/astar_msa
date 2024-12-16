@@ -27,6 +27,7 @@ int msa_options_core(msa_option_type type, int argc, char *argv[], std::string &
 {
     const std::string description = "Usage " + std::string(argv[0]) + " [OPTIONS] file.fasta";
     std::string cost_read;
+    std::string fasta;
     std::string hash_read;
     std::string affinity_read;
     std::string hybrid_read;
@@ -38,6 +39,8 @@ int msa_options_core(msa_option_type type, int argc, char *argv[], std::string &
         ("help,h", "produce help message")
         ("cost_type,c", po::value<std::string>(&cost_read)->default_value("PAM250"),
          "Match and mismatches costs (NUC for nucleotides, PAM250 for proteins) [NUC|PAM250]")
+        ("fasta_output,f", po::value<std::string>(&fasta)->default_value(""),
+         "Also write the output in fasta format on the file with the name")
         ("memory_debug", "memory debug option") /* Force quit should be used only for debug purposes. Check the struct for
                                    full explanation, it is good to not explain to the users what it does. */
         ;
@@ -107,6 +110,10 @@ int msa_options_core(msa_option_type type, int argc, char *argv[], std::string &
         else if (cost_read == "NUC")
             Cost::set_cost_nuc();
     }
+    if (vm.count("fasta_output"))
+    {
+        opt.common_options.fasta_output_file = fasta;
+    }
     if (vm.count("version")) {
         if (type == Msa_Pastar)
             std::cout << "msa_pastar";
@@ -175,7 +182,6 @@ int msa_options_core(msa_option_type type, int argc, char *argv[], std::string &
     }
     else
     {
-        std::cout << "DEFAULT\n";
         opt.hybrid_conf.p_cores_num = opt.threads_num;
         opt.hybrid_conf.p_cores_size = 1;
         opt.hybrid_conf.e_cores_num = 0;

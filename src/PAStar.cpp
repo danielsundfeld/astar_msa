@@ -408,7 +408,7 @@ void PAStar<N>::print_nodes_count()
 template < int N >
 void PAStar<N>::print_answer()
 {
-    backtrace<N>(ClosedList, map_size, thread_map);
+    backtrace<N>(ClosedList, m_options.common_options.fasta_output_file, map_size, thread_map);
     print_nodes_count();
 }
 

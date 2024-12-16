@@ -9,5 +9,5 @@
 #include "Coord.h"
 #include "Node.h"
 
-template <int N> void backtrace(boost::unordered_map< Coord<N>, Node<N> > *ClosedList, int map_size = 1, int thread_map[] = NULL);
+template <int N> void backtrace(boost::unordered_map< Coord<N>, Node<N> > *ClosedList, const std::string &output_file = "", int map_size = 1, int thread_map[] = NULL);
 #endif

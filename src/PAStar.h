@@ -11,6 +11,7 @@
 #include <atomic>
 #include <boost/unordered_map.hpp>
 #include <condition_variable>
+#include <fstream>
 #include <iostream>
 #include <map>
 #include <string>

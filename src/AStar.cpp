@@ -84,7 +84,7 @@ int a_star(const Node<N> &node_zero, const Coord<N> &coord_final, const AStarOpt
         neigh.clear();
     }
     delete t;
-    backtrace<N>(&ClosedList, 1);
+    backtrace<N>(&ClosedList, options.fasta_output_file);
 
     if (options.force_quit)
         exit(0);

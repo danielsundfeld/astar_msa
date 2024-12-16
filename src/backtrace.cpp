@@ -6,6 +6,7 @@
 
 #include <sys/ioctl.h>
 #include <unistd.h>
+#include <fstream>
 #include <iostream>
 #include <iomanip>
 #include <limits>
@@ -131,21 +132,55 @@ void backtrace_print_alignment(std::list<char> *alignments)
 }
 
 /*!
+ * Print fasta output
+ */
+template <int N>
+void backtrace_print_fasta_file(std::list<char> *alignments, const std::string &output_file)
+{
+    Sequences *sequences = Sequences::getInstance();
+
+    if (output_file == "")
+        return;
+    try
+    {
+        std::ofstream file(output_file);
+        for (int j = 0; j < N; j++)
+        {
+            file << sequences->get_seq_name(j) << std::endl;
+            for (const char &ch : alignments[j])
+            {
+                file << ch;
+            }
+            file << std::endl;
+        }
+    }
+    catch (std::exception &e)
+    {
+        std::cerr << "Writing file fatal error: " << e.what() << std::endl;
+    }
+    catch (...)
+    {
+        std::cerr << "Unknown fatal error while writing file!\n";
+    }
+}
+
+/*!
  * MSA-Node backtrace functions prints the answer. Using the
  * \a ClosedList it backtrace every node until the origin is reached
  */
 template <int N>
-void backtrace(boost::unordered_map< Coord<N>, Node<N> > *ClosedList, int map_size, int thread_map[])
+void backtrace(boost::unordered_map< Coord<N>, Node<N> > *ClosedList, const std::string &output_file, int map_size, int thread_map[])
 {
     TimeCounter t("Phase 3 - backtrace: ");
     std::list<char> alignments[N];
 
     backtrace_create_alignment<N>(alignments, ClosedList, map_size, thread_map);
     backtrace_print_similarity<N>(alignments);
+    backtrace_print_fasta_file<N>(alignments, output_file);
     backtrace_print_alignment<N>(alignments);
 }
 
 #define DECLARE_BACKTRACE_TEMPLATE( X ) \
-template void backtrace< X >(boost::unordered_map< Coord< X >, Node< X > >*ClosedList, int list_size, int thread_map[] = NULL); \
+template void backtrace< X >(boost::unordered_map< Coord< X >, Node< X > >*ClosedList, const std::string &output_file = "", int list_size, int thread_map[] = NULL); \
 
 MAX_NUM_SEQ_HELPER(DECLARE_BACKTRACE_TEMPLATE);

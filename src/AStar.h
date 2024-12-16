@@ -16,14 +16,17 @@ struct AStarOpt {
      * and save some time. This option may be changed for memcheck purposes.
      */
     bool force_quit;
+    std::string fasta_output_file;
 
     AStarOpt()
     {
         force_quit = true;
+        fasta_output_file = "";
     }
     AStarOpt(bool force)
     {
         force_quit = force;
+        fasta_output_file = "";
     }
 };
 
