@@ -33,7 +33,10 @@ int read_fasta_file_core(const std::string &name)
             seq.append(buf);
         }
         if (!seq.empty())
+        {
+            for (auto & c: seq) c = toupper(c);
             sequences->set_seq(seq);
+        }
     }
     return 0;
 }
