@@ -73,7 +73,7 @@ You can also implement any 'best-first search' algorithm using the PriorityList 
 ## Cite us
 Daniel Sundfeld, Caina Razzolini, George Teodoro, Azzedine Boukerche, Alba Cristina Magalhaes Alves de Melo: PA-Star: A disk-assisted parallel A-Star strategy with locality-sensitive hash for multiple sequence alignment.  J. Parallel Distrib. Comput. 112: 154-165 (2018)
 
-Daniel Sundfeld, George Teodor, Alba Cristina Magalhaes Alves de Melo: PA-Star2: Fast Optimal Multiple Sequence
+Daniel Sundfeld, George Teodoro, Alba Cristina Magalhaes Alves de Melo: PA-Star2: Fast Optimal Multiple Sequence
 Alignment for Asymmetric Multicore Processors. In 33rd Euromicro International Conference on Parallel, Distributed and Network-based Processing, PDP 2025, (in press)
 
 ## Documentation
