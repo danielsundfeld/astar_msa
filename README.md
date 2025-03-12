@@ -2,7 +2,7 @@
 
 PA-Star is a software that performs a parallel A-Star search to solve the Multiple Sequence Alignment (MSA) problem. For comparison we also developed a serial version (msa\_astar).
 
-PA-Star2 is a new version with several improvements on the performance. A new Workload Distribution Vector Technique has been developed, where you can distribute the work among the threads on Asymmetric Processors (Like Intel 13th and 14th Gen.). More details, check our paper (Cite us section).
+PA-Star2 is a new version with several improvements on the performance. A new Workload Distribution Vector Technique has been developed, where you can distribute the work among the threads on Asymmetric Processors (Like Intel 12th to 14th Gen.). More details, check our paper (Cite us section).
 
 ## Getting Started
 
@@ -71,16 +71,19 @@ Yes, the A\* algorithm is useful for any pathfinding problem! But this project o
 You can also implement any 'best-first search' algorithm using the PriorityList class, by changing the rules on how you insert the nodes in the list.
 
 ## Cite us
-Daniel Sundfeld, Caina Razzolini, George Teodoro, Azzedine Boukerche, Alba Cristina Magalhaes Alves de Melo: PA-Star: A disk-assisted parallel A-Star strategy with locality-sensitive hash for multiple sequence alignment.  J. Parallel Distrib. Comput. 112: 154-165 (2018)
-
 Daniel Sundfeld, George Teodoro, Alba Cristina Magalhaes Alves de Melo: PA-Star2: Fast Optimal Multiple Sequence
-Alignment for Asymmetric Multicore Processors. In 33rd Euromicro International Conference on Parallel, Distributed and Network-based Processing, PDP 2025, (in press)
+Alignment for Asymmetric Multicore Processors. In 33rd Euromicro International Conference on Parallel, Distributed and Network-based Processing (PDP 2025), Torino, Italy, 2025, pp. 146-153
+
+## List of previous papers
+Daniel Sundfeld, Caina Razzolini, George Teodoro, Azzedine Boukerche, Alba Cristina Magalhaes Alves de Melo: PA-Star: A disk-assisted parallel A-Star strategy with locality-sensitive hash for multiple sequence alignment.  Journal of Parallel and Distributed Computing 112: 154-165 (2018)
+
+Daniel Sundfeld, George Teodoro, Alba Cristina Magalhaes Alves de Melo: Parallel A-Star Multiple Sequence Alignment with Locality-Sensitive Hash Functions, 2015 Ninth International Conference on Complex, Intelligent, and Software Intensive Systems (CISIS 2015), Santa Catarina, Brazil, 2015, pp. 342-347
 
 ## Documentation
 This is a small scientific project, but we have professional
 standards on our code and documentation. You can generate
 the Doxygen documentation by running 'make' command in the
-'astar\_msa/doc' folder.
+'doc/' folder.
 
 ## License
 
