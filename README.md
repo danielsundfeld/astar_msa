@@ -48,13 +48,13 @@ Few examples:
 ./bin/msa_pastar -f output.fasta seqs/3/synthetic_veryeasy.fasta
 
 #PA-Star2 asymmetric processor distribution.
-#Set the affinity for Intel i7-13700k and use a
-#1:1 proportion between P-Cores and E-Cores (symetric distribution)
+#Set the affinity for Intel i7-13700k and use 8 P-Core Threads, 8 E-Core threads with
+#1:1 proportion between P-Cores and E-Cores (symmetric distribution)
 ./bin/msa_pastar -t 16 --affinity=0,2,4,6,8,10,12,14,16,17,18,19,20,21,22,23 --hybrid=8,1,8,1 ./seqs/Balibase/Ref1/0_short_low_id/1aboA.fasta
 
 #PA-Star2 asymmetric processor distribution.
-#Set the affinity for Intel i7-13700k and use a
-#9:7 proportion between P-Cores and E-Cores (assymetric distribution)
+#Set the affinity for Intel i7-13700k and use 8 P-Core Threads, 8 E-COre threads with
+#9:7 proportion between P-Cores and E-Cores (asymmetric distribution)
 ./bin/msa_pastar -t 16 --affinity=0,2,4,6,8,10,12,14,16,17,18,19,20,21,22,23 --hybrid=8,9,8,7 ./seqs/Balibase/Ref1/0_short_low_id/1aboA.fasta
 ```
 ### More options
